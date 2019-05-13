@@ -186,6 +186,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="img\barco.ico" />
+    <Content Include="SQL\DER - GDD - Crucero.jpeg" />
     <Content Include="SQL\Ejemplos\BorrarTablas-Relaciones-old.sql" />
     <Content Include="SQL\Ejemplos\script_creación_inicial-old.sql" />
     <Content Include="SQL\Reset_carga_inicial.sql" />
