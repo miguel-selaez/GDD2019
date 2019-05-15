@@ -7,7 +7,7 @@ GO
 print (CONCAT('Creacion de tablas ', CONVERT(VARCHAR, GETDATE(), 114)))
 
 CREATE TABLE [DSW].[Puerto] (
-  [pt_id] int,
+  [pt_id] int IDENTITY (1,1),
   [pt_descripcion] nvarchar(255),
   PRIMARY KEY ([pt_id])
 );
@@ -15,7 +15,7 @@ CREATE TABLE [DSW].[Puerto] (
 GO
 
 CREATE TABLE [DSW].[Tramo] (
-  [t_id] int,
+  [t_id] int IDENTITY(1,1),
   [t_id_origen] int,
   [t_id_destino] int,
   [t_precio] decimal(18,2),
@@ -25,7 +25,7 @@ CREATE TABLE [DSW].[Tramo] (
 GO
 
 CREATE TABLE [DSW].[Recorrido] (
-  [rc_id] int,
+  [rc_id] decimal(18,0) IDENTITY(43820864, 1),
   [rc_codigo] char(20), -- Verificar el tipo en el enunciado
   [rc_baja] bit,
   PRIMARY KEY ([rc_id])
@@ -34,7 +34,7 @@ CREATE TABLE [DSW].[Recorrido] (
 GO
 
 CREATE TABLE [DSW].[Recorridos_x_tramos] (
-  [rxt_id_recorrido] int,
+  [rxt_id_recorrido] decimal(18,0),
   [rxt_id_tramo] int,
   [rxt_orden] int,
   PRIMARY KEY ([rxt_id_recorrido], [rxt_id_tramo], [rxt_orden])
@@ -57,7 +57,7 @@ GO
 CREATE TABLE [DSW].[Viaje] (
   [v_id] int,
   [v_id_crucero] int,
-  [v_id_recorrido] int,
+  [v_id_recorrido] decimal(18,0),
   [v_fecha_salida] datetime2(3),
   [v_fecha_llegada] datetime2(3),
   [v_fecha_llegada_estimada] datetime2(3),
@@ -148,7 +148,7 @@ CREATE TABLE [DSW].[Reserva] (
 GO
 
 CREATE TABLE [DSW].[Funcion] (
-  [f_id] int,
+  [f_id] int IDENTITY (1,1),
   [f_descripcion] nvarchar(100),
   [f_baja] bit,
   PRIMARY KEY ([f_id])
@@ -164,7 +164,7 @@ CREATE TABLE [DSW].[Funcion_x_Rol] (
 GO
 
 CREATE TABLE [DSW].[Rol] (
-  [r_id] int,
+  [r_id] int IDENTITY (1,1),
   [r_descripcion] nvarchar(100),
   [r_baja] bit,
   PRIMARY KEY ([r_id])
@@ -173,9 +173,9 @@ CREATE TABLE [DSW].[Rol] (
 GO
 
 CREATE TABLE [DSW].[Usuario] (
-  [u_id] int,
+  [u_id] int IDENTITY (1,1),
   [u_nombre_usuario] nvarchar(100),
-  [u_password] varbinary,
+  [u_password] varbinary(256),
   [u_baja] bit,
   [u_intentos_fallidos] int,
   PRIMARY KEY ([u_id])
@@ -200,25 +200,165 @@ print (CONCAT('Creacion de SPs ', CONVERT(VARCHAR, GETDATE(), 114)))
 
 print (CONCAT('INSERTS ', CONVERT(VARCHAR, GETDATE(), 114)))
 
---BEGIN TRY
---BEGIN TRANSACTION
+BEGIN TRY
+BEGIN TRANSACTION
 
--- Todos los insert se ejecutan con exito o ninguno, esto para que no queden relaciones rotas si se rompe 
+--Todos los insert se ejecutan con exito o ninguno, esto para que no queden relaciones rotas si se rompe 
 
---COMMIT TRANSACTION
+INSERT INTO [DSW].Rol VALUES 
+('Administrador General',0),
+('Cliente',0)
 
---END TRY
---BEGIN CATCH
---	SELECT  
---    ERROR_NUMBER() AS ErrorNumber  
---    ,ERROR_SEVERITY() AS ErrorSeverity  
---    ,ERROR_STATE() AS ErrorState  
---    ,ERROR_PROCEDURE() AS ErrorProcedure  
---    ,ERROR_LINE() AS ErrorLine  
---    ,ERROR_MESSAGE() AS ErrorMessage;  
---	ROLLBACK TRANSACTION
---END CATCH
---GO
+INSERT INTO [DSW].Funcion VALUES
+('ABM ROL', 0),
+('ABM USUARIO', 0),
+('ABM PUERTO', 0),
+('ABM RECORRIDO', 0),
+('ABM CRUCERO', 0),
+('ABM VIAJE', 0),
+('COMPRAS Y RESERVAS', 0),
+('PAGOS', 0),
+('LISTADO ESTADISTICO', 0)
+
+INSERT INTO [DSW].Funcion_x_Rol
+SELECT
+	f_id, r_id
+FROM 
+	[DSW].Rol,
+	[DSW].Funcion
+WHERE
+	r_id = 1
+
+
+INSERT INTO [DSW].Funcion_x_Rol
+SELECT
+	f_id, r_id
+FROM 
+	[DSW].Rol,
+	[DSW].Funcion
+WHERE
+	r_id = 2
+	AND f_descripcion IN ('COMPRAS Y RESERVAS', 'PAGOS')
+
+INSERT INTO [DSW].Usuario VALUES
+('admin', HASHBYTES('SHA2_256', CONVERT(nvarchar(50), 'w23e')), 0, 0),
+('clienteGenerico', NULL, 0, 0)
+
+INSERT INTO [DSW].Rol_x_Usuario
+SELECT 
+	u_id,
+	r_id
+FROM 
+	[DSW].Usuario,
+	[DSW].Rol
+WHERE
+	u_id = 1
+	AND r_id = 1
+
+INSERT INTO [DSW].Rol_x_Usuario
+SELECT 
+	u_id,
+	r_id
+FROM 
+	[DSW].Usuario,
+	[DSW].Rol
+WHERE
+	u_id = 2
+	AND r_id = 2
+
+INSERT INTO [DSW].Puerto
+SELECT DISTINCT PUERTO_DESDE 
+FROM gd_esquema.Maestra m1
+UNION 
+SELECT PUERTO_HASTA
+FROM gd_esquema.Maestra m1
+
+;WITH tramo_maestra as(SELECT DISTINCT PUERTO_DESDE as desde, PUERTO_HASTA as hasta, RECORRIDO_PRECIO_BASE precio FROM gd_esquema.Maestra)
+INSERT INTO DSW.Tramo
+SELECT
+	p_desde.pt_id,
+	p_hasta.pt_id,
+	precio
+FROM
+	tramo_maestra 
+	INNER JOIN DSW.Puerto as p_desde ON p_desde.pt_descripcion = desde
+	INNER JOIN DSW.Puerto as p_hasta ON p_hasta.pt_descripcion = hasta
+
+INSERT INTO [DSW].Recorrido VALUES 
+('43820864',0),
+('43820865',0),
+('43820866',0),
+('43820867',0),
+('43820868',0),
+('43820869',0),
+('43820870',0),
+('43820871',0),
+('43820872',0),
+('43820873',0),
+('43820874',0),
+('43820875',0),
+('43820876',0),
+('43820877',0),
+('43820878',0),
+('43820879',0),
+('43820880',0),
+('43820881',0),
+('43820882',0),
+('43820883',0),
+('43820884',0),
+('43820885',0),
+('43820886',0),
+('43820887',0),
+('43820888',0),
+('43820889',0),
+('43820890',0),
+('43820891',0),
+('43820892',0),
+('43820893',0),
+('43820894',0),
+('43820895',0),
+('43820896',0),
+('43820897',0),
+('43820898',0),
+('43820899',0),
+('43820900',0),
+('43820901',0),
+('43820902',0),
+('43820903',0),
+('43820904',0),
+('43820905',0),
+('43820906',0),
+('43820907',0),
+('43820908',0)
+
+DECLARE @recorrido TABLE (cod decimal(18,0), desde nvarchar(510), hasta nvarchar(510))
+
+INSERT INTO @recorrido
+SELECT DISTINCT RECORRIDO_CODIGO cod, PUERTO_DESDE desde, PUERTO_HASTA hasta FROM gd_esquema.Maestra
+
+INSERT INTO DSW.Recorridos_x_tramos
+SELECT r1.cod, (SELECT t_id FROM DSW.Tramo INNER JOIN DSW.Puerto desde ON t_id_origen = desde.pt_id INNER JOIN DSW.Puerto hasta ON t_id_destino = hasta.pt_id WHERE desde.pt_descripcion = r2.desde AND hasta.pt_descripcion = r2.hasta ), 2 FROM @recorrido r1 INNER JOIN @recorrido r2 ON r1.hasta = r2.desde WHERE r1.cod = r2.cod ORDER BY 2
+
+INSERT INTO DSW.Recorridos_x_tramos
+SELECT r1.cod, (SELECT t_id FROM DSW.Tramo INNER JOIN DSW.Puerto desde ON t_id_origen = desde.pt_id INNER JOIN DSW.Puerto hasta ON t_id_destino = hasta.pt_id WHERE desde.pt_descripcion = r1.desde AND hasta.pt_descripcion = r1.hasta ), 1 FROM @recorrido r1 INNER JOIN @recorrido r2 ON r1.hasta = r2.desde WHERE r1.cod = r2.cod ORDER BY 2
+
+INSERT INTO DSW.Recorridos_x_tramos
+SELECT DISTINCT RECORRIDO_CODIGO cod, (SELECT t_id FROM DSW.Tramo INNER JOIN DSW.Puerto desde ON t_id_origen = desde.pt_id INNER JOIN DSW.Puerto hasta ON t_id_destino = hasta.pt_id WHERE desde.pt_descripcion = PUERTO_DESDE AND hasta.pt_descripcion = PUERTO_HASTA ) , 1 FROM gd_esquema.Maestra WHERE RECORRIDO_CODIGO IN (43820864,43820908)
+
+COMMIT TRANSACTION
+
+END TRY
+BEGIN CATCH
+	SELECT  
+    ERROR_NUMBER() AS ErrorNumber  
+    ,ERROR_SEVERITY() AS ErrorSeverity  
+    ,ERROR_STATE() AS ErrorState  
+    ,ERROR_PROCEDURE() AS ErrorProcedure  
+    ,ERROR_LINE() AS ErrorLine  
+    ,ERROR_MESSAGE() AS ErrorMessage;  
+	ROLLBACK TRANSACTION
+END CATCH
+GO
 
 --------------------FIN DE INSERTS --------------------------------------------
 
