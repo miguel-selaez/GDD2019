@@ -43,7 +43,7 @@ CREATE TABLE [DSW].[Recorridos_x_tramos] (
 GO
 
 CREATE TABLE [DSW].[Pago] (
-  [p_id] int,
+  [p_id] int IDENTITY(1,1),
   [p_cant_cuotas] int,
   [p_cuotas_pagas] int,
   [p_total_pagado] decimal(18,2),
@@ -55,7 +55,7 @@ CREATE TABLE [DSW].[Pago] (
 GO
 
 CREATE TABLE [DSW].[Viaje] (
-  [v_id] int,
+  [v_id] int IDENTITY(1,1),
   [v_id_crucero] int,
   [v_id_recorrido] decimal(18,0),
   [v_fecha_salida] datetime2(3),
@@ -67,7 +67,7 @@ CREATE TABLE [DSW].[Viaje] (
 GO
 
 CREATE TABLE [DSW].[Cliente] (
-  [c_id] int,
+  [c_id] int IDENTITY(1,1),
   [c_nombre] nvarchar(255),
   [c_apellido] nvarchar(255),
   [c_dni] decimal(18,0),
@@ -75,6 +75,7 @@ CREATE TABLE [DSW].[Cliente] (
   [c_telefono] int,
   [c_mail] nvarchar(255),
   [c_fecha_nacimiento] datetime2(3),
+  [c_inconsistente] bit,
   PRIMARY KEY ([c_id])
 );
 
@@ -95,7 +96,7 @@ CREATE TABLE [DSW].[Pasaje] (
 GO
 
 CREATE TABLE [DSW].[Crucero] (
-  [cr_id] int,
+  [cr_id] int IDENTITY (1,1),
   [cr_codigo] nvarchar(50),
   [cr_modelo] nvarchar(50),
   [cr_fabricante] nvarchar(255),
@@ -110,7 +111,7 @@ CREATE TABLE [DSW].[Crucero] (
 GO
 
 CREATE TABLE [DSW].[Cabina] (
-  [ca_id] int,
+  [ca_id] int IDENTITY (1,1),
   [ca_numero] decimal(18,0),
   [ca_piso] decimal(18,0),
   [ca_id_crucero] int,
@@ -121,7 +122,7 @@ CREATE TABLE [DSW].[Cabina] (
 GO
 
 CREATE TABLE [DSW].[Tipo_cabina] (
-  [tc_id] int,
+  [tc_id] int IDENTITY (1,1),
   [tc_descripcion] nvarchar(255),
   [tc_porcentaje_recargo] decimal(18,2),
   PRIMARY KEY ([tc_id])
@@ -130,7 +131,7 @@ CREATE TABLE [DSW].[Tipo_cabina] (
 GO
 
 CREATE TABLE [DSW].[Medio_Pago] (
-  [mp_id] int,
+  [mp_id] int IDENTITY(1,1),
   [mp_descripcion] nvarchar(100),
   PRIMARY KEY ([mp_id])
 );
@@ -199,16 +200,20 @@ print (CONCAT('Creacion de SPs ', CONVERT(VARCHAR, GETDATE(), 114)))
 --------------------FIN CREACION DE SPS --------------------------------------------
 
 print (CONCAT('INSERTS ', CONVERT(VARCHAR, GETDATE(), 114)))
+--VARIABLES
+DECLARE @fecha_actual datetime2(3) = GETDATE()
 
 BEGIN TRY
 BEGIN TRANSACTION
 
 --Todos los insert se ejecutan con exito o ninguno, esto para que no queden relaciones rotas si se rompe 
 
+--Rol
 INSERT INTO [DSW].Rol VALUES 
 ('Administrador General',0),
 ('Cliente',0)
 
+--Funcion
 INSERT INTO [DSW].Funcion VALUES
 ('ABM ROL', 0),
 ('ABM USUARIO', 0),
@@ -220,6 +225,7 @@ INSERT INTO [DSW].Funcion VALUES
 ('PAGOS', 0),
 ('LISTADO ESTADISTICO', 0)
 
+--Funcion_x_Rol
 INSERT INTO [DSW].Funcion_x_Rol
 SELECT
 	f_id, r_id
@@ -228,7 +234,6 @@ FROM
 	[DSW].Funcion
 WHERE
 	r_id = 1
-
 
 INSERT INTO [DSW].Funcion_x_Rol
 SELECT
@@ -240,10 +245,12 @@ WHERE
 	r_id = 2
 	AND f_descripcion IN ('COMPRAS Y RESERVAS', 'PAGOS')
 
+--Usuario
 INSERT INTO [DSW].Usuario VALUES
 ('admin', HASHBYTES('SHA2_256', CONVERT(nvarchar(50), 'w23e')), 0, 0),
 ('clienteGenerico', NULL, 0, 0)
 
+--Rol_x_Usuario
 INSERT INTO [DSW].Rol_x_Usuario
 SELECT 
 	u_id,
@@ -266,6 +273,7 @@ WHERE
 	u_id = 2
 	AND r_id = 2
 
+--Puerto
 INSERT INTO [DSW].Puerto
 SELECT DISTINCT PUERTO_DESDE 
 FROM gd_esquema.Maestra m1
@@ -273,6 +281,7 @@ UNION
 SELECT PUERTO_HASTA
 FROM gd_esquema.Maestra m1
 
+--Tramo
 ;WITH tramo_maestra as(SELECT DISTINCT PUERTO_DESDE as desde, PUERTO_HASTA as hasta, RECORRIDO_PRECIO_BASE precio FROM gd_esquema.Maestra)
 INSERT INTO DSW.Tramo
 SELECT
@@ -284,6 +293,7 @@ FROM
 	INNER JOIN DSW.Puerto as p_desde ON p_desde.pt_descripcion = desde
 	INNER JOIN DSW.Puerto as p_hasta ON p_hasta.pt_descripcion = hasta
 
+--Recorrido
 INSERT INTO [DSW].Recorrido VALUES 
 ('43820864',0),
 ('43820865',0),
@@ -331,6 +341,7 @@ INSERT INTO [DSW].Recorrido VALUES
 ('43820907',0),
 ('43820908',0)
 
+--Reoccidos_x_tramos
 DECLARE @recorrido TABLE (cod decimal(18,0), desde nvarchar(510), hasta nvarchar(510))
 
 INSERT INTO @recorrido
@@ -345,17 +356,81 @@ SELECT r1.cod, (SELECT t_id FROM DSW.Tramo INNER JOIN DSW.Puerto desde ON t_id_o
 INSERT INTO DSW.Recorridos_x_tramos
 SELECT DISTINCT RECORRIDO_CODIGO cod, (SELECT t_id FROM DSW.Tramo INNER JOIN DSW.Puerto desde ON t_id_origen = desde.pt_id INNER JOIN DSW.Puerto hasta ON t_id_destino = hasta.pt_id WHERE desde.pt_descripcion = PUERTO_DESDE AND hasta.pt_descripcion = PUERTO_HASTA ) , 1 FROM gd_esquema.Maestra WHERE RECORRIDO_CODIGO IN (43820864,43820908)
 
+--Tipo_cabina
+INSERT INTO DSW.Tipo_cabina
+SELECT DISTINCT CABINA_TIPO, CABINA_TIPO_PORC_RECARGO FROM gd_esquema.Maestra
+
+--Crucero
+
+INSERT INTO DSW.Crucero
+SELECT DISTINCT 
+	CRUCERO_IDENTIFICADOR, 
+	CRUCERO_MODELO, 
+	CRU_FABRICANTE,
+	@fecha_actual,
+	0,
+	NULL,
+	NULL,
+	NULL
+FROM gd_esquema.Maestra
+
+--Cabina
+INSERT INTO DSW.Cabina
+SELECT DISTINCT 
+	CABINA_NRO, 
+	CABINA_PISO, 
+	(SELECT cr_id FROM DSW.Crucero WHERE cr_codigo = CRUCERO_IDENTIFICADOR),
+	(SELECT tc_id FROM DSW.Tipo_cabina WHERE tc_descripcion = RTRIM(LTRIM(CABINA_TIPO))) 
+FROM 
+	gd_esquema.Maestra 
+
+--Viaje
+INSERT INTO DSW.Viaje
+SELECT DISTINCT 
+	(SELECT cr_id FROM DSW.Crucero WHERE cr_codigo = CRUCERO_IDENTIFICADOR) , 
+	CONVERT(decimal(18,0),RECORRIDO_CODIGO), 
+	FECHA_SALIDA, 
+	FECHA_LLEGADA, 
+	FECHA_LLEGADA_ESTIMADA 
+FROM 
+	gd_esquema.Maestra
+
+--Cliente
+SELECT CLI_DNI INTO #cliente_inconsistente FROM (SELECT DISTINCT CLI_NOMBRE, CLI_APELLIDO, CLI_DNI FROM gd_esquema.Maestra) M_AUX GROUP BY CLI_DNI HAVING COUNT(1) > 1
+
+INSERT INTO DSW.Cliente
+SELECT DISTINCT ma.CLI_NOMBRE, ma.CLI_APELLIDO, ma.CLI_DNI, ma.CLI_DIRECCION, ma.CLI_TELEFONO, ma.CLI_MAIL, ma.CLI_FECHA_NAC, ISNULL((SELECT TOP 1 1 FROM #cliente_inconsistente ci WHERE ci.CLI_DNI = ma.CLI_DNI), 0) FROM gd_esquema.Maestra ma 
+
+DROP TABLE #cliente_inconsistente
+
+--Medio_Pago
+INSERT INTO DSW.Medio_Pago
+VALUES('EFECTIVO'), ('CRÉDITO'), ('DÉBITO')
+
+--Pago
+;WITH pagos as (SELECT CLI_NOMBRE as nomb, CLI_APELLIDO as ape, CLI_DNI as dni, PASAJE_CODIGO as cod_p, PASAJE_PRECIO precio_p FROM gd_esquema.Maestra WHERE PASAJE_CODIGO IS NOT NULL AND PASAJE_PRECIO IS NOT NULL AND PASAJE_FECHA_COMPRA IS NOT NULL) 
+INSERT INTO DSW.Pago
+SELECT
+	1,
+	1,
+	precio_p,
+	c_id ,
+	1
+FROM
+	pagos
+	INNER JOIN DSW.Cliente ON c_nombre = nomb AND c_apellido = ape AND c_dni = dni
+
 COMMIT TRANSACTION
 
 END TRY
 BEGIN CATCH
 	SELECT  
-    ERROR_NUMBER() AS ErrorNumber  
-    ,ERROR_SEVERITY() AS ErrorSeverity  
-    ,ERROR_STATE() AS ErrorState  
-    ,ERROR_PROCEDURE() AS ErrorProcedure  
-    ,ERROR_LINE() AS ErrorLine  
-    ,ERROR_MESSAGE() AS ErrorMessage;  
+	  ERROR_NUMBER() AS ErrorNumber  
+    , ERROR_SEVERITY() AS ErrorSeverity  
+    , ERROR_STATE() AS ErrorState  
+    , ERROR_PROCEDURE() AS ErrorProcedure  
+    , ERROR_LINE() AS ErrorLine  
+    , ERROR_MESSAGE() AS ErrorMessage;  
 	ROLLBACK TRANSACTION
 END CATCH
 GO
