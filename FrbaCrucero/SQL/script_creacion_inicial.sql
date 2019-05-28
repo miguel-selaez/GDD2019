@@ -139,7 +139,7 @@ CREATE TABLE [DSW].[Medio_Pago] (
 GO
 
 CREATE TABLE [DSW].[Reserva] (
-  [r_codigo] decimal(18,0),
+  [r_codigo] decimal(18,0) IDENTITY(53930108, 1),
   [r_fecha] datetime2(3),
   [r_estado] bit,
   [r_id_cliente] int,
@@ -407,18 +407,97 @@ DROP TABLE #cliente_inconsistente
 INSERT INTO DSW.Medio_Pago
 VALUES('EFECTIVO'), ('CRÉDITO'), ('DÉBITO')
 
---Pago
-;WITH pagos as (SELECT CLI_NOMBRE as nomb, CLI_APELLIDO as ape, CLI_DNI as dni, PASAJE_CODIGO as cod_p, PASAJE_PRECIO precio_p FROM gd_esquema.Maestra WHERE PASAJE_CODIGO IS NOT NULL AND PASAJE_PRECIO IS NOT NULL AND PASAJE_FECHA_COMPRA IS NOT NULL) 
-INSERT INTO DSW.Pago
-SELECT
-	1,
-	1,
-	precio_p,
-	c_id ,
-	1
-FROM
-	pagos
-	INNER JOIN DSW.Cliente ON c_nombre = nomb AND c_apellido = ape AND c_dni = dni
+-- Pasaje
+CREATE TABLE #main(
+	[CRUCERO_IDENTIFICADOR] [nvarchar](50) NULL,
+	[RECORRIDO_CODIGO] [decimal](18, 0) NULL,
+	[FECHA_SALIDA] [datetime2](3) NULL,
+	[FECHA_LLEGADA] [datetime2](3) NULL,
+	[FECHA_LLEGADA_ESTIMADA] [datetime2](3) NULL,
+
+	[CABINA_NRO] [decimal](18, 0) NULL,
+	[CABINA_PISO] [decimal](18, 0) NULL,
+	[CABINA_TIPO] [nvarchar](255) NULL,
+
+	[CLI_NOMBRE] [nvarchar](255) NULL,
+	[CLI_APELLIDO] [nvarchar](255) NULL,
+	[CLI_DNI] [decimal](18, 0) NULL,
+
+	[PASAJE_CODIGO] [decimal](18, 0) NULL,
+	[PASAJE_FECHA_COMPRA] [datetime2](3) NULL,
+	[PASAJE_PRECIO] [decimal](18, 2) NULL,
+		
+	[RESERVA_CODIGO] [decimal](18, 0) NULL,
+	[RESERVA_FECHA] [datetime2](3) NULL,
+
+	id_viaje int null, 
+	id_cabina int null,
+	id_reserva int null,
+	id_cliente int null,
+	id_pago int null
+)
+
+INSERT INTO #main
+SELECT 
+	CRUCERO_IDENTIFICADOR , 
+	RECORRIDO_CODIGO, 
+	FECHA_SALIDA, 
+	FECHA_LLEGADA, 
+	FECHA_LLEGADA_ESTIMADA,
+
+	CABINA_NRO, 
+	CABINA_PISO,
+	CABINA_TIPO,
+
+	CLI_NOMBRE,
+	CLI_APELLIDO,
+	CLI_DNI,
+
+	PASAJE_CODIGO,
+	PASAJE_FECHA_COMPRA,
+	PASAJE_PRECIO,
+
+	RESERVA_CODIGO,
+	RESERVA_FECHA,
+	0,
+	0,
+	0,
+	0,
+	0
+FROM 
+	gd_esquema.Maestra 
+
+-- SET id Viaje
+update m
+set m.id_viaje = v.v_id
+from #main as m
+inner join DSW.Viaje as v
+	on m.RECORRIDO_CODIGO = v.v_id_recorrido
+	and m.FECHA_SALIDA = v.v_fecha_salida
+	and m.FECHA_LLEGADA = v.v_fecha_llegada
+	and m.FECHA_LLEGADA_ESTIMADA = v.v_fecha_llegada_estimada
+inner join DSW.Crucero as c
+	on v.v_id_crucero = c.cr_id
+	and m.CRUCERO_IDENTIFICADOR = c.cr_codigo
+ 
+--select * from #main
+drop table #main
+
+
+----Pago
+--;WITH pagos as (SELECT CLI_NOMBRE as nomb, CLI_APELLIDO as ape, CLI_DNI as dni, PASAJE_CODIGO as cod_p, PASAJE_PRECIO precio_p FROM gd_esquema.Maestra WHERE PASAJE_CODIGO IS NOT NULL AND PASAJE_PRECIO IS NOT NULL AND PASAJE_FECHA_COMPRA IS NOT NULL) 
+--INSERT INTO DSW.Pago
+--SELECT
+--	1,
+--	1,
+--	precio_p,
+--	c_id ,
+--	1
+--FROM
+--	pagos
+--	INNER JOIN DSW.Cliente ON c_nombre = nomb AND c_apellido = ape AND c_dni = dni
+
+
 
 COMMIT TRANSACTION
 
