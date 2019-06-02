@@ -44,9 +44,9 @@ GO
 
 CREATE TABLE [DSW].[Pago] (
   [p_id] int IDENTITY(1,1),
+  [p_total] decimal(18,2),
+  [p_fecha_compra] datetime2(3),
   [p_cant_cuotas] int,
-  [p_cuotas_pagas] int,
-  [p_total_pagado] decimal(18,2),
   [p_id_cliente] int,
   [p_id_medio_pago] int,
   PRIMARY KEY ([p_id])
@@ -82,8 +82,8 @@ CREATE TABLE [DSW].[Cliente] (
 GO
 
 CREATE TABLE [DSW].[Pasaje] (
-  [pa_codigo] decimal(18,0),
-  [pa_fecha_compra] datetime2(3),
+  [pa_codigo] decimal(18,0) IDENTITY(28797566, 1),
+  --[pa_fecha_compra] datetime2(3),
   [pa_precio] decimal(18,2),
   [pa_id_viaje] int,
   [pa_id_cabina] int,
@@ -203,9 +203,8 @@ print (CONCAT('INSERTS ', CONVERT(VARCHAR, GETDATE(), 114)))
 --VARIABLES
 DECLARE @fecha_actual datetime2(3) = GETDATE()
 
-BEGIN TRY
 BEGIN TRANSACTION
-
+BEGIN TRY
 --Todos los insert se ejecutan con exito o ninguno, esto para que no queden relaciones rotas si se rompe 
 
 --Rol
@@ -407,7 +406,7 @@ DROP TABLE #cliente_inconsistente
 INSERT INTO DSW.Medio_Pago
 VALUES('EFECTIVO'), ('CRÉDITO'), ('DÉBITO')
 
--- Pasaje
+---- Pasaje
 CREATE TABLE #main(
 	[CRUCERO_IDENTIFICADOR] [nvarchar](50) NULL,
 	[RECORRIDO_CODIGO] [decimal](18, 0) NULL,
@@ -430,6 +429,7 @@ CREATE TABLE #main(
 	[RESERVA_CODIGO] [decimal](18, 0) NULL,
 	[RESERVA_FECHA] [datetime2](3) NULL,
 
+	id_crucero int null,
 	id_viaje int null, 
 	id_cabina int null,
 	id_reserva int null,
@@ -463,11 +463,19 @@ SELECT
 	0,
 	0,
 	0,
+	0,
 	0
 FROM 
-	gd_esquema.Maestra 
+	gd_esquema.Maestra;
 
--- SET id Viaje
+-- crucero
+update m
+set m.id_crucero = c.cr_id
+from #main as m
+inner join DSW.Crucero as c
+	on m.CRUCERO_IDENTIFICADOR = c.cr_codigo;
+
+-- viaje
 update m
 set m.id_viaje = v.v_id
 from #main as m
@@ -476,30 +484,78 @@ inner join DSW.Viaje as v
 	and m.FECHA_SALIDA = v.v_fecha_salida
 	and m.FECHA_LLEGADA = v.v_fecha_llegada
 	and m.FECHA_LLEGADA_ESTIMADA = v.v_fecha_llegada_estimada
-inner join DSW.Crucero as c
-	on v.v_id_crucero = c.cr_id
-	and m.CRUCERO_IDENTIFICADOR = c.cr_codigo
+	and m.id_crucero = v.v_id_crucero;
  
---select * from #main
+ -- cabina
+ update m
+set m.id_cabina = c.ca_id
+from #main as m
+inner join DSW.Cabina as c
+	on m.id_crucero = c.ca_id_crucero
+	and m.CABINA_NRO = c.ca_numero
+	and m.CABINA_PISO = c.ca_piso
+inner join DSW.Tipo_cabina as t
+	on c.ca_id_tipo_cabina = t.tc_id
+	and m.CABINA_TIPO = t.tc_descripcion;
+
+-- cliente
+update m
+set m.id_cliente = cl.c_id
+from #main as m
+inner join DSW.Cliente as cl
+	on m.CLI_APELLIDO = cl.c_apellido
+	and m.CLI_DNI = cl.c_dni
+	and m.CLI_NOMBRE = cl.c_nombre;
+
+
+-- pagos insert
+INSERT INTO DSW.Pago
+select 
+	PASAJE_PRECIO,
+	PASAJE_FECHA_COMPRA,
+	1,
+	id_cliente,
+	1
+from #main
+where PASAJE_CODIGO IS NOT NULL;
+
+-- pagos update
+update m
+set m.id_pago = p.p_id
+from #main as m
+inner join DSW.Pago as p
+	on m.id_cliente = p.p_id_cliente
+	and m.PASAJE_PRECIO = p.p_total
+	and m.PASAJE_FECHA_COMPRA = p.p_fecha_compra;
+
+-- reservas insert
+INSERT INTO DSW.Reserva
+select 
+--RESERVA_CODIGO,
+RESERVA_FECHA,
+0,-- porque las reservas ya se pagaron y no vencieron
+id_cliente
+from #main
+where RESERVA_CODIGO IS NOT NULL
+order by RESERVA_CODIGO;
+
+-- pasajes insert
+INSERT INTO DSW.Pasaje
+select 
+	MAX(PASAJE_PRECIO),
+	id_viaje,
+	id_cabina,
+	MAX(RESERVA_CODIGO),
+	id_cliente,
+	MAX(id_pago)
+from #main
+group by 
+	id_viaje,
+	id_cabina,
+	id_cliente
+order by MAX(PASAJE_CODIGO);
+
 drop table #main
-
-
-----Pago
---;WITH pagos as (SELECT CLI_NOMBRE as nomb, CLI_APELLIDO as ape, CLI_DNI as dni, PASAJE_CODIGO as cod_p, PASAJE_PRECIO precio_p FROM gd_esquema.Maestra WHERE PASAJE_CODIGO IS NOT NULL AND PASAJE_PRECIO IS NOT NULL AND PASAJE_FECHA_COMPRA IS NOT NULL) 
---INSERT INTO DSW.Pago
---SELECT
---	1,
---	1,
---	precio_p,
---	c_id ,
---	1
---FROM
---	pagos
---	INNER JOIN DSW.Cliente ON c_nombre = nomb AND c_apellido = ape AND c_dni = dni
-
-
-
-COMMIT TRANSACTION
 
 END TRY
 BEGIN CATCH
@@ -512,7 +568,10 @@ BEGIN CATCH
     , ERROR_MESSAGE() AS ErrorMessage;  
 	ROLLBACK TRANSACTION
 END CATCH
-GO
+
+IF @@TRANCOUNT > 0  
+    COMMIT TRANSACTION;  
+GO  
 
 --------------------FIN DE INSERTS --------------------------------------------
 
