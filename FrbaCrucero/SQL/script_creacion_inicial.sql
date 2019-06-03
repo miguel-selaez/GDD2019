@@ -339,6 +339,51 @@ BEGIN
 END
 GO
 
+
+CREATE PROCEDURE [DSW].P_Obtener_Puerto
+	@id_puerto int
+AS
+BEGIN
+	SELECT * FROM [DSW].Puerto WHERE pt_id = @id_puerto;
+END
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Tramos_x_Recorrido
+	@id_recorrido int
+AS
+BEGIN
+	SELECT t_id, t_id_origen, t_id_destino, t_precio FROM [DSW].Tramo as t 
+	INNER JOIN [DSW].Recorridos_x_tramos as rt ON t_id = rxt_id_tramo
+	WHERE rxt_id_recorrido = @id_recorrido;
+END
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Tramos
+AS
+BEGIN
+	SELECT t_id, t_id_origen, t_id_destino, t_precio FROM [DSW].Tramo;
+END
+GO
+
+CREATE PROCEDURE [DSW].P_Guardar_Tramo_x_Recorrido
+	@id_tramo int,
+	@id_recorrido int,
+	@orden int
+AS
+BEGIN
+	INSERT INTO [DSW].Recorridos_x_tramos VALUES (@id_recorrido, @id_tramo, @orden);
+END
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Recorridos
+	@codigo char(20),
+	@baja bit
+AS
+BEGIN
+	SELECT * FROM [DSW].Recorrido WHERE (rc_codigo = @codigo OR @codigo IS NULL) AND (rc_baja = @baja OR @baja IS NULL) ORDER BY rc_codigo;
+END
+GO
+
 --------------------FIN CREACION DE SPS --------------------------------------------
 
 print (CONCAT('INSERTS ', CONVERT(VARCHAR, GETDATE(), 114)))

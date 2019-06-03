@@ -12,7 +12,9 @@ namespace FrbaCrucero.AbmRecorrido
 {
     public partial class Recorrido : Form
     {
-        private Model.Session session;
+        private Model.Session _session;
+        private Model.Recorrido _editObject;
+        private ListadoRecorrido _listado;
 
         public Recorrido()
         {
@@ -22,7 +24,17 @@ namespace FrbaCrucero.AbmRecorrido
         public Recorrido(Model.Session session)
         {
             // TODO: Complete member initialization
-            this.session = session;
+            _session = session;
+        }
+
+        public Recorrido(Model.Session session, Model.Recorrido editRecorrido, ListadoRecorrido listado)
+        {
+            InitializeComponent();
+            _session = session;
+            _editObject = editRecorrido;
+            _listado = listado;
+            //InitValues();
+            //BindRol();
         }
     }
 }

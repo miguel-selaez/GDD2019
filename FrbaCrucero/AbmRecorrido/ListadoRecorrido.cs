@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FrbaCrucero.DAO;
+using FrbaCrucero.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,7 +14,8 @@ namespace FrbaCrucero.AbmRecorrido
 {
     public partial class ListadoRecorrido : Form
     {
-        private Model.Session session;
+        private Session _session;
+        private List<Model.Recorrido> _results;
 
         public ListadoRecorrido()
         {
@@ -21,8 +24,41 @@ namespace FrbaCrucero.AbmRecorrido
 
         public ListadoRecorrido(Model.Session session)
         {
-            // TODO: Complete member initialization
-            this.session = session;
+            InitializeComponent();
+            _session = session;
+            InitValues();
         }
+
+        private void InitValues()
+        {
+            cbVigencia.SelectedIndex = 0;
+        }
+
+        public List<Model.Recorrido> GetResults()
+        {
+            return DAOFactory.RecorridoDAO.GetRecorridos(txtCodigo.Text, cbVigencia.SelectedItem.ToString());
+        }
+
+        private void BtnBuscar_Click(object sender, EventArgs e)
+        {
+            dgRecorridos.Rows.Clear();
+            _results = GetResults();
+
+            foreach (Model.Recorrido recorrido in _results)
+            {
+                var index = dgRecorridos.Rows.Add();
+                dgRecorridos.Rows[index].Cells["Codigo"].Value = recorrido.Codigo;
+                dgRecorridos.Rows[index].Cells["Vigente"].Value = recorrido.Baja ? "No" : "Si";
+                dgRecorridos.Rows[index].Cells["Editar"].Value = "Seleccionar";
+            }
+        }
+
+        private void dgRecorrido_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var selectedRol = _results.ElementAt(e.RowIndex);
+            var nuevo = new Recorrido(_session, selectedRol, this);
+            nuevo.Show();
+        }
+
     }
 }

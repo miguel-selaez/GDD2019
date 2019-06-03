@@ -103,7 +103,10 @@
     <Compile Include="DAO\ClienteDAO.cs" />
     <Compile Include="DAO\DAOFactory.cs" />
     <Compile Include="DAO\DBConnection.cs" />
+    <Compile Include="DAO\RecorridoDAO.cs" />
+    <Compile Include="DAO\TramoDAO.cs" />
     <Compile Include="DAO\FuncionDAO.cs" />
+    <Compile Include="DAO\PuertoDAO.cs" />
     <Compile Include="DAO\RolDAO.cs" />
     <Compile Include="DAO\UsuarioDAO.cs" />
     <Compile Include="Exceptions\ClienteException.cs" />
@@ -144,6 +147,9 @@
     <Compile Include="Model\Cliente.cs" />
     <Compile Include="Model\DataRowExtensions.cs" />
     <Compile Include="Model\Funcion.cs" />
+    <Compile Include="Model\Puerto.cs" />
+    <Compile Include="Model\Tramo.cs" />
+    <Compile Include="Model\Recorrido.cs" />
     <Compile Include="Model\Rol.cs" />
     <Compile Include="Model\Session.cs" />
     <Compile Include="Model\Usuario.cs" />
@@ -156,6 +162,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools.cs" />
+    <EmbeddedResource Include="AbmRecorrido\ListadoRecorrido.resx">
+      <DependentUpon>ListadoRecorrido.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmRecorrido\Recorrido.resx">
+      <DependentUpon>Recorrido.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AbmRol\ListadoRol.resx">
       <DependentUpon>ListadoRol.cs</DependentUpon>
     </EmbeddedResource>

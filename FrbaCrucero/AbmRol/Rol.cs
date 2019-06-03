@@ -2,12 +2,8 @@
 using FrbaCrucero.Model;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FrbaCrucero.AbmRol
@@ -23,6 +19,16 @@ namespace FrbaCrucero.AbmRol
             InitializeComponent();
             _session = session;
             InitValues();
+        }
+
+        public Rol(Session session, Model.Rol editRol, ListadoRol listado)
+        {
+            InitializeComponent();
+            _session = session;
+            _editObject = editRol;
+            _listado = listado;
+            InitValues();
+            BindRol();
         }
 
         private void InitValues()
@@ -47,15 +53,7 @@ namespace FrbaCrucero.AbmRol
         {
             return _editObject == null || !_editObject.Funciones.Exists(f => f.Id == funcion.Id);
         }
-        public Rol(Session session, Model.Rol editRol, ListadoRol listado)
-        {
-            InitializeComponent();
-            _session = session;
-            _editObject = editRol;
-            _listado = listado;
-            InitValues();
-            BindRol();
-        }
+
 
         private void BindRol()
         {
@@ -76,16 +74,16 @@ namespace FrbaCrucero.AbmRol
             try
             {
                 ValidateForm();
-                var vigente = rdNo.Checked ? true : false;
+                var baja = rdNo.Checked ? false : true;
                 var funciones = lbFunciones.Items.Cast<Model.Funcion>().ToList();
                 if (_editObject == null)
                 {
-                    _editObject = new Model.Rol(txtDescripcion.Text, vigente, funciones);
+                    _editObject = new Model.Rol(txtDescripcion.Text, baja, funciones);
                 }
                 else
                 {
                     _editObject.Descripcion = txtDescripcion.Text;
-                    _editObject.Baja = vigente;
+                    _editObject.Baja = baja;
                     _editObject.Funciones = funciones;
                 }
                 DAO.DAOFactory.RolDAO.CreateOrUpdate(_editObject);
