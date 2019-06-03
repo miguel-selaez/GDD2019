@@ -260,6 +260,85 @@ END
 
 GO
 
+CREATE PROCEDURE [DSW].P_Obtener_Roles  
+	@descripcion nvarchar(255),
+	@baja bit
+AS
+BEGIN 
+	SELECT 
+		r.*
+	FROM 
+		[DSW].Rol as r
+	WHERE
+		(r.r_descripcion like '%'+ @descripcion + '%' OR @descripcion IS NULL)
+		AND (r.r_baja = @baja OR @baja IS NULL)
+	ORDER BY
+		r.r_descripcion
+
+END
+
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Funciones 
+	@baja bit
+AS
+BEGIN 
+	SELECT 
+		f.*
+	FROM 
+		[DSW].Funcion as f
+	WHERE 
+		f.f_baja = @baja
+	ORDER BY
+		f.f_descripcion
+
+END
+
+GO
+
+CREATE PROCEDURE [DSW].P_Guardar_Rol 
+	@id int, 
+	@descripcion nvarchar(255),
+	@baja bit
+AS
+BEGIN 
+	IF @id = 0
+	BEGIN 
+		INSERT INTO [DSW].Rol (r_descripcion, r_baja)
+		VALUES (@descripcion, @baja)
+
+		SELECT id_out = @@IDENTITY
+	END 
+	ELSE 
+	BEGIN 
+		UPDATE [DSW].Rol 
+		SET 
+			r_descripcion = @descripcion,
+			r_baja = @baja
+		WHERE 
+			r_id = @id;
+
+		SELECT id_out = @id;
+
+		DELETE [DSW].Funcion_x_Rol
+		WHERE 
+			fxr_id_rol = @id;
+	END
+
+END
+
+GO
+
+CREATE PROCEDURE [DSW].P_Guardar_Funcion_x_Rol 
+	@id_funcion int, 
+	@id_rol int
+AS
+BEGIN 
+	INSERT INTO [DSW].Funcion_x_Rol(fxr_id_funcion, fxr_id_rol)
+	VALUES (@id_funcion, @id_rol)
+END
+GO
+
 --------------------FIN CREACION DE SPS --------------------------------------------
 
 print (CONCAT('INSERTS ', CONVERT(VARCHAR, GETDATE(), 114)))

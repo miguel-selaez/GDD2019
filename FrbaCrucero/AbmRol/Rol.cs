@@ -80,7 +80,7 @@ namespace FrbaCrucero.AbmRol
                 var funciones = lbFunciones.Items.Cast<Model.Funcion>().ToList();
                 if (_editObject == null)
                 {
-                    //_editObject = new Model.Rol(txtDescripcion.Text, vigente, funciones);
+                    _editObject = new Model.Rol(txtDescripcion.Text, vigente, funciones);
                 }
                 else
                 {
@@ -90,10 +90,7 @@ namespace FrbaCrucero.AbmRol
                 }
                 DAO.DAOFactory.RolDAO.CreateOrUpdate(_editObject);
 
-                if (_listado != null)
-                    _listado.UpdateRoles();
-
-                Close();
+                CerrarAbm();
             }
             catch(Exception ex) {
                 string message = ex.Message;
@@ -115,6 +112,14 @@ namespace FrbaCrucero.AbmRol
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
+            CerrarAbm();
+        }
+
+        private void CerrarAbm()
+        {
+            if (_listado != null)
+                _listado.UpdateRoles();
+
             Close();
         }
 

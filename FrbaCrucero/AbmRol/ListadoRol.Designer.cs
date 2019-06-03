@@ -96,6 +96,7 @@
             this.btnLimpiar.TabIndex = 13;
             this.btnLimpiar.Text = "Limpiar";
             this.btnLimpiar.UseVisualStyleBackColor = true;
+            this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
             // 
             // btnBuscar
             // 
@@ -105,6 +106,7 @@
             this.btnBuscar.TabIndex = 12;
             this.btnBuscar.Text = "Buscar";
             this.btnBuscar.UseVisualStyleBackColor = true;
+            this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
             // 
             // txtDescripcion
             // 
@@ -128,6 +130,7 @@
             this.dgRoles.Name = "dgRoles";
             this.dgRoles.Size = new System.Drawing.Size(359, 150);
             this.dgRoles.TabIndex = 10;
+            this.dgRoles.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgRoles_CellContentClick);
             // 
             // Descripcion
             // 

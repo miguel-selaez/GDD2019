@@ -31,7 +31,7 @@ namespace FrbaCrucero.AbmRol
 
         public List<Model.Rol> GetResults()
         {
-            return null; //DAOFactory.RolDAO.GetRoles(txtDescripcion.Text, cbVigencia.SelectedItem.ToString());
+            return DAOFactory.RolDAO.GetRoles(txtDescripcion.Text, cbVigencia.SelectedItem.ToString());
         }
 
         private void btnBuscar_Click(object sender, EventArgs e)

@@ -51,6 +51,22 @@ IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Login')
 	DROP PROCEDURE [DSW].P_Login
 GO 	
 
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Roles')
+	DROP PROCEDURE [DSW].P_Obtener_Roles
+GO 
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Funciones')
+	DROP PROCEDURE [DSW].P_Obtener_Funciones
+GO 	
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Guardar_Rol')
+	DROP PROCEDURE [DSW].P_Guardar_Rol
+GO 	
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Guardar_Funcion_x_Rol')
+	DROP PROCEDURE [DSW].P_Guardar_Funcion_x_Rol
+GO 	
+
 --- TABLAS
 -- Limpieza de datos (TRUNCATE)
 TRUNCATE TABLE [DSW].Cabina
