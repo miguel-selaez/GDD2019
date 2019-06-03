@@ -48,7 +48,7 @@ namespace FrbaCrucero.DAO
         /// <returns></returns>
         public string ArmarSentenciaSP(string nombreSp, string[] parametros)
         {
-            var sqlStatement = "EXEC NPM." + nombreSp + " ";
+            var sqlStatement = "EXEC DSW." + nombreSp + " ";
             if (parametros.Length == 0)
             { // Agregado para llamar a SPs sin parametros de entrada
                 return sqlStatement + ";";

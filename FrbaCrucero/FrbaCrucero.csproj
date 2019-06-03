@@ -141,8 +141,8 @@
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
     <Compile Include="MenuCreator.cs" />
-    <Compile Include="Model\BaseData.cs" />
     <Compile Include="Model\Cliente.cs" />
+    <Compile Include="Model\DataRowExtensions.cs" />
     <Compile Include="Model\Funcion.cs" />
     <Compile Include="Model\Rol.cs" />
     <Compile Include="Model\Session.cs" />
@@ -156,6 +156,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools.cs" />
+    <EmbeddedResource Include="AbmRol\ListadoRol.resx">
+      <DependentUpon>ListadoRol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmRol\Rol.resx">
+      <DependentUpon>Rol.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Inicio.resx">
       <DependentUpon>Inicio.cs</DependentUpon>
     </EmbeddedResource>

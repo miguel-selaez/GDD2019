@@ -38,6 +38,19 @@ GO
 ALTER TABLE [DSW].[Cabina]  DROP CONSTRAINT [FK_Cabina_Tipo_cabina] 
 GO
 
+-- SPs
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Funciones_x_Rol')
+	DROP PROCEDURE [DSW].P_Obtener_Funciones_x_Rol
+GO 	
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Roles_x_Usuario')
+	DROP PROCEDURE [DSW].P_Obtener_Roles_x_Usuario
+GO
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Login')
+	DROP PROCEDURE [DSW].P_Login
+GO 	
+
 --- TABLAS
 -- Limpieza de datos (TRUNCATE)
 TRUNCATE TABLE [DSW].Cabina

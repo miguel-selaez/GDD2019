@@ -12,30 +12,34 @@ namespace FrbaCrucero.DAO
     {
         public RolDAO(DBConnection con) : base(con) { }
 
-        //public int CreateOrUpdate(Rol rol){
-        //    var query = ArmarSentenciaSP("P_Guardar_Rol", new[] { GetParam(rol.Id), GetParam(rol.Descripcion), GetParam(rol.Baja) });
-        //    var rolId = Int32.Parse(Connection.ExecuteSingleResult(query));
+        public int CreateOrUpdate(Rol rol)
+        {
+            var query = ArmarSentenciaSP("P_Guardar_Rol", new[] { GetParam(rol.Id), GetParam(rol.Descripcion), GetParam(rol.Baja) });
+            var rolId = Int32.Parse(Connection.ExecuteSingleResult(query));
 
-        //    foreach (var funcion in rol.Funciones) {
-        //        DAOFactory.FuncionDAO.SaveFuncionxRol(funcion, rolId);
-        //    }
-        //    return rolId;
-        //} 
+            foreach (var funcion in rol.Funciones)
+            {
+                DAOFactory.FuncionDAO.SaveFuncionxRol(funcion, rolId);
+            }
+            return rolId;
+        } 
 
-        //public List<Rol> GetRolesByUserId(int userId)
-        //{
-        //    var list = new List<Rol>();
+        public List<Rol> GetRolesByUserId(int userId)
+        {
+            var list = new List<Rol>();
 
-        //    var query = ArmarSentenciaSP("P_Obtener_Roles_x_Usuario", new[] { GetParam(userId) });
-        //    var result = Connection.ExecuteQuery(query);
+            var query = ArmarSentenciaSP("P_Obtener_Roles_x_Usuario", new[] { GetParam(userId) });
+            var result = Connection.ExecuteQuery(query);
 
-        //    if (result.Rows.Count > 0) {
-        //        foreach (DataRow row in result.Rows) {
-        //            list.Add(new Rol(row));
-        //        }
-        //    }
-        //    return list;
-        //}
+            if (result.Rows.Count > 0)
+            {
+                foreach (DataRow row in result.Rows)
+                {
+                    list.Add(new Rol(row));
+                }
+            }
+            return list;
+        }
 
         //public List<Rol> GetRoles(string descripcion, string vigencia) {
         //    var list = new List<Rol>();

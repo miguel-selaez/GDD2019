@@ -1,4 +1,5 @@
-﻿using FrbaCrucero.Exceptions;
+﻿using FrbaCrucero.DAO;
+using FrbaCrucero.Exceptions;
 using FrbaCrucero.Model;
 using System;
 using System.Collections.Generic;
@@ -36,7 +37,10 @@ namespace FrbaCrucero.Login
                 var currentUser = AutenticateUser();
                 if (currentUser != null)
                 {
-                    LoginHotel(currentUser);
+                    _inicio.SetSession(currentUser, currentUser.Roles.First());
+                    _inicio.SetMenuLogged();
+                    _inicio.Show();
+                    Close();
                 }
                 else throw new LoginException("Usuario o Password incorrecto.");
             }
@@ -44,29 +48,6 @@ namespace FrbaCrucero.Login
             {
                 lblError.Text = ex.Message;
             }
-        }
-
-        private void LoginHotel(Usuario currentUser)
-        {
-            //var hasMoreThanOneRole = currentUser.Roles.Count > 1;
-            //var hasMoreThanOneHotel = currentUser.HotelesAsignados.Count > 1;
-
-            //Form nextForm;
-            //if (hasMoreThanOneRole || hasMoreThanOneHotel)
-            //{
-            //    nextForm = new LoginSeleccion(_inicio, currentUser);
-            //}
-            //else
-            //{
-            //    var selectedRol = currentUser.Roles.First();
-            //    var selectedHotel = currentUser.HotelesAsignados.First();
-
-            //    _inicio.SetSession(currentUser, selectedHotel, selectedRol);
-            //    nextForm = _inicio;
-            //}
-
-            //nextForm.Show();
-            Close();
         }
 
         private void ValidateForm()
@@ -79,7 +60,7 @@ namespace FrbaCrucero.Login
 
         private Usuario AutenticateUser()
         {
-            return null; //DAOFactory.UsuarioDAO.Login(txtUser.Text, txtPassword.Text);
+            return DAOFactory.UsuarioDAO.Login(txtUser.Text, txtPassword.Text);
         }
 
         private void atrasToolStripMenuItem_Click(object sender, EventArgs e)

@@ -49,26 +49,6 @@ namespace FrbaCrucero
                 Main = this,
                 Rol = rol
             };
-
-            SetLoggedMenu();
-        }
-
-        private void SetLoggedMenu()
-        {
-            this.MainMenuStrip.Items.Clear();
-            var itemDefault = _menuCreator.GetItemMenu("LOGGED");
-            mainMenu.MdiWindowListItem = itemDefault;
-            mainMenu.Items.Add(itemDefault);
-
-            //foreach (var funcion in session.Rol.Funciones)
-            //{
-            //    var itemFuncion = _menuCreator.GetItemMenu(funcion.Descripcion);
-            //    mainMenu.MdiWindowListItem = itemFuncion;
-            //    mainMenu.Items.Add(itemFuncion);
-            //}
-
-            mainMenu.Dock = DockStyle.Top;
-            this.MainMenuStrip = mainMenu;
         }
 
         public void SetInitMenu()
@@ -80,9 +60,32 @@ namespace FrbaCrucero
             mainMenu.Dock = DockStyle.Top;
             this.MainMenuStrip = mainMenu;
 
-            //var generico = DAO.DAOFactory.UsuarioDAO.Login("generico", "gen123*");
-            //SetSession(generico, null, generico.Roles.First());
-            SetLoggedMenu();
+            var generico = DAO.DAOFactory.UsuarioDAO.Login("clienteGenerico", "w23e");
+            SetSession(generico, generico.Roles.First());
+            SetUserFunctions();
+        }
+
+        public void SetMenuLogged()
+        {
+            this.MainMenuStrip.Items.Clear();
+            var itemDefault = _menuCreator.GetItemMenu("LOGGED");
+            mainMenu.MdiWindowListItem = itemDefault;
+            mainMenu.Items.Add(itemDefault);
+
+            SetUserFunctions();
+        }
+
+        private void SetUserFunctions()
+        {
+            foreach (var funcion in session.Rol.Funciones)
+            {
+                var itemFuncion = _menuCreator.GetItemMenu(funcion.Descripcion);
+                mainMenu.MdiWindowListItem = itemFuncion;
+                mainMenu.Items.Add(itemFuncion);
+            }
+
+            mainMenu.Dock = DockStyle.Top;
+            this.MainMenuStrip = mainMenu;
         }
     }
 }

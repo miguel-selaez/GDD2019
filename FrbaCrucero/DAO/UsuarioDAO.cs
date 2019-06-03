@@ -40,15 +40,15 @@ namespace FrbaCrucero.DAO
         //    Connection.ExecuteQuery(query);
         //}
 
-        //public Usuario Login(string user, string password)
-        //{
-        //    var query = ArmarSentenciaSP("P_LOGIN", new [] { 
-        //        GetParam(user), 
-        //        GetParam(password) 
-        //    });
-        //    var result = Connection.ExecuteQuery(query);
-        //    return result.Rows.Count > 0 ? new Usuario(result.Rows[0]) : null;
-        //}
+        public Usuario Login(string user, string password)
+        {
+            var query = ArmarSentenciaSP("P_LOGIN", new[] { 
+                GetParam(user), 
+                GetParam(password) 
+            });
+            var result = Connection.ExecuteQuery(query);
+            return result.Rows.Count > 0 ? new Usuario(result.Rows[0]) : null;
+        }
 
         //public List<Usuario> GetUsuarios(string usuario, string vigencia)
         //{

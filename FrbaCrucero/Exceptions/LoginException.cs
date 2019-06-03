@@ -8,9 +8,8 @@ namespace FrbaCrucero.Exceptions
 {
     public class LoginException : Exception
     {
-        public LoginException(string message) :
-            
-            base( "Error de Login: " + message )
+        public LoginException(string message) :      
+            base( message )
         { }
     }
 }

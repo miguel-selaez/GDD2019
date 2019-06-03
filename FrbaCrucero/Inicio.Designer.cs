@@ -36,11 +36,12 @@
             // lblTitulo
             // 
             this.lblTitulo.AutoSize = true;
-            this.lblTitulo.Font = new System.Drawing.Font("Calibri", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitulo.Font = new System.Drawing.Font("Calibri", 25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitulo.ForeColor = System.Drawing.Color.Firebrick;
-            this.lblTitulo.Location = new System.Drawing.Point(186, 157);
+            this.lblTitulo.Location = new System.Drawing.Point(164, 129);
+            this.lblTitulo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblTitulo.Name = "lblTitulo";
-            this.lblTitulo.Size = new System.Drawing.Size(279, 31);
+            this.lblTitulo.Size = new System.Drawing.Size(380, 41);
             this.lblTitulo.TabIndex = 30;
             this.lblTitulo.Text = "Bienvenido a FrbaCrucero";
             // 
@@ -48,19 +49,21 @@
             // 
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
-            this.mainMenu.Size = new System.Drawing.Size(631, 24);
+            this.mainMenu.Padding = new System.Windows.Forms.Padding(4, 2, 0, 2);
+            this.mainMenu.Size = new System.Drawing.Size(705, 24);
             this.mainMenu.TabIndex = 31;
             this.mainMenu.Text = "menuStrip1";
             // 
             // FrbaCrucero
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(631, 385);
+            this.ClientSize = new System.Drawing.Size(705, 313);
             this.Controls.Add(this.lblTitulo);
             this.Controls.Add(this.mainMenu);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.mainMenu;
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "FrbaCrucero";
             this.Text = "FrbaCrucero";
             this.ResumeLayout(false);

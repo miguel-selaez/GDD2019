@@ -194,8 +194,71 @@ GO
 --------------------FIN TABLAS ----------------------------------------------------
 print (CONCAT('Creacion de SPs ', CONVERT(VARCHAR, GETDATE(), 114)))
 
+GO
 
+CREATE PROCEDURE [DSW].P_Obtener_Funciones_x_Rol 
+	@id int
+AS
+BEGIN 
+	SELECT 
+		f.*
+	FROM 
+		[DSW].Funcion as f
+		INNER JOIN [DSW].Funcion_x_Rol as fr
+			ON f.f_id = fr.fxr_id_funcion
+	WHERE 
+		fr.fxr_id_rol = @id
+		AND f.f_baja = 0
+	ORDER BY
+		f.f_descripcion
 
+END
+
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Roles_x_Usuario  
+	@id int
+AS
+BEGIN 
+	SELECT 
+		r.*
+	FROM 
+		[DSW].Rol as r
+		INNER JOIN [DSW].Rol_x_Usuario as ru
+			ON r.r_id = ru.rxu_id_rol
+	WHERE 
+		ru.rxu_id_usuario = @id
+		AND r.r_baja = 0
+	ORDER BY
+		r.r_descripcion
+END
+
+GO
+
+CREATE PROCEDURE [DSW].P_Login  
+	@user nvarchar(255),
+	@pass nvarchar(50)
+AS
+BEGIN 
+	DECLARE @pass_enc varbinary(256)
+	SELECT @pass_enc = HASHBYTES('SHA2_256', @pass);
+
+	SELECT 
+		u.u_id,
+		u.u_nombre_usuario,
+		'' as pass,
+		u.u_baja,
+		u.u_intentos_fallidos
+	FROM
+		[DSW].Usuario as u
+	WHERE
+		UPPER(u.u_nombre_usuario) = UPPER(@user)
+		AND u.u_password = @pass_enc
+		AND u.u_baja = 0
+	 	
+END
+
+GO
 
 --------------------FIN CREACION DE SPS --------------------------------------------
 
@@ -247,7 +310,7 @@ WHERE
 --Usuario
 INSERT INTO [DSW].Usuario VALUES
 ('admin', HASHBYTES('SHA2_256', CONVERT(nvarchar(50), 'w23e')), 0, 0),
-('clienteGenerico', NULL, 0, 0)
+('clienteGenerico', HASHBYTES('SHA2_256', CONVERT(nvarchar(50), 'w23e')), 0, 0)
 
 --Rol_x_Usuario
 INSERT INTO [DSW].Rol_x_Usuario
