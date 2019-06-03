@@ -17,4 +17,5 @@
 *.sqlite
 *.suo
 /FrbaCrucero/obj
+FrbaCrucero/.vs
 /.vs
