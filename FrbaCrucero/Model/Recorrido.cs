@@ -10,7 +10,7 @@ namespace FrbaCrucero.Model
 {
     public class Recorrido
     {
-        public int Id { get; set; }
+        public decimal Id { get; set; }
         public string Codigo { get; set; }
         public bool Baja { get; set; }
 
@@ -23,7 +23,7 @@ namespace FrbaCrucero.Model
 
         public Recorrido(DataRow row)
         {
-            Id = row.GetValue<int>("rc_id");
+            Id = row.GetValue<decimal>("rc_id");
             Codigo = row.GetValue<string>("rc_codigo");
             Baja = row.GetValue<bool>("rc_baja");
         }

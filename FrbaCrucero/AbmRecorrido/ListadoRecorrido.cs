@@ -55,9 +55,14 @@ namespace FrbaCrucero.AbmRecorrido
 
         private void dgRecorrido_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            var selectedRol = _results.ElementAt(e.RowIndex);
-            var nuevo = new Recorrido(_session, selectedRol, this);
+            var selectedRecorrido = _results.ElementAt(e.RowIndex);
+            var nuevo = new Recorrido(_session, selectedRecorrido, this);
             nuevo.Show();
+        }
+
+        public void UpdateRecorridos()
+        {
+            btnBuscar.PerformClick();
         }
 
     }

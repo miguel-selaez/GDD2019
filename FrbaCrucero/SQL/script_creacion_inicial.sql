@@ -324,9 +324,7 @@ BEGIN
 		WHERE 
 			fxr_id_rol = @id;
 	END
-
 END
-
 GO
 
 CREATE PROCEDURE [DSW].P_Guardar_Funcion_x_Rol 
@@ -354,7 +352,7 @@ AS
 BEGIN
 	SELECT t_id, t_id_origen, t_id_destino, t_precio FROM [DSW].Tramo as t 
 	INNER JOIN [DSW].Recorridos_x_tramos as rt ON t_id = rxt_id_tramo
-	WHERE rxt_id_recorrido = @id_recorrido;
+	WHERE rxt_id_recorrido = @id_recorrido ORDER BY rt.rxt_orden ASC;
 END
 GO
 
@@ -381,6 +379,35 @@ CREATE PROCEDURE [DSW].P_Obtener_Recorridos
 AS
 BEGIN
 	SELECT * FROM [DSW].Recorrido WHERE (rc_codigo = @codigo OR @codigo IS NULL) AND (rc_baja = @baja OR @baja IS NULL) ORDER BY rc_codigo;
+END
+GO
+
+CREATE PROCEDURE [DSW].P_Guardar_Recorrido
+	@id_recorrido int,
+	@codigo char(20),
+	@baja bit
+AS
+BEGIN
+	IF @id_recorrido = 0
+	BEGIN 
+		INSERT INTO [DSW].Recorrido VALUES (@codigo, @baja);
+		SELECT id_out = @@IDENTITY
+	END 
+	ELSE 
+	BEGIN 
+		UPDATE [DSW].Recorrido 
+		SET 
+			rc_codigo = @codigo,
+			rc_baja = @baja
+		WHERE 
+			rc_id = @id_recorrido;
+
+		SELECT id_out = @id_recorrido;
+
+		DELETE [DSW].Recorridos_x_tramos
+		WHERE 
+			rxt_id_recorrido = @id_recorrido;
+	END
 END
 GO
 

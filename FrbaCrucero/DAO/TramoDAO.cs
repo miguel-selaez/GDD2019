@@ -12,7 +12,7 @@ namespace FrbaCrucero.DAO
     {
         public TramoDAO(DBConnection con) : base(con) { }
 
-        public List<Tramo> GetTramosByRecorrido(int recorridoId)
+        public List<Tramo> GetTramosByRecorrido(decimal recorridoId)
         {
             var list = new List<Tramo>();
 

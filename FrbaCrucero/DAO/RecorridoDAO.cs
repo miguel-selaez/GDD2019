@@ -2,27 +2,25 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FrbaCrucero.DAO
 {
-    public class RecorridoDAO : BaseDAO<Rol>
+    public class RecorridoDAO : BaseDAO<Recorrido>
     {
         public RecorridoDAO(DBConnection con) : base(con) { }
 
-        public int CreateOrUpdate(Rol rol)
+        public int CreateOrUpdate(Recorrido recorrido)
         {
-            //var query = ArmarSentenciaSP("P_Guardar_Rol", new[] { GetParam(rol.Id), GetParam(rol.Descripcion), GetParam(rol.Baja) });
-            //var rolId = Int32.Parse(Connection.ExecuteSingleResult(query));
+            var query = ArmarSentenciaSP("P_Guardar_Recorrido", new[] { GetParam(recorrido.Id), GetParam(recorrido.Codigo), GetParam(recorrido.Baja) });
+            var recorridoId = Int32.Parse(Connection.ExecuteSingleResult(query));
 
-            //foreach (var funcion in rol.Funciones)
-            //{
-            //    DAOFactory.FuncionDAO.SaveFuncionxRol(funcion, rolId);
-            //}
-            //return rolId;
-            return 0;
+            int i = 1;
+            foreach (var tramo in recorrido.Tramos)
+            {
+                DAOFactory.TramoDAO.SaveTramoxRecorrido(tramo, recorridoId, i);
+                i++;
+            }
+            return recorridoId;
         } 
 
         public List<Recorrido> GetRecorridos(string codigo, string vigencia)

@@ -87,6 +87,10 @@ IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Recorridos')
 	DROP PROCEDURE [DSW].P_Obtener_Recorridos
 GO 	
 
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Guardar_Recorrido')
+	DROP PROCEDURE [DSW].P_Guardar_Recorrido
+GO 
+
 --- TABLAS
 -- Limpieza de datos (TRUNCATE)
 TRUNCATE TABLE [DSW].Cabina
