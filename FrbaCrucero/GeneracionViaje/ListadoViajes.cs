@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FrbaCrucero.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,7 +13,8 @@ namespace FrbaCrucero.GeneracionViaje
 {
     public partial class ListadoViajes : Form
     {
-        private Model.Session session;
+        private Session _session;
+        private List<Model.Viaje> _results;
 
         public ListadoViajes()
         {
@@ -22,7 +24,8 @@ namespace FrbaCrucero.GeneracionViaje
         public ListadoViajes(Model.Session session)
         {
             // TODO: Complete member initialization
-            this.session = session;
+            _session = session;
         }
+
     }
 }

@@ -147,7 +147,9 @@
     <Compile Include="Model\Cliente.cs" />
     <Compile Include="Model\DataRowExtensions.cs" />
     <Compile Include="Model\Funcion.cs" />
+    <Compile Include="Model\Crucero.cs" />
     <Compile Include="Model\Puerto.cs" />
+    <Compile Include="Model\Viaje.cs" />
     <Compile Include="Model\Tramo.cs" />
     <Compile Include="Model\Recorrido.cs" />
     <Compile Include="Model\Rol.cs" />
@@ -173,6 +175,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AbmRol\Rol.resx">
       <DependentUpon>Rol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GeneracionViaje\ListadoViajes.resx">
+      <DependentUpon>ListadoViajes.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Inicio.resx">
       <DependentUpon>Inicio.cs</DependentUpon>
