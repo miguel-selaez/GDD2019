@@ -37,7 +37,6 @@
             this.dgViajes = new System.Windows.Forms.DataGridView();
             this.CodigoCrucero = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CodigoRecorrido = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Vigente = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Editar = new System.Windows.Forms.DataGridViewButtonColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgViajes)).BeginInit();
             this.SuspendLayout();
@@ -101,7 +100,6 @@
             this.dgViajes.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.CodigoCrucero,
             this.CodigoRecorrido,
-            this.Vigente,
             this.Editar});
             this.dgViajes.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgViajes.Location = new System.Drawing.Point(15, 125);
@@ -119,12 +117,6 @@
             // 
             this.CodigoRecorrido.HeaderText = "Código recorrido";
             this.CodigoRecorrido.Name = "CodigoRecorrido";
-            // 
-            // Vigente
-            // 
-            this.Vigente.HeaderText = "Vigente";
-            this.Vigente.Name = "Vigente";
-            this.Vigente.ReadOnly = true;
             // 
             // Editar
             // 
@@ -162,7 +154,6 @@
         private System.Windows.Forms.DataGridView dgViajes;
         private System.Windows.Forms.DataGridViewTextBoxColumn CodigoCrucero;
         private System.Windows.Forms.DataGridViewTextBoxColumn CodigoRecorrido;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Vigente;
         private System.Windows.Forms.DataGridViewButtonColumn Editar;
     }
 }

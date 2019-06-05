@@ -49,5 +49,31 @@ namespace FrbaCrucero.GeneracionViaje
         {
             Limpiar();
         }
+
+        private void BtnBuscar_Click(object sender, EventArgs e)
+        {
+            dgViajes.Rows.Clear();
+            _results = GetResults();
+
+            foreach (Model.Viaje viaje in _results)
+            {
+                var index = dgViajes.Rows.Add();
+                dgViajes.Rows[index].Cells["CodigoCrucero"].Value = viaje.Crucero.Codigo;
+                dgViajes.Rows[index].Cells["CodigoRecorrido"].Value = viaje.Recorrido.Codigo;
+                dgViajes.Rows[index].Cells["Editar"].Value = "Seleccionar";
+            }
+        }
+
+        private void dgRecorrido_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var selectedRecorrido = _results.ElementAt(e.RowIndex);
+            var nuevo = new Recorrido(_session, selectedRecorrido, this);
+            nuevo.Show();
+        }
+
+        public void UpdateRecorridos()
+        {
+            btnBuscar.PerformClick();
+        }
     }
 }
