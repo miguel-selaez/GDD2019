@@ -28,8 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.cbVigencia = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.txtCodigoCrucero = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -44,31 +42,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgViajes)).BeginInit();
             this.SuspendLayout();
             // 
-            // cbVigencia
-            // 
-            this.cbVigencia.AutoCompleteCustomSource.AddRange(new string[] {
-            "Todos",
-            "Si",
-            "No"});
-            this.cbVigencia.FormattingEnabled = true;
-            this.cbVigencia.Items.AddRange(new object[] {
-            "Todos",
-            "Si",
-            "No"});
-            this.cbVigencia.Location = new System.Drawing.Point(131, 103);
-            this.cbVigencia.Name = "cbVigencia";
-            this.cbVigencia.Size = new System.Drawing.Size(100, 21);
-            this.cbVigencia.TabIndex = 28;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 106);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(46, 13);
-            this.label3.TabIndex = 27;
-            this.label3.Text = "Vigente:";
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -80,7 +53,7 @@
             // 
             // txtCodigoCrucero
             // 
-            this.txtCodigoCrucero.Location = new System.Drawing.Point(131, 38);
+            this.txtCodigoCrucero.Location = new System.Drawing.Point(111, 38);
             this.txtCodigoCrucero.Name = "txtCodigoCrucero";
             this.txtCodigoCrucero.Size = new System.Drawing.Size(100, 20);
             this.txtCodigoCrucero.TabIndex = 25;
@@ -88,7 +61,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 75);
+            this.label1.Location = new System.Drawing.Point(242, 41);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(87, 13);
             this.label1.TabIndex = 30;
@@ -96,23 +69,24 @@
             // 
             // txtCodigoRecorrido
             // 
-            this.txtCodigoRecorrido.Location = new System.Drawing.Point(131, 72);
+            this.txtCodigoRecorrido.Location = new System.Drawing.Point(345, 38);
             this.txtCodigoRecorrido.Name = "txtCodigoRecorrido";
             this.txtCodigoRecorrido.Size = new System.Drawing.Size(100, 20);
             this.txtCodigoRecorrido.TabIndex = 29;
             // 
             // btnLimpiar
             // 
-            this.btnLimpiar.Location = new System.Drawing.Point(26, 134);
+            this.btnLimpiar.Location = new System.Drawing.Point(62, 96);
             this.btnLimpiar.Name = "btnLimpiar";
             this.btnLimpiar.Size = new System.Drawing.Size(75, 23);
             this.btnLimpiar.TabIndex = 33;
             this.btnLimpiar.Text = "Limpiar";
             this.btnLimpiar.UseVisualStyleBackColor = true;
+            this.btnLimpiar.Click += new System.EventHandler(this.BtnLimpiar_Click);
             // 
             // btnBuscar
             // 
-            this.btnBuscar.Location = new System.Drawing.Point(346, 134);
+            this.btnBuscar.Location = new System.Drawing.Point(386, 96);
             this.btnBuscar.Name = "btnBuscar";
             this.btnBuscar.Size = new System.Drawing.Size(75, 23);
             this.btnBuscar.TabIndex = 32;
@@ -130,10 +104,10 @@
             this.Vigente,
             this.Editar});
             this.dgViajes.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.dgViajes.Location = new System.Drawing.Point(12, 163);
+            this.dgViajes.Location = new System.Drawing.Point(15, 125);
             this.dgViajes.MultiSelect = false;
             this.dgViajes.Name = "dgViajes";
-            this.dgViajes.Size = new System.Drawing.Size(428, 150);
+            this.dgViajes.Size = new System.Drawing.Size(489, 205);
             this.dgViajes.TabIndex = 31;
             // 
             // CodigoCrucero
@@ -162,14 +136,12 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(456, 342);
+            this.ClientSize = new System.Drawing.Size(516, 342);
             this.Controls.Add(this.btnLimpiar);
             this.Controls.Add(this.btnBuscar);
             this.Controls.Add(this.dgViajes);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtCodigoRecorrido);
-            this.Controls.Add(this.cbVigencia);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtCodigoCrucero);
             this.Name = "ListadoViajes";
@@ -181,9 +153,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.ComboBox cbVigencia;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtCodigoCrucero;
         private System.Windows.Forms.Label label1;

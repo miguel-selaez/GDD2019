@@ -31,13 +31,23 @@ namespace FrbaCrucero.GeneracionViaje
 
         private void InitValues()
         {
-            cbVigencia.SelectedIndex = 0;
+            Limpiar();
         }
 
         public List<Model.Viaje> GetResults()
         {
-            return DAOFactory.ViajeDAO.GetViajes(txtCodigoCrucero.Text, txtCodigoRecorrido.Text, cbVigencia.SelectedItem.ToString());
+            return DAOFactory.ViajeDAO.GetViajes(txtCodigoCrucero.Text, txtCodigoRecorrido.Text);
         }
 
+        public void Limpiar()
+        {
+            txtCodigoCrucero.Text = string.Empty;
+            txtCodigoRecorrido.Text = string.Empty;
+        }
+
+        private void BtnLimpiar_Click(object sender, EventArgs e)
+        {
+            Limpiar();
+        }
     }
 }

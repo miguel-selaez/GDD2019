@@ -427,6 +427,58 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE [DSW].P_Guardar_Viaje
+	@id_viaje int,
+	@codigo_crucero int,
+	@codigo_recorrido decimal,
+	@fecha_llegada datetime2,
+	@fecha_salida datetime2,
+	@fecha_llegada_estimada datetime2
+AS
+BEGIN
+	IF @id_viaje = 0
+	BEGIN 
+		INSERT INTO [DSW].Viaje VALUES (@codigo_crucero, @codigo_recorrido, @fecha_llegada, @fecha_salida, @fecha_llegada_estimada);
+		SELECT id_out = @@IDENTITY
+	END 
+	ELSE 
+	BEGIN 
+		UPDATE [DSW].Viaje 
+		SET 
+			v_id_crucero = @codigo_crucero,
+			v_id_recorrido = @codigo_recorrido,
+			v_fecha_llegada = @fecha_llegada,
+			v_fecha_salida = @fecha_salida,
+			v_fecha_llegada_estimada = @fecha_llegada_estimada
+		WHERE 
+			v_id = @id_viaje;
+
+		SELECT id_out = @id_viaje;
+	END
+END
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Viaje
+	@id_viaje decimal
+AS
+BEGIN
+	SELECT * FROM [DSW].Viaje WHERE v_id = @id_viaje;
+END
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Viajes
+	@codigo_crucero int,
+	@codigo_recorrido decimal
+AS
+BEGIN
+	SELECT v.* FROM [DSW].Viajes v
+	INNER JOIN [DSW].Crucero AS c ON c.cr_id = v.v_id_crucero
+	INNER JOIN [DSW].Recorrido AS r ON r.rc_id = v.v_id_recorrido
+	WHERE (c.cr_codigo = @codigo_crucero OR @codigo_crucero IS NULL) AND (r.rc_codigo = @codigo_recorrido OR @codigo_recorrido IS NULL) 
+	ORDER BY @codigo_recorrido;
+END
+GO
+
 CREATE PROCEDURE [DSW].P_Obtener_Marca
 	@id_marca int
 AS
@@ -488,11 +540,11 @@ CREATE PROCEDURE [DSW].P_Obtener_Viajes
 	@codigo_recorrido decimal
 AS
 BEGIN
-	SELECT v.* FROM [DSW].Viajes v
+	SELECT v.* FROM [DSW].Viaje v
 	INNER JOIN [DSW].Crucero AS c ON c.cr_id = v.v_id_crucero
 	INNER JOIN [DSW].Recorrido AS r ON r.rc_id = v.v_id_recorrido
 	WHERE (c.cr_codigo = @codigo_crucero OR @codigo_crucero IS NULL) AND (r.rc_codigo = @codigo_recorrido OR @codigo_recorrido IS NULL) 
-	ORDER BY @codigo_recorrido;
+	ORDER BY v_fecha_salida DESC;
 END
 GO
 
