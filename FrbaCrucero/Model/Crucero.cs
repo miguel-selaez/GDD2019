@@ -13,7 +13,7 @@ namespace FrbaCrucero.Model
         public bool Baja { get; set; }
         public DateTime? FechaFueraServicio { get; set; }
         public DateTime? FechaReinicioServicio { get; set; }
-        public DateTime? FechaBajaDefinitica { get; set; }
+        public DateTime? FechaBajaDefinitiva { get; set; }
 
         public Crucero(DataRow row)
         {
@@ -25,7 +25,7 @@ namespace FrbaCrucero.Model
             Baja = row.GetValue<bool>("cr_baja");
             FechaFueraServicio = row.GetDate("cr_fecha_fuera_servicio");
             FechaReinicioServicio = row.GetDate("cr_fecha_reinicio_servicio");
-            FechaBajaDefinitica = row.GetDate("cr_fecha_baja_definitiva");
+            FechaBajaDefinitiva = row.GetDate("cr_fecha_baja_definitiva");
         }
     }
 }
