@@ -17,7 +17,7 @@ namespace FrbaCrucero.GeneracionViaje
         private Session _session;
         private List<Model.Viaje> _results;
         private int _paginaActual;
-        private int _offset = 20;
+        private int _offset;
 
         public ListadoViajes()
         {
@@ -41,11 +41,6 @@ namespace FrbaCrucero.GeneracionViaje
             return DAOFactory.ViajeDAO.GetViajesPage(txtCodigoCrucero.Text, txtCodigoRecorrido.Text, page, offset);
         }
 
-        public int GetCountResults()
-        {
-            return DAOFactory.ViajeDAO.GetViajesCount(txtCodigoCrucero.Text, txtCodigoRecorrido.Text);
-        }
-
         public void Limpiar()
         {
             txtCodigoCrucero.Text = string.Empty;
@@ -53,7 +48,6 @@ namespace FrbaCrucero.GeneracionViaje
             btnAnterior.Visible = false;
             btnSiguiente.Visible = false;
             lblPagina.Visible = false;
-            dgViajes.Rows.Clear();
         }
 
         private void BtnLimpiar_Click(object sender, EventArgs e)
@@ -76,10 +70,9 @@ namespace FrbaCrucero.GeneracionViaje
             }
 
             btnAnterior.Visible = true;
-            btnAnterior.Enabled = false;
             btnSiguiente.Visible = true;
             lblPagina.Visible = true;
-            lblPagina.Text = _paginaActual + " de " + getTotalPages();
+            lblPagina.Text = _paginaActual + " de " + _results.Count;
         }
 
         private void dgViaje_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -96,46 +89,12 @@ namespace FrbaCrucero.GeneracionViaje
 
         private void BtnSiguiente_Click(object sender, EventArgs e)
         {
-            int totalPages = getTotalPages();
-            dgViajes.Rows.Clear();
             _paginaActual++;
             if(_paginaActual > 1)
             {
                 btnAnterior.Enabled = true;
             }
-            if(_paginaActual == totalPages)
-            {
-                btnSiguiente.Enabled = false;
-            }
-            _results = GetResults(_paginaActual, _offset);
-
-            foreach (Model.Viaje viaje in _results)
-            {
-                var index = dgViajes.Rows.Add();
-                dgViajes.Rows[index].Cells["CodigoCrucero"].Value = viaje.Crucero.Codigo;
-                dgViajes.Rows[index].Cells["CodigoRecorrido"].Value = viaje.Recorrido.Codigo;
-                dgViajes.Rows[index].Cells["Editar"].Value = "Seleccionar";
-            }
-
-            btnAnterior.Visible = true;
-            btnSiguiente.Visible = true;
-            lblPagina.Visible = true;
-            lblPagina.Text = _paginaActual + " de " + totalPages;
-        }
-
-        private void BtnAnterior_Click(object sender, EventArgs e)
-        {
-            int totalPages = getTotalPages();
             dgViajes.Rows.Clear();
-            _paginaActual--;
-            if (_paginaActual == 1)
-            {
-                btnAnterior.Enabled = false;
-            }
-            if (_paginaActual != totalPages)
-            {
-                btnSiguiente.Enabled = false;
-            }
             _results = GetResults(_paginaActual, _offset);
 
             foreach (Model.Viaje viaje in _results)
@@ -149,13 +108,7 @@ namespace FrbaCrucero.GeneracionViaje
             btnAnterior.Visible = true;
             btnSiguiente.Visible = true;
             lblPagina.Visible = true;
-            lblPagina.Text = _paginaActual + " de " + totalPages;
-        }
-
-        private int getTotalPages()
-        {
-            int countResults = GetCountResults();
-            return countResults / _offset + 1;
+            lblPagina.Text = _paginaActual + " de " + _results.Count;
         }
     }
 }

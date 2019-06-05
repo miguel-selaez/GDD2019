@@ -16,11 +16,11 @@ namespace FrbaCrucero.DAO
             return viajeId;
         } 
 
-        public List<Viaje> GetViajes(string codigoCrucero, string codigoRecorrido)
+        public List<Viaje> GetViajesPage(string codigoCrucero, string codigoRecorrido, int page, int offset)
         {
             var list = new List<Viaje>();
 
-            var query = ArmarSentenciaSP("P_Obtener_Viajes", new[] { GetParam(codigoCrucero), GetParam(codigoRecorrido)});
+            var query = ArmarSentenciaSP("P_Obtener_Viajes", new[] { GetParam(codigoCrucero), GetParam(codigoRecorrido), GetParam(page), GetParam(offset)});
             var result = Connection.ExecuteQuery(query);
 
             if (result.Rows.Count > 0)
@@ -31,6 +31,13 @@ namespace FrbaCrucero.DAO
                 }
             }
             return list;
+        }
+
+        public int GetViajesCount(string codigoCrucero, string codigoRecorrido)
+        {
+            var query = ArmarSentenciaSP("P_Obtener_Cantidad_Viajes", new[] { GetParam(codigoCrucero), GetParam(codigoRecorrido) });
+            var result = Connection.ExecuteQuery(query);
+            return result.Rows[0].GetValue<int>("count");
         }
 
         public Viaje GetViaje(decimal id)

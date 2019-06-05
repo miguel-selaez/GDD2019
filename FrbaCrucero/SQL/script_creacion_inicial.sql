@@ -468,14 +468,29 @@ GO
 
 CREATE PROCEDURE [DSW].P_Obtener_Viajes
 	@codigo_crucero nvarchar(255),
-	@codigo_recorrido char(20)
+	@codigo_recorrido char(20),
+	@page int,
+	@offset int
 AS
 BEGIN
 	SELECT v.* FROM [DSW].Viaje v
 	INNER JOIN [DSW].Crucero AS c ON c.cr_id = v.v_id_crucero
 	INNER JOIN [DSW].Recorrido AS r ON r.rc_id = v.v_id_recorrido
 	WHERE (c.cr_codigo = @codigo_crucero OR @codigo_crucero IS NULL) AND (r.rc_codigo = @codigo_recorrido OR @codigo_recorrido IS NULL) 
-	ORDER BY v.v_fecha_salida DESC;
+	ORDER BY v.v_fecha_salida DESC
+	OFFSET (@page * @offset) ROWS FETCH NEXT @offset ROWS ONLY;
+END
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Cantidad_Viajes
+	@codigo_crucero nvarchar(255),
+	@codigo_recorrido char(20)
+AS
+BEGIN
+	SELECT count(*) as "count" FROM [DSW].Viaje v
+	INNER JOIN [DSW].Crucero AS c ON c.cr_id = v.v_id_crucero
+	INNER JOIN [DSW].Recorrido AS r ON r.rc_id = v.v_id_recorrido
+	WHERE (c.cr_codigo = @codigo_crucero OR @codigo_crucero IS NULL) AND (r.rc_codigo = @codigo_recorrido OR @codigo_recorrido IS NULL);
 END
 GO
 
