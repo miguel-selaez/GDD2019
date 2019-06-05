@@ -467,8 +467,8 @@ END
 GO
 
 CREATE PROCEDURE [DSW].P_Obtener_Viajes
-	@codigo_crucero int,
-	@codigo_recorrido decimal
+	@codigo_crucero nvarchar(255),
+	@codigo_recorrido char(20)
 AS
 BEGIN
 	SELECT v.* FROM [DSW].Viaje v

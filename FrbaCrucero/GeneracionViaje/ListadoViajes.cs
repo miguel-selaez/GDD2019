@@ -64,10 +64,10 @@ namespace FrbaCrucero.GeneracionViaje
             }
         }
 
-        private void dgRecorrido_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dgViaje_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            var selectedRecorrido = _results.ElementAt(e.RowIndex);
-            var nuevo = new Recorrido(_session, selectedRecorrido, this);
+            var selectedViaje = _results.ElementAt(e.RowIndex);
+            var nuevo = new Viaje(_session, selectedViaje, this);
             nuevo.Show();
         }
 

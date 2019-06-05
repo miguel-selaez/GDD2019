@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FrbaCrucero.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,17 +13,35 @@ namespace FrbaCrucero.GeneracionViaje
 {
     public partial class Viaje : Form
     {
-        private Model.Session session;
+        private Session _session;
+        private Model.Viaje _editObject;
+        private ListadoViajes _listado;
 
-        public Viaje()
+        public Viaje(Session session)
         {
             InitializeComponent();
+            _session = session;
+            InitValues();
         }
 
-        public Viaje(Model.Session session)
+        public Viaje(Session session, Model.Viaje editViaje, ListadoViajes listado)
         {
-            // TODO: Complete member initialization
-            this.session = session;
+            InitializeComponent();
+            _session = session;
+            _editObject = editViaje;
+            _listado = listado;
+            InitValues();
+            //BindViaje();
+        }
+
+        private void InitValues()
+        {
+            //var tramos = DAO.DAOFactory.TramoDAO.GetTramos();
+            //tramos = tramos.Where(f => NoExisteEnEditObject(f)).ToList();
+            //if (tramos.Any())
+            //{
+            //    BindCbTramos(tramos.Select(t => new TramoVO(t)).ToList());
+            //}
         }
     }
 }
