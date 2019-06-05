@@ -101,6 +101,7 @@
     </Compile>
     <Compile Include="DAO\BaseDAO.cs" />
     <Compile Include="DAO\ClienteDAO.cs" />
+    <Compile Include="DAO\CruceroDAO.cs" />
     <Compile Include="DAO\DAOFactory.cs" />
     <Compile Include="DAO\DBConnection.cs" />
     <Compile Include="DAO\RecorridoDAO.cs" />
@@ -145,6 +146,7 @@
     </Compile>
     <Compile Include="MenuCreator.cs" />
     <Compile Include="Model\Cliente.cs" />
+    <Compile Include="Model\Marca.cs" />
     <Compile Include="Model\DataRowExtensions.cs" />
     <Compile Include="Model\Funcion.cs" />
     <Compile Include="Model\Crucero.cs" />
@@ -213,7 +215,7 @@
     <Content Include="SQL\Ejemplos\BorrarTablas-Relaciones-old.sql" />
     <Content Include="SQL\Ejemplos\script_creación_inicial-old.sql" />
     <Content Include="SQL\Reset_carga_inicial.sql" />
-    <Content Include="SQL\script_creación_inicial.sql" />
+    <Content Include="SQL\script_creacion_inicial.sql" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AbmPuerto\" />

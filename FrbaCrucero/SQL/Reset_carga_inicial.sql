@@ -37,6 +37,9 @@ ALTER TABLE [DSW].[Cabina]  DROP CONSTRAINT [FK_Cabina_Crucero]
 GO
 ALTER TABLE [DSW].[Cabina]  DROP CONSTRAINT [FK_Cabina_Tipo_cabina] 
 GO
+ALTER TABLE [DSW].[Crucero]  DROP CONSTRAINT [FK_Crucero_Marca] 
+GO
+
 
 -- SPs
 IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Funciones_x_Rol')
@@ -91,10 +94,19 @@ IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Guardar_Recorrido')
 	DROP PROCEDURE [DSW].P_Guardar_Recorrido
 GO 
 
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Marca')
+	DROP PROCEDURE [DSW].P_Obtener_Marca
+GO 
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Crucero')
+	DROP PROCEDURE [DSW].P_Obtener_Crucero
+GO 
+
 --- TABLAS
 -- Limpieza de datos (TRUNCATE)
 TRUNCATE TABLE [DSW].Cabina
 TRUNCATE TABLE [DSW].Cliente
+TRUNCATE TABLE [DSW].Marca
 TRUNCATE TABLE [DSW].Crucero
 GO
 
@@ -124,6 +136,7 @@ GO
 DROP TABLE [DSW].Cabina
 DROP TABLE [DSW].Cliente
 DROP TABLE [DSW].Crucero
+DROP TABLE [DSW].Marca
 GO
 
 DROP TABLE [DSW].Funcion

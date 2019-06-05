@@ -99,7 +99,7 @@ CREATE TABLE [DSW].[Crucero] (
   [cr_id] int IDENTITY (1,1),
   [cr_codigo] nvarchar(50),
   [cr_modelo] nvarchar(50),
-  [cr_fabricante] nvarchar(255),
+  [cr_id_marca] int,
   [cr_fecha_alta] datetime2(3),
   [cr_baja] bit,
   [cr_fecha_fuera_servicio] datetime2(3),
@@ -126,6 +126,14 @@ CREATE TABLE [DSW].[Tipo_cabina] (
   [tc_descripcion] nvarchar(255),
   [tc_porcentaje_recargo] decimal(18,2),
   PRIMARY KEY ([tc_id])
+);
+
+GO
+
+CREATE TABLE [DSW].[Marca] (
+  [m_id] int IDENTITY (1,1),
+  [m_descripcion] nvarchar(255),
+  PRIMARY KEY ([m_id])
 );
 
 GO
@@ -411,6 +419,23 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE [DSW].P_Obtener_Marca
+	@id_marca int
+AS
+BEGIN
+	SELECT * FROM [DSW].Marca WHERE m_id = @id_marca;
+END
+
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Crucero
+	@id_crucero int
+AS
+BEGIN
+	SELECT * FROM [DSW].Crucero WHERE cr_id = @id_crucero;
+END
+
+GO
 --------------------FIN CREACION DE SPS --------------------------------------------
 
 print (CONCAT('INSERTS ', CONVERT(VARCHAR, GETDATE(), 114)))
@@ -573,13 +598,16 @@ SELECT DISTINCT RECORRIDO_CODIGO cod, (SELECT t_id FROM DSW.Tramo INNER JOIN DSW
 INSERT INTO DSW.Tipo_cabina
 SELECT DISTINCT CABINA_TIPO, CABINA_TIPO_PORC_RECARGO FROM gd_esquema.Maestra
 
---Crucero
+-- Marca/Fabricante
+INSERT INTO DSW.Marca
+SELECT DISTINCT CRU_FABRICANTE FROM gd_esquema.Maestra
 
+--Crucero
 INSERT INTO DSW.Crucero
 SELECT DISTINCT 
 	CRUCERO_IDENTIFICADOR, 
 	CRUCERO_MODELO, 
-	CRU_FABRICANTE,
+	(select m_id from DSW.Marca where m_descripcion = CRU_FABRICANTE),
 	@fecha_actual,
 	0,
 	NULL,
@@ -919,6 +947,12 @@ GO
 ALTER TABLE [DSW].[Cabina] CHECK CONSTRAINT [FK_Cabina_Tipo_cabina]
 GO
 
+ALTER TABLE [DSW].[Crucero]  WITH CHECK ADD  CONSTRAINT [FK_Crucero_Marca] FOREIGN KEY([cr_id_marca])
+REFERENCES [DSW].[Marca] ([m_id])
+GO
+
+ALTER TABLE [DSW].[Crucero] CHECK CONSTRAINT [FK_Crucero_Marca]
+GO
 
 --------------- FKS, INDICES Y CONSTRAINS ------------------
 print (CONCAT('Fin del Script Inicial', CONVERT(VARCHAR, GETDATE(), 114)))
