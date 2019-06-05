@@ -92,6 +92,10 @@ GO
 
 IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Guardar_Recorrido')
 	DROP PROCEDURE [DSW].P_Guardar_Recorrido
+GO
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Recorrido')
+	DROP PROCEDURE [DSW].P_Obtener_Recorrido
 GO 
 
 IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Marca')

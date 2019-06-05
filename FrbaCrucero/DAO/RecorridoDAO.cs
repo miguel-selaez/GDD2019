@@ -40,5 +40,12 @@ namespace FrbaCrucero.DAO
             return list;
         }
 
+        public Recorrido GetRecorrido(decimal id)
+        {
+            var query = ArmarSentenciaSP("P_Obtener_Recorrido", new[] { GetParam(id) });
+            var result = Connection.ExecuteQuery(query);
+            return new Recorrido(result.Rows[0]);
+        }
+
     }
 }

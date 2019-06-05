@@ -16,8 +16,8 @@ namespace FrbaCrucero.Model
         public Viaje(DataRow row)
         {
             Id = row.GetValue<decimal>("v_id");
-            Crucero = DAO.DAOFactory.CruceroDAO.GetCrucero(row.GetValue<int>("v_crucero_id"));
-            //Recorrido = DAOFactory.RecorridoDAO.GetRecorrido(row.GetValue<decimal>("v_id_recorrido"));
+            Crucero = new Crucero(row);
+            Recorrido = DAOFactory.RecorridoDAO.GetRecorrido(row.GetValue<decimal>("v_id_recorrido"));
             FechaLlegada = row.GetValue<DateTime>("v_fecha_llegada");
             FechaSalida = row.GetValue<DateTime>("v_fecha_salida");
             FechaLlegadaEstimada = row.GetValue<DateTime>("v_fecha_llegada_estimada");

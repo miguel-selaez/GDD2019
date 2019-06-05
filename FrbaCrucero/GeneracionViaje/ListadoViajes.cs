@@ -1,4 +1,5 @@
-﻿using FrbaCrucero.Model;
+﻿using FrbaCrucero.DAO;
+using FrbaCrucero.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -23,8 +24,19 @@ namespace FrbaCrucero.GeneracionViaje
 
         public ListadoViajes(Model.Session session)
         {
-            // TODO: Complete member initialization
+            InitializeComponent();
             _session = session;
+            InitValues();
+        }
+
+        private void InitValues()
+        {
+            cbVigencia.SelectedIndex = 0;
+        }
+
+        public List<Model.Viaje> GetResults()
+        {
+            return DAOFactory.ViajeDAO.GetViajes(txtCodigoCrucero.Text, txtCodigoRecorrido.Text, cbVigencia.SelectedItem.ToString());
         }
 
     }
