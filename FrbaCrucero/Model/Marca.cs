@@ -18,5 +18,11 @@ namespace FrbaCrucero.Model
             Id = row.GetValue<int>("m_id");
             Descripcion = row.GetValue<string>("m_descripcion");
         }
+
+        public Marca(int id, string descripcion)
+        {
+            Id = id;
+            Descripcion = descripcion;
+        }
     }
 }

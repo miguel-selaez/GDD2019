@@ -129,7 +129,7 @@ namespace FrbaCrucero
 
         private void nuevoCrucero_Click(object sender, EventArgs e)
         {
-            var nuevoRol = new AbmCrucero.Crucero(MainInit.session);
+            var nuevoRol = new AbmCrucero.AltaCrucero(MainInit.session);
             nuevoRol.Show();
         }
 

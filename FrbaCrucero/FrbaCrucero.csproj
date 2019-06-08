@@ -57,11 +57,11 @@
     <Compile Include="AbmCliente\ListadoCliente.Designer.cs">
       <DependentUpon>ListadoCliente.cs</DependentUpon>
     </Compile>
-    <Compile Include="AbmCrucero\Crucero.cs">
+    <Compile Include="AbmCrucero\AltaCrucero.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AbmCrucero\Crucero.Designer.cs">
-      <DependentUpon>Crucero.cs</DependentUpon>
+    <Compile Include="AbmCrucero\AltaCrucero.Designer.cs">
+      <DependentUpon>AltaCrucero.cs</DependentUpon>
     </Compile>
     <Compile Include="AbmCrucero\ListadoCrucero.cs">
       <SubType>Form</SubType>
@@ -167,6 +167,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools.cs" />
+    <EmbeddedResource Include="AbmCrucero\AltaCrucero.resx">
+      <DependentUpon>AltaCrucero.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmCrucero\ListadoCrucero.resx">
+      <DependentUpon>ListadoCrucero.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AbmRecorrido\ListadoRecorrido.resx">
       <DependentUpon>ListadoRecorrido.cs</DependentUpon>
     </EmbeddedResource>

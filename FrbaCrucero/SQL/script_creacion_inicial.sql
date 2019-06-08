@@ -511,6 +511,56 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE [DSW].P_Obtener_Cruceros
+	@codigo_crucero nvarchar(50),
+	@id_marca int,
+	@modelo nvarchar(50),
+	@estado nvarchar(50)
+AS
+BEGIN
+	SELECT * 
+	INTO #cruceros
+	FROM [DSW].Crucero 
+	WHERE 
+		(cr_codigo like '%' + @codigo_crucero + '%' OR @codigo_crucero IS NULL)
+		AND (cr_id_marca = @id_marca OR @id_marca = 0)
+		AND (cr_modelo = @modelo OR @modelo IS NULL)
+
+	IF(@estado = 'Todos')
+	BEGIN	
+		SELECT * FROM #cruceros
+		ORDER BY cr_id_marca, cr_modelo
+	END
+	ELSE IF(@estado = 'Vigente')
+	BEGIN 
+		SELECT * FROM #cruceros
+		WHERE cr_baja = 0 AND cr_fecha_fuera_servicio IS NULL
+		ORDER BY cr_id_marca, cr_modelo
+	END
+	ELSE IF(@estado = 'No Vigente')
+	BEGIN 
+		SELECT * FROM #cruceros
+		WHERE cr_baja = 1
+		ORDER BY cr_id_marca, cr_modelo
+	END
+	ELSE
+	BEGIN 
+		SELECT * FROM #cruceros
+		WHERE cr_fecha_fuera_servicio IS NOT NULL
+		ORDER BY cr_id_marca, cr_modelo
+	END
+END
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Marcas
+AS
+BEGIN
+	SELECT * FROM [DSW].Marca
+	ORDER BY m_descripcion
+END 
+
+GO
+
 --------------------FIN CREACION DE SPS --------------------------------------------
 
 print (CONCAT('INSERTS ', CONVERT(VARCHAR, GETDATE(), 114)))

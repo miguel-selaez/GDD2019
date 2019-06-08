@@ -102,8 +102,16 @@ IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Marca')
 	DROP PROCEDURE [DSW].P_Obtener_Marca
 GO 
 
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Marcas')
+	DROP PROCEDURE [DSW].P_Obtener_Marcas
+GO 
+
 IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Crucero')
 	DROP PROCEDURE [DSW].P_Obtener_Crucero
+GO 
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Cruceros')
+	DROP PROCEDURE [DSW].P_Obtener_Cruceros
 GO 
 
 IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Guardar_Viaje')
