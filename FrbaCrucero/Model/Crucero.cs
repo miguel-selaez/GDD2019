@@ -5,10 +5,6 @@ namespace FrbaCrucero.Model
 {
     public class Crucero
     {
-        private Session _session;
-        private Crucero selectedRol;
-        private AbmCrucero.ListadoCrucero listadoCrucero;
-
         public int Id { get; set; }
         public string Codigo { get; set; }
         public string Modelo { get; set; }
@@ -30,14 +26,6 @@ namespace FrbaCrucero.Model
             FechaFueraServicio = row.GetDate("cr_fecha_fuera_servicio");
             FechaReinicioServicio = row.GetDate("cr_fecha_reinicio_servicio");
             FechaBajaDefinitiva = row.GetDate("cr_fecha_baja_definitiva");
-        }
-
-        public Crucero(Session _session, Crucero selectedRol, AbmCrucero.ListadoCrucero listadoCrucero)
-        {
-            // TODO: Complete member initialization
-            this._session = _session;
-            this.selectedRol = selectedRol;
-            this.listadoCrucero = listadoCrucero;
         }
     }
 
