@@ -188,6 +188,9 @@
     <EmbeddedResource Include="GeneracionViaje\ListadoViajes.resx">
       <DependentUpon>ListadoViajes.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GeneracionViaje\Viaje.resx">
+      <DependentUpon>Viaje.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Inicio.resx">
       <DependentUpon>Inicio.cs</DependentUpon>
     </EmbeddedResource>

@@ -23,7 +23,7 @@ namespace FrbaCrucero.Model
             FechaLlegadaEstimada = row.GetDate("v_fecha_llegada_estimada");
         }
 
-        public Viaje(Crucero crucero, Recorrido recorrido, DateTime fechaLlegada, DateTime fechaSalida, DateTime fechaLlegadaEstimada)
+        public Viaje(Crucero crucero, Recorrido recorrido,DateTime fechaSalida, DateTime fechaLlegada, DateTime fechaLlegadaEstimada)
         {
             Crucero = crucero;
             Recorrido = recorrido;

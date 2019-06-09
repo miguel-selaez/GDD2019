@@ -431,14 +431,14 @@ CREATE PROCEDURE [DSW].P_Guardar_Viaje
 	@id_viaje int,
 	@codigo_crucero int,
 	@codigo_recorrido decimal,
-	@fecha_llegada datetime2,
 	@fecha_salida datetime2,
+	@fecha_llegada datetime2,
 	@fecha_llegada_estimada datetime2
 AS
 BEGIN
 	IF @id_viaje = 0
 	BEGIN 
-		INSERT INTO [DSW].Viaje VALUES (@codigo_crucero, @codigo_recorrido, @fecha_llegada, @fecha_salida, @fecha_llegada_estimada);
+		INSERT INTO [DSW].Viaje VALUES (@codigo_crucero, @codigo_recorrido, @fecha_salida, @fecha_llegada, @fecha_llegada_estimada);
 		SELECT id_out = @@IDENTITY
 	END 
 	ELSE 
@@ -549,6 +549,22 @@ BEGIN
 		WHERE cr_fecha_fuera_servicio IS NOT NULL
 		ORDER BY cr_id_marca, cr_modelo
 	END
+END
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Cruceros_Disponibles
+	@fechaSalida nvarchar(50),
+	@fechaLlegada nvarchar(50)
+AS
+BEGIN
+	SELECT * FROM
+		[DSW].Crucero
+		WHERE cr_id NOT IN (SELECT v_id_crucero FROM [dsw].Viaje 
+						WHERE (v_fecha_salida BETWEEN @fechaSalida AND @fechaLlegada
+						OR v_fecha_llegada BETWEEN @fechaSalida AND @fechaLlegada)
+						AND v_id_crucero = cr_id)
+		AND cr_baja = 0 AND cr_fecha_fuera_servicio IS NULL
+		ORDER BY cr_id_marca, cr_modelo
 END
 GO
 

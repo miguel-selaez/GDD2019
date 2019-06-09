@@ -114,6 +114,10 @@ IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Cruceros')
 	DROP PROCEDURE [DSW].P_Obtener_Cruceros
 GO 
 
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Cruceros_Disponibles')
+	DROP PROCEDURE [DSW].P_Obtener_Cruceros
+GO 
+
 IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Guardar_Viaje')
 	DROP PROCEDURE [DSW].P_Guardar_Viaje
 GO 

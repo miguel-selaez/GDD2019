@@ -11,7 +11,7 @@ namespace FrbaCrucero.DAO
 
         public int CreateOrUpdate(Viaje viaje)
         {
-            var query = ArmarSentenciaSP("P_Guardar_Viaje", new[] { GetParam(viaje.Id), GetParam(viaje.Crucero.Id), GetParam(viaje.Recorrido.Id), GetParam(viaje.FechaLlegada), GetParam(viaje.FechaSalida), GetParam(viaje.FechaLlegadaEstimada) });
+            var query = ArmarSentenciaSP("P_Guardar_Viaje", new[] { GetParam(viaje.Id), GetParam(viaje.Crucero.Id), GetParam(viaje.Recorrido.Id), GetParam(viaje.FechaSalida), GetParam(viaje.FechaLlegada), GetParam(viaje.FechaLlegadaEstimada) });
             var viajeId = Int32.Parse(Connection.ExecuteSingleResult(query));
             return viajeId;
         } 

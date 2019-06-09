@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ListadoViajes));
             this.label2 = new System.Windows.Forms.Label();
             this.txtCodigoCrucero = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -111,6 +112,7 @@
             this.dgViajes.Name = "dgViajes";
             this.dgViajes.Size = new System.Drawing.Size(489, 205);
             this.dgViajes.TabIndex = 31;
+            this.dgViajes.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgViaje_CellContentClick);
             // 
             // CodigoCrucero
             // 
@@ -176,6 +178,7 @@
             this.Controls.Add(this.txtCodigoRecorrido);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtCodigoCrucero);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ListadoViajes";
             this.Text = "ListadoViajes";
             ((System.ComponentModel.ISupportInitialize)(this.dgViajes)).EndInit();

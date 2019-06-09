@@ -89,7 +89,7 @@ namespace FrbaCrucero.GeneracionViaje
             nuevo.Show();
         }
 
-        public void UpdateRecorridos()
+        public void UpdateViajes()
         {
             btnBuscar.PerformClick();
         }

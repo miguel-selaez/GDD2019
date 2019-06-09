@@ -12,41 +12,6 @@ namespace FrbaCrucero.DAO
     {
         public CruceroDAO(DBConnection con) : base(con) { }
 
-        /*public List<Funcion> GetFuncionesByRol(int rolId)
-        {
-            var list = new List<Funcion>();
-
-            var query = ArmarSentenciaSP("P_Obtener_Funciones_x_Rol", new[] { GetParam(rolId) });
-            var result = Connection.ExecuteQuery(query);
-
-            if (result.Rows.Count > 0)
-            {
-                foreach (DataRow row in result.Rows)
-                {
-                    list.Add(new Funcion(row));
-                }
-            }
-            return list;
-        }
-
-        public List<Funcion> GetFunciones()
-        {
-            var list = new List<Funcion>();
-            var baja = false;
-
-            var query = ArmarSentenciaSP("P_Obtener_Funciones", new[] { GetParam(baja) });
-            var result = Connection.ExecuteQuery(query);
-
-            if (result.Rows.Count > 0)
-            {
-                foreach (DataRow row in result.Rows)
-                {
-                    list.Add(new Funcion(row));
-                }
-            }
-            return list;
-        }*/
-
         public Crucero GetCrucero(int cruceroId)
         {
             var query = ArmarSentenciaSP("P_Obtener_Crucero", new[] { GetParam(cruceroId) });
@@ -66,6 +31,23 @@ namespace FrbaCrucero.DAO
             var list = new List<Crucero>();
 
             var query = ArmarSentenciaSP("P_Obtener_Cruceros", new[] { GetParam(codigo), GetParam(marcaId), GetParam(modelo), GetParam(estado)});
+            var result = Connection.ExecuteMultipleResult(query);
+
+            if (result.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow row in result.Tables[0].Rows)
+                {
+                    list.Add(new Crucero(row));
+                }
+            }
+            return list;
+        }
+
+        public List<Crucero> GetCrucerosDisponibles(DateTime fechaSalida, DateTime fechaLlegada)
+        {
+            var list = new List<Crucero>();
+
+            var query = ArmarSentenciaSP("P_Obtener_Cruceros_Disponibles", new[] { GetParam(fechaSalida), GetParam(fechaLlegada) });
             var result = Connection.ExecuteMultipleResult(query);
 
             if (result.Tables[0].Rows.Count > 0)
