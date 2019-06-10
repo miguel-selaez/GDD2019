@@ -43,11 +43,7 @@ namespace FrbaCrucero.AbmCrucero
                 dgCruceros.Rows[index].Cells["Codigo"].Value = crucero.Codigo;
                 dgCruceros.Rows[index].Cells["Marca"].Value = crucero.Marca.Descripcion;
                 dgCruceros.Rows[index].Cells["Modelo"].Value = crucero.Modelo;
-                dgCruceros.Rows[index].Cells["Estado"].Value = crucero.Baja 
-                    ? Model.CruceroEstados.NoVigente 
-                    : (crucero.FechaFueraServicio.HasValue) 
-                        ? Model.CruceroEstados.FueraServicio 
-                        : Model.CruceroEstados.Vigente;
+                dgCruceros.Rows[index].Cells["Estado"].Value = crucero.Estado;
                 dgCruceros.Rows[index].Cells["Editar"].Value = "Seleccionar";
             }
         }

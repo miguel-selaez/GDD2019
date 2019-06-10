@@ -13,9 +13,8 @@ namespace FrbaCrucero.Model
         public Marca Marca { get; set; }
         public DateTime? FechaAlta { get; set; }
         public bool Baja { get; set; }
-        public DateTime? FechaFueraServicio { get; set; }
-        public DateTime? FechaReinicioServicio { get; set; }
-        public DateTime? FechaBajaDefinitiva { get; set; }
+
+        public string Estado { get; set; }
 
         private List<Cabina> _cabinas;
         public List<Cabina> Cabinas
@@ -32,9 +31,7 @@ namespace FrbaCrucero.Model
             Marca = DAO.DAOFactory.CruceroDAO.GetMarca(row.GetValue<int>("cr_id_marca"));
             FechaAlta = row.GetDate("cr_fecha_alta");
             Baja = row.GetValue<bool>("cr_baja");
-            FechaFueraServicio = row.GetDate("cr_fecha_fuera_servicio");
-            FechaReinicioServicio = row.GetDate("cr_fecha_reinicio_servicio");
-            FechaBajaDefinitiva = row.GetDate("cr_fecha_baja_definitiva");
+            Estado = row.GetValue<string>("cr_estado");
         }
     }
 

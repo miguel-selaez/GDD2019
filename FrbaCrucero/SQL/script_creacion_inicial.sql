@@ -529,49 +529,30 @@ CREATE PROCEDURE [DSW].P_Obtener_Cruceros
 	@fecha_actual datetime2(3)
 AS
 BEGIN
-	SELECT * 
-	INTO #cruceros
-	FROM [DSW].Crucero 
-	WHERE 
-		(cr_codigo like '%' + @codigo_crucero + '%' OR @codigo_crucero IS NULL)
-		AND (cr_id_marca = @id_marca OR @id_marca = 0)
-		AND (cr_modelo = @modelo OR @modelo IS NULL)
+	
+	SELECT
+		*
+	FROM (
+		SELECT 
+			c.*,
+			CASE 
+				WHEN c.cr_baja = 1 THEN 'No Vigente'
+				WHEN EXISTS(
+					SELECT * FROM DSW.Fuera_Servicio_Crucero as f 
+					WHERE f.fs_id_crucero = c.cr_id
+						AND f.fs_fecha_inicio >= @fecha_actual 
+						AND f.fs_fecha_fin <= @fecha_actual) THEN 'Fuera de Servicio'
+				ELSE 'Vigente' 
+			END as 'cr_estado'  
+		FROM [DSW].Crucero as c
+		WHERE 
+			(cr_codigo like '%' + @codigo_crucero + '%' OR @codigo_crucero IS NULL)
+			AND (cr_id_marca = @id_marca OR @id_marca = 0)
+			AND (cr_modelo = @modelo OR @modelo IS NULL)
+	) as t
+	WHERE (@estado = 'Todos' OR t.cr_estado = @estado)
+	ORDER BY t.cr_id_marca, t.cr_modelo
 
-	IF(@estado = 'Todos')
-	BEGIN	
-		SELECT * FROM #cruceros
-		ORDER BY cr_id_marca, cr_modelo
-	END
-	ELSE IF(@estado = 'Vigente')
-	BEGIN 
-		SELECT * FROM #cruceros as c
-		WHERE cr_baja = 0
-		AND NOT EXISTS(
-			SELECT * FROM DSW.Fuera_Servicio_Crucero as f 
-			WHERE f.fs_id_crucero = c.cr_id
-				AND f.fs_fecha_inicio >= @fecha_actual 
-				AND f.fs_fecha_fin <= @fecha_actual
-		)
-		ORDER BY cr_id_marca, cr_modelo
-	END
-	ELSE IF(@estado = 'No Vigente')
-	BEGIN 
-		SELECT * FROM #cruceros
-		WHERE cr_baja = 1
-		ORDER BY cr_id_marca, cr_modelo
-	END
-	ELSE
-	BEGIN 
-		SELECT * FROM #cruceros as c
-		WHERE cr_baja = 0
-		AND EXISTS(
-			SELECT * FROM DSW.Fuera_Servicio_Crucero as f 
-			WHERE f.fs_id_crucero = c.cr_id
-				AND f.fs_fecha_inicio >= @fecha_actual 
-				AND f.fs_fecha_fin <= @fecha_actual
-		)
-		ORDER BY cr_id_marca, cr_modelo
-	END
 END
 GO
 

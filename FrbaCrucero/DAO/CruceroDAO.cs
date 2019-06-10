@@ -30,7 +30,13 @@ namespace FrbaCrucero.DAO
         {
             var list = new List<Crucero>();
 
-            var query = ArmarSentenciaSP("P_Obtener_Cruceros", new[] { GetParam(codigo), GetParam(marcaId), GetParam(modelo), GetParam(estado)});
+            var query = ArmarSentenciaSP("P_Obtener_Cruceros", new[] { 
+                GetParam(codigo), 
+                GetParam(marcaId), 
+                GetParam(modelo), 
+                GetParam(estado),
+                GetParam(Tools.GetDate())
+            });
             var result = Connection.ExecuteMultipleResult(query);
 
             if (result.Tables[0].Rows.Count > 0)
