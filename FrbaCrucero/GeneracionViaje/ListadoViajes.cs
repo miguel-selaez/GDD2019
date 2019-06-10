@@ -67,8 +67,8 @@ namespace FrbaCrucero.GeneracionViaje
         private void dgRecorrido_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             var selectedRecorrido = _results.ElementAt(e.RowIndex);
-            var nuevo = new Recorrido(_session, selectedRecorrido, this);
-            nuevo.Show();
+            //var nuevo = new Recorrido(_session, selectedRecorrido, this);
+            //nuevo.Show();
         }
 
         public void UpdateRecorridos()

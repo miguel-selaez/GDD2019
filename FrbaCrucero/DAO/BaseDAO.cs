@@ -75,11 +75,7 @@ namespace FrbaCrucero.DAO
             return param.ToString("0.00", CultureInfo.InvariantCulture);
         }
         public string GetParamVigencia(string param) {
-            return param == "Todos"
-                ? "null"
-                : param == "No"
-                    ? "1"
-                    : "0";
+            return param == "Todos" ? "null" : param == "No" ? "1" : "0";
         }
         //public string GetParam(Usuario param)
         //{

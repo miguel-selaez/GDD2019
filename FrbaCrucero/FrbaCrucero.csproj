@@ -167,6 +167,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools.cs" />
+    <EmbeddedResource Include="AbmCliente\Cliente.resx">
+      <DependentUpon>Cliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmCliente\ListadoCliente.resx">
+      <DependentUpon>ListadoCliente.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AbmRecorrido\ListadoRecorrido.resx">
       <DependentUpon>ListadoRecorrido.cs</DependentUpon>
     </EmbeddedResource>
