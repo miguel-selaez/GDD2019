@@ -39,6 +39,8 @@ ALTER TABLE [DSW].[Cabina]  DROP CONSTRAINT [FK_Cabina_Tipo_cabina]
 GO
 ALTER TABLE [DSW].[Crucero]  DROP CONSTRAINT [FK_Crucero_Marca] 
 GO
+ALTER TABLE [DSW].[Fuera_Servicio_Crucero]  DROP CONSTRAINT [FK_Fuera_Servicio_Crucero] 
+GO
 
 
 -- SPs
@@ -102,8 +104,20 @@ IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Marca')
 	DROP PROCEDURE [DSW].P_Obtener_Marca
 GO 
 
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Marcas')
+	DROP PROCEDURE [DSW].P_Obtener_Marcas
+GO 
+
 IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Crucero')
 	DROP PROCEDURE [DSW].P_Obtener_Crucero
+GO 
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Cruceros')
+	DROP PROCEDURE [DSW].P_Obtener_Cruceros
+GO 
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Cruceros_Disponibles')
+	DROP PROCEDURE [DSW].P_Obtener_Cruceros_Disponibles
 GO 
 
 IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Guardar_Viaje')
@@ -118,6 +132,18 @@ IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Viajes')
 	DROP PROCEDURE [DSW].P_Obtener_Viajes
 GO 
 
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Cantidad_Viajes')
+	DROP PROCEDURE [DSW].P_Obtener_Cantidad_Viajes
+GO 
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Cabinas_x_Crucero')
+	DROP PROCEDURE [DSW].P_Obtener_Cabinas_x_Crucero
+GO 
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Tipo_Cabina')
+	DROP PROCEDURE [DSW].P_Obtener_Tipo_Cabina
+GO 
+
 --- TABLAS
 -- Limpieza de datos (TRUNCATE)
 TRUNCATE TABLE [DSW].Cabina
@@ -126,6 +152,7 @@ TRUNCATE TABLE [DSW].Marca
 TRUNCATE TABLE [DSW].Crucero
 GO
 
+TRUNCATE TABLE [DSW].Fuera_Servicio_Crucero
 TRUNCATE TABLE [DSW].Funcion
 TRUNCATE TABLE [DSW].Funcion_x_Rol
 TRUNCATE TABLE [DSW].Medio_Pago
@@ -155,6 +182,7 @@ DROP TABLE [DSW].Crucero
 DROP TABLE [DSW].Marca
 GO
 
+DROP TABLE [DSW].Fuera_Servicio_Crucero
 DROP TABLE [DSW].Funcion
 DROP TABLE [DSW].Funcion_x_Rol
 DROP TABLE [DSW].Medio_Pago

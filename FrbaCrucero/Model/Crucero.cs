@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FrbaCrucero.DAO;
+using System;
+using System.Collections.Generic;
 using System.Data;
 
 namespace FrbaCrucero.Model
@@ -9,11 +11,17 @@ namespace FrbaCrucero.Model
         public string Codigo { get; set; }
         public string Modelo { get; set; }
         public Marca Marca { get; set; }
-        public DateTime FechaAlta { get; set; }
+        public DateTime? FechaAlta { get; set; }
         public bool Baja { get; set; }
-        public DateTime? FechaFueraServicio { get; set; }
-        public DateTime? FechaReinicioServicio { get; set; }
-        public DateTime? FechaBajaDefinitica { get; set; }
+
+        public string Estado { get; set; }
+
+        private List<Cabina> _cabinas;
+        public List<Cabina> Cabinas
+        {
+            get { return _cabinas ?? (_cabinas = DAOFactory.CabinaDAO.GetCabinasByCrucero(Id)); }
+            set { _cabinas = value; }
+        }
 
         public Crucero(DataRow row)
         {
@@ -21,11 +29,16 @@ namespace FrbaCrucero.Model
             Codigo = row.GetValue<string>("cr_codigo");
             Modelo = row.GetValue<string>("cr_modelo");
             Marca = DAO.DAOFactory.CruceroDAO.GetMarca(row.GetValue<int>("cr_id_marca"));
-            FechaAlta = row.GetValue<DateTime>("cr_fecha_alta");
+            FechaAlta = row.GetDate("cr_fecha_alta");
             Baja = row.GetValue<bool>("cr_baja");
-            FechaFueraServicio = row.GetValue<DateTime?>("cr_fecha_fuera_servicio");
-            FechaReinicioServicio = row.GetValue<DateTime?>("cr_fecha_reinicio_servicio");
-            FechaBajaDefinitica = row.GetValue<DateTime?>("cr_fecha_baja_definitiva");
+            Estado = row.GetValue<string>("cr_estado");
         }
+    }
+
+    public static class CruceroEstados
+    {
+        public static string Vigente = "Vigente";
+        public static string NoVigente = "No Vigente";
+        public static string FueraServicio = "Fuera de Servicio";
     }
 }

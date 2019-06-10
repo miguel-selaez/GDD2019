@@ -10,19 +10,12 @@ using System.Windows.Forms;
 
 namespace FrbaCrucero.AbmCrucero
 {
-    public partial class Crucero : Form
+    public partial class FueraDeServicio : Form
     {
-        private Model.Session session;
-
-        public Crucero()
+        public FueraDeServicio()
         {
             InitializeComponent();
-        }
-
-        public Crucero(Model.Session session)
-        {
-            // TODO: Complete member initialization
-            this.session = session;
+            dtIncioFueraServicio.Value = Tools.GetDate();
         }
     }
 }

@@ -57,11 +57,23 @@
     <Compile Include="AbmCliente\ListadoCliente.Designer.cs">
       <DependentUpon>ListadoCliente.cs</DependentUpon>
     </Compile>
-    <Compile Include="AbmCrucero\Crucero.cs">
+    <Compile Include="AbmCrucero\AltaCabina.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AbmCrucero\Crucero.Designer.cs">
-      <DependentUpon>Crucero.cs</DependentUpon>
+    <Compile Include="AbmCrucero\AltaCabina.Designer.cs">
+      <DependentUpon>AltaCabina.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AbmCrucero\AltaCrucero.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AbmCrucero\AltaCrucero.Designer.cs">
+      <DependentUpon>AltaCrucero.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AbmCrucero\FueraDeServicio.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AbmCrucero\FueraDeServicio.Designer.cs">
+      <DependentUpon>FueraDeServicio.cs</DependentUpon>
     </Compile>
     <Compile Include="AbmCrucero\ListadoCrucero.cs">
       <SubType>Form</SubType>
@@ -101,6 +113,7 @@
     </Compile>
     <Compile Include="DAO\BaseDAO.cs" />
     <Compile Include="DAO\ClienteDAO.cs" />
+    <Compile Include="DAO\CabinaDAO.cs" />
     <Compile Include="DAO\CruceroDAO.cs" />
     <Compile Include="DAO\DAOFactory.cs" />
     <Compile Include="DAO\DBConnection.cs" />
@@ -147,6 +160,8 @@
     </Compile>
     <Compile Include="MenuCreator.cs" />
     <Compile Include="Model\Cliente.cs" />
+    <Compile Include="Model\TipoCabina.cs" />
+    <Compile Include="Model\Cabina.cs" />
     <Compile Include="Model\Marca.cs" />
     <Compile Include="Model\DataRowExtensions.cs" />
     <Compile Include="Model\Funcion.cs" />
@@ -167,11 +182,17 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools.cs" />
-    <EmbeddedResource Include="AbmCliente\Cliente.resx">
-      <DependentUpon>Cliente.cs</DependentUpon>
+    <EmbeddedResource Include="AbmCrucero\AltaCabina.resx">
+      <DependentUpon>AltaCabina.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AbmCliente\ListadoCliente.resx">
-      <DependentUpon>ListadoCliente.cs</DependentUpon>
+    <EmbeddedResource Include="AbmCrucero\AltaCrucero.resx">
+      <DependentUpon>AltaCrucero.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmCrucero\FueraDeServicio.resx">
+      <DependentUpon>FueraDeServicio.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmCrucero\ListadoCrucero.resx">
+      <DependentUpon>ListadoCrucero.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AbmRecorrido\ListadoRecorrido.resx">
       <DependentUpon>ListadoRecorrido.cs</DependentUpon>
@@ -187,6 +208,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GeneracionViaje\ListadoViajes.resx">
       <DependentUpon>ListadoViajes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GeneracionViaje\Viaje.resx">
+      <DependentUpon>Viaje.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Inicio.resx">
       <DependentUpon>Inicio.cs</DependentUpon>

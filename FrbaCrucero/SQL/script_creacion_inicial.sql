@@ -101,12 +101,21 @@ CREATE TABLE [DSW].[Crucero] (
   [cr_modelo] nvarchar(50),
   [cr_id_marca] int,
   [cr_fecha_alta] datetime2(3),
-  [cr_baja] bit,
-  [cr_fecha_fuera_servicio] datetime2(3),
-  [cr_fecha_reinicio_servicio] datetime2(3),
-  [cr_fecha_baja_definitiva] datetime2(3),
+  [cr_baja] bit,  
+  [cr_fecha_baja] datetime2(3),
   PRIMARY KEY ([cr_id])
 );
+
+GO
+
+CREATE TABLE [DSW].[Fuera_Servicio_Crucero] (
+	[fs_id] int IDENTITY (1,1),
+	[fs_id_crucero] int,
+	[fs_fecha_inicio] datetime2(3),
+    [fs_fecha_fin] datetime2(3),
+    [fs_motivo] nvarchar(50),
+	PRIMARY KEY ([fs_id])
+)
 
 GO
 
@@ -114,6 +123,7 @@ CREATE TABLE [DSW].[Cabina] (
   [ca_id] int IDENTITY (1,1),
   [ca_numero] decimal(18,0),
   [ca_piso] decimal(18,0),
+  [ca_baja] bit,
   [ca_id_crucero] int,
   [ca_id_tipo_cabina] int,
   PRIMARY KEY ([ca_id])
@@ -431,14 +441,14 @@ CREATE PROCEDURE [DSW].P_Guardar_Viaje
 	@id_viaje int,
 	@codigo_crucero int,
 	@codigo_recorrido decimal,
-	@fecha_llegada datetime2,
 	@fecha_salida datetime2,
+	@fecha_llegada datetime2,
 	@fecha_llegada_estimada datetime2
 AS
 BEGIN
 	IF @id_viaje = 0
 	BEGIN 
-		INSERT INTO [DSW].Viaje VALUES (@codigo_crucero, @codigo_recorrido, @fecha_llegada, @fecha_salida, @fecha_llegada_estimada);
+		INSERT INTO [DSW].Viaje VALUES (@codigo_crucero, @codigo_recorrido, @fecha_salida, @fecha_llegada, @fecha_llegada_estimada);
 		SELECT id_out = @@IDENTITY
 	END 
 	ELSE 
@@ -467,15 +477,30 @@ END
 GO
 
 CREATE PROCEDURE [DSW].P_Obtener_Viajes
-	@codigo_crucero int,
-	@codigo_recorrido decimal
+	@codigo_crucero nvarchar(255),
+	@codigo_recorrido char(20),
+	@page int,
+	@offset int
 AS
 BEGIN
 	SELECT v.* FROM [DSW].Viaje v
 	INNER JOIN [DSW].Crucero AS c ON c.cr_id = v.v_id_crucero
 	INNER JOIN [DSW].Recorrido AS r ON r.rc_id = v.v_id_recorrido
 	WHERE (c.cr_codigo = @codigo_crucero OR @codigo_crucero IS NULL) AND (r.rc_codigo = @codigo_recorrido OR @codigo_recorrido IS NULL) 
-	ORDER BY v.v_fecha_salida DESC;
+	ORDER BY v.v_fecha_salida DESC
+	OFFSET (@page * @offset) ROWS FETCH NEXT @offset ROWS ONLY;
+END
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Cantidad_Viajes
+	@codigo_crucero nvarchar(255),
+	@codigo_recorrido char(20)
+AS
+BEGIN
+	SELECT count(*) as "count" FROM [DSW].Viaje v
+	INNER JOIN [DSW].Crucero AS c ON c.cr_id = v.v_id_crucero
+	INNER JOIN [DSW].Recorrido AS r ON r.rc_id = v.v_id_recorrido
+	WHERE (c.cr_codigo = @codigo_crucero OR @codigo_crucero IS NULL) AND (r.rc_codigo = @codigo_recorrido OR @codigo_recorrido IS NULL);
 END
 GO
 
@@ -494,6 +519,101 @@ AS
 BEGIN
 	SELECT * FROM [DSW].Crucero WHERE cr_id = @id_crucero;
 END
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Cruceros
+	@codigo_crucero nvarchar(50),
+	@id_marca int,
+	@modelo nvarchar(50),
+	@estado nvarchar(50),
+	@fecha_actual datetime2(3)
+AS
+BEGIN
+	
+	SELECT
+		*
+	FROM (
+		SELECT 
+			c.*,
+			CASE 
+				WHEN c.cr_baja = 1 THEN 'No Vigente'
+				WHEN EXISTS(
+					SELECT * FROM DSW.Fuera_Servicio_Crucero as f 
+					WHERE f.fs_id_crucero = c.cr_id
+						AND f.fs_fecha_inicio >= @fecha_actual 
+						AND f.fs_fecha_fin <= @fecha_actual) THEN 'Fuera de Servicio'
+				ELSE 'Vigente' 
+			END as 'cr_estado'  
+		FROM [DSW].Crucero as c
+		WHERE 
+			(cr_codigo like '%' + @codigo_crucero + '%' OR @codigo_crucero IS NULL)
+			AND (cr_id_marca = @id_marca OR @id_marca = 0)
+			AND (cr_modelo = @modelo OR @modelo IS NULL)
+	) as t
+	WHERE (@estado = 'Todos' OR t.cr_estado = @estado)
+	ORDER BY t.cr_id_marca, t.cr_modelo
+
+END
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Cruceros_Disponibles
+	@fechaSalida nvarchar(50),
+	@fechaLlegada nvarchar(50)
+AS
+BEGIN
+	SELECT * FROM
+		[DSW].Crucero as c
+		WHERE cr_id NOT IN (SELECT v_id_crucero FROM [dsw].Viaje 
+						WHERE (v_fecha_salida BETWEEN @fechaSalida AND @fechaLlegada
+						OR v_fecha_llegada BETWEEN @fechaSalida AND @fechaLlegada)
+						AND v_id_crucero = cr_id)
+		AND cr_baja = 0 
+		--AND NOT EXISTS(
+		--	SELECT * FROM DSW.Fuera_Servicio_Crucero as f 
+		--	WHERE f.fs_id_crucero = c.cr_id
+		--		AND f.fs_fecha_inicio >= @fecha_actual 
+		--		AND f.fs_fecha_fin <= @fecha_actual
+		--)
+		ORDER BY cr_id_marca, cr_modelo
+END
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Marcas
+AS
+BEGIN
+	SELECT * FROM [DSW].Marca
+	ORDER BY m_descripcion
+END 
+
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Cabinas_x_Crucero
+@id_crucero int
+AS
+BEGIN
+	SELECT 
+		c.*
+	FROM 
+		[DSW].Cabina as c
+	WHERE 
+		c.ca_id_crucero = @id_crucero
+		AND c.ca_baja = 0
+	ORDER BY
+		c.ca_piso,
+		c.ca_numero
+		
+END 
+
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Tipo_Cabina
+@id_tipo_cabina int
+AS
+BEGIN
+	SELECT * FROM [DSW].Tipo_cabina
+	WHERE tc_id = @id_tipo_cabina
+END 
+
 GO
 
 --------------------FIN CREACION DE SPS --------------------------------------------
@@ -670,8 +790,6 @@ SELECT DISTINCT
 	(select m_id from DSW.Marca where m_descripcion = CRU_FABRICANTE),
 	@fecha_actual,
 	0,
-	NULL,
-	NULL,
 	NULL
 FROM gd_esquema.Maestra
 
@@ -680,6 +798,7 @@ INSERT INTO DSW.Cabina
 SELECT DISTINCT 
 	CABINA_NRO, 
 	CABINA_PISO, 
+	0,
 	(SELECT cr_id FROM DSW.Crucero WHERE cr_codigo = CRUCERO_IDENTIFICADOR),
 	(SELECT tc_id FROM DSW.Tipo_cabina WHERE tc_descripcion = RTRIM(LTRIM(CABINA_TIPO))) 
 FROM 
@@ -1012,6 +1131,13 @@ REFERENCES [DSW].[Marca] ([m_id])
 GO
 
 ALTER TABLE [DSW].[Crucero] CHECK CONSTRAINT [FK_Crucero_Marca]
+GO
+
+ALTER TABLE [DSW].[Fuera_Servicio_Crucero]  WITH CHECK ADD CONSTRAINT [FK_Fuera_Servicio_Crucero] FOREIGN KEY([fs_id_crucero])
+REFERENCES [DSW].[Crucero] ([cr_id])
+GO
+
+ALTER TABLE [DSW].[Fuera_Servicio_Crucero] CHECK CONSTRAINT [FK_Fuera_Servicio_Crucero]
 GO
 
 --------------- FKS, INDICES Y CONSTRAINS ------------------

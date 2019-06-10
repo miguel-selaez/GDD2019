@@ -12,46 +12,6 @@ namespace FrbaCrucero.DAO
     {
         public CruceroDAO(DBConnection con) : base(con) { }
 
-        //public List<Funcion> GetFuncionesByRol(int rolId)
-        //{
-        //    var list = new List<Funcion>();
-
-        //    var query = ArmarSentenciaSP("P_Obtener_Funciones_x_Rol", new[] { GetParam(rolId) });
-        //    var result = Connection.ExecuteQuery(query);
-
-        //    if (result.Rows.Count > 0)
-        //    {
-        //        foreach (DataRow row in result.Rows)
-        //        {
-        //            list.Add(new Funcion(row));
-        //        }
-        //    }
-        //    return list;
-        //}
-
-        //public List<Funcion> GetFunciones()
-        //{
-        //    var list = new List<Funcion>();
-        //    var baja = false;
-
-        //    var query = ArmarSentenciaSP("P_Obtener_Funciones", new[] { GetParam(baja) });
-        //    var result = Connection.ExecuteQuery(query);
-
-        //    if (result.Rows.Count > 0)
-        //    {
-        //        foreach (DataRow row in result.Rows)
-        //        {
-        //            list.Add(new Funcion(row));
-        //        }
-        //    }
-        //    return list;
-        //}
-
-        //public void SaveFuncionxRol(Funcion funcion, int rolId)
-        //{
-        //    var query = ArmarSentenciaSP("P_Guardar_Funcion_x_Rol", new[] { GetParam(funcion.Id), GetParam(rolId) });
-        //    Connection.ExecuteNoQuery(query);
-        //}
         public Crucero GetCrucero(int cruceroId)
         {
             var query = ArmarSentenciaSP("P_Obtener_Crucero", new[] { GetParam(cruceroId) });
@@ -64,6 +24,63 @@ namespace FrbaCrucero.DAO
             var query = ArmarSentenciaSP("P_Obtener_Marca", new[] { GetParam(marcaId) });
             var result = Connection.ExecuteQuery(query);
             return new Marca(result.Rows[0]);
+        }
+
+        public List<Crucero> GetCruceros(string codigo, int marcaId, string modelo, string estado)
+        {
+            var list = new List<Crucero>();
+
+            var query = ArmarSentenciaSP("P_Obtener_Cruceros", new[] { 
+                GetParam(codigo), 
+                GetParam(marcaId), 
+                GetParam(modelo), 
+                GetParam(estado),
+                GetParam(Tools.GetDate())
+            });
+            var result = Connection.ExecuteMultipleResult(query);
+
+            if (result.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow row in result.Tables[0].Rows)
+                {
+                    list.Add(new Crucero(row));
+                }
+            }
+            return list;
+        }
+
+        public List<Crucero> GetCrucerosDisponibles(DateTime fechaSalida, DateTime fechaLlegada)
+        {
+            var list = new List<Crucero>();
+
+            var query = ArmarSentenciaSP("P_Obtener_Cruceros_Disponibles", new[] { GetParam(fechaSalida), GetParam(fechaLlegada) });
+            var result = Connection.ExecuteMultipleResult(query);
+
+            if (result.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow row in result.Tables[0].Rows)
+                {
+                    list.Add(new Crucero(row));
+                }
+            }
+            return list;
+        }
+
+        public List<Marca> GetMarcas()
+        {
+            var list = new List<Marca>();
+
+            var query = ArmarSentenciaSP("P_Obtener_Marcas", null);
+            var result = Connection.ExecuteQuery(query);
+
+            if (result.Rows.Count > 0)
+            {
+                foreach (DataRow row in result.Rows)
+                {
+                    list.Add(new Marca(row));
+                }
+            }
+            return list;
         }
     }
 }

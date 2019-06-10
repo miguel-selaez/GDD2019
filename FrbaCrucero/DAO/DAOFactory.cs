@@ -19,6 +19,7 @@ namespace FrbaCrucero.DAO
         private static RecorridoDAO _recorridoDao;
         private static CruceroDAO _cruceroDao;
         private static ViajeDAO _viajeDao;
+        private static CabinaDAO _cabinaDao;
 
         public static FuncionDAO FuncionDAO { get { return _funcionDao ?? (_funcionDao = new FuncionDAO(_connection)); } }
 
@@ -37,5 +38,7 @@ namespace FrbaCrucero.DAO
         public static CruceroDAO CruceroDAO { get { return _cruceroDao ?? (_cruceroDao = new CruceroDAO(_connection)); } }
 
         public static ViajeDAO ViajeDAO { get { return _viajeDao ?? (_viajeDao = new ViajeDAO(_connection)); } }
+
+        public static CabinaDAO CabinaDAO { get { return _cabinaDao ?? (_cabinaDao = new CabinaDAO(_connection)); } }
     }
 }

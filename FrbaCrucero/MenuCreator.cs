@@ -54,11 +54,11 @@ namespace FrbaCrucero
                     break;
                 case "ABM VIAJE":
                     itemMenu.Text = "Viajes";
-                    ToolStripMenuItem listadoViaje = new ToolStripMenuItem("Listado", null, new EventHandler(listadoViaje_Click));
-                    itemMenu.DropDownItems.Add(listadoViaje);
+                    //ToolStripMenuItem listadoViaje = new ToolStripMenuItem("Listado", null, new EventHandler(listadoViaje_Click));
+                    //itemMenu.DropDownItems.Add(listadoViaje);
 
-                    ToolStripMenuItem nuevoViaje = new ToolStripMenuItem("Nuevo", null, new EventHandler(nuevoViaje_Click));
-                    itemMenu.DropDownItems.Add(nuevoViaje);
+                    ToolStripMenuItem generarViaje = new ToolStripMenuItem("Generar viaje", null, new EventHandler(generarViaje_Click));
+                    itemMenu.DropDownItems.Add(generarViaje);
                     break;
                 case "COMPRAS Y RESERVAS":
                     itemMenu.Text = "Compras y/o Reservas";
@@ -114,7 +114,7 @@ namespace FrbaCrucero
             listado.Show();
         }
 
-        private void nuevoViaje_Click(object sender, EventArgs e)
+        private void generarViaje_Click(object sender, EventArgs e)
         {
             var nuevo = new GeneracionViaje.Viaje(MainInit.session);
             nuevo.Show();
@@ -129,7 +129,7 @@ namespace FrbaCrucero
 
         private void nuevoCrucero_Click(object sender, EventArgs e)
         {
-            var nuevoRol = new AbmCrucero.Crucero(MainInit.session);
+            var nuevoRol = new AbmCrucero.AltaCrucero(MainInit.session);
             nuevoRol.Show();
         }
 
