@@ -15,24 +15,48 @@ namespace FrbaCrucero.AbmCrucero
         private Model.Session _session;
         private Model.Crucero _selectedRol;
         private ListadoCrucero _listadoCrucero;
-
-        public AltaCrucero()
-        {
-            InitializeComponent();
-        }
-
+        
         public AltaCrucero(Model.Session session)
         {
-            // TODO: Complete member initialization
+            InitializeComponent();
+
             this._session = session;
         }
 
         public AltaCrucero(Model.Session _session, Model.Crucero selectedRol, ListadoCrucero listadoCrucero)
         {
-            // TODO: Complete member initialization
+            InitializeComponent();
+
             this._session = _session;
             this._selectedRol = selectedRol;
             this._listadoCrucero = listadoCrucero;
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnAgregarCabina_Click(object sender, EventArgs e)
+        {
+            var nueva = new AltaCabina();
+            nueva.Show();
+        }
+
+        private void btnEliminarCabina_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnFueraServicio_Click(object sender, EventArgs e)
+        {
+            var fueraServicio = new FueraDeServicio();
+            fueraServicio.Show();
         }
     }
 }

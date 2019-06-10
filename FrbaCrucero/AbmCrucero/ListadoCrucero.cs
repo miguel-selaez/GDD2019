@@ -82,8 +82,8 @@ namespace FrbaCrucero.AbmCrucero
 
         private void dgCruceros_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            var selectedRol = _results.ElementAt(e.RowIndex);
-            var nuevo = new AltaCrucero(_session, selectedRol, this);
+            var selectedCrucero = _results.ElementAt(e.RowIndex);
+            var nuevo = new AltaCrucero(_session, selectedCrucero, this);
             nuevo.Show();
         }
 

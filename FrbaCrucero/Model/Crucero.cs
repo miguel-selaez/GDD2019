@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FrbaCrucero.DAO;
+using System;
+using System.Collections.Generic;
 using System.Data;
 
 namespace FrbaCrucero.Model
@@ -14,6 +16,13 @@ namespace FrbaCrucero.Model
         public DateTime? FechaFueraServicio { get; set; }
         public DateTime? FechaReinicioServicio { get; set; }
         public DateTime? FechaBajaDefinitiva { get; set; }
+
+        private List<Cabina> _cabinas;
+        public List<Cabina> Cabinas
+        {
+            get { return _cabinas ?? (_cabinas = DAOFactory.CabinaDAO.GetCabinasByCrucero(Id)); }
+            set { _cabinas = value; }
+        }
 
         public Crucero(DataRow row)
         {
