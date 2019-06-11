@@ -601,9 +601,7 @@ BEGIN
 	ORDER BY
 		c.ca_piso,
 		c.ca_numero
-		
 END 
-
 GO
 
 CREATE PROCEDURE [DSW].P_Obtener_Tipo_Cabina
@@ -836,6 +834,32 @@ AS
 BEGIN	
 	SELECT * FROM DSW.Medio_Pago WHERE mp_id = @id;
 END
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Pasajes_x_Reserva
+@codigo_reserva decimal
+AS
+BEGIN
+	SELECT 
+		*
+	FROM 
+		[DSW].Pasaje
+	WHERE 
+		pa_id_reserva = @codigo_reserva
+END 
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Pasajes_x_Pago
+@id_pago int
+AS
+BEGIN
+	SELECT 
+		*
+	FROM 
+		[DSW].Pasaje
+	WHERE 
+		pa_id_pago = @id_pago
+END 
 GO
 --------------------FIN CREACION DE SPS --------------------------------------------
 

@@ -1,5 +1,6 @@
 ﻿using FrbaCrucero.DAO;
 using System;
+using System.Collections.Generic;
 using System.Data;
 
 namespace FrbaCrucero.Model
@@ -10,6 +11,12 @@ namespace FrbaCrucero.Model
         public DateTime? Fecha { get; set; }
         public bool Estado { get; set; }
         public Cliente Cliente { get; set; }
+        private List<Pasaje> _pasajes;
+        public List<Pasaje> Pasajes
+        {
+            get { return _pasajes ?? (_pasajes = DAOFactory.PasajeDAO.GetPasajesByReservaCodigo(Codigo)); }
+            set { _pasajes = value; }
+        }
 
         public Reserva(DataRow row)
         {

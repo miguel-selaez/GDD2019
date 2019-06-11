@@ -188,6 +188,14 @@ IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Medio_Pago')
 	DROP PROCEDURE [DSW].P_Obtener_Medio_Pago	
 GO 
 
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Pasajes_x_Pago')
+	DROP PROCEDURE [DSW].P_Obtener_Pasajes_x_Pago	
+GO 
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Pasajes_x_Reserva')
+	DROP PROCEDURE [DSW].P_Obtener_Pasajes_x_Reserva	
+GO
+
 --- TABLAS
 -- Limpieza de datos (TRUNCATE)
 TRUNCATE TABLE [DSW].Cabina
