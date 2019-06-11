@@ -14,6 +14,9 @@
         private static CruceroDAO _cruceroDao;
         private static ViajeDAO _viajeDao;
         private static CabinaDAO _cabinaDao;
+        private static PagoDAO _pagoDao;
+        private static MedioPagoDAO _medioPagoDao;
+        private static ReservaDAO _reservaDao;
 
         public static FuncionDAO FuncionDAO { get { return _funcionDao ?? (_funcionDao = new FuncionDAO(_connection)); } }
 
@@ -34,5 +37,11 @@
         public static ViajeDAO ViajeDAO { get { return _viajeDao ?? (_viajeDao = new ViajeDAO(_connection)); } }
 
         public static CabinaDAO CabinaDAO { get { return _cabinaDao ?? (_cabinaDao = new CabinaDAO(_connection)); } }
+        
+        public static PagoDAO PagoDAO { get { return _pagoDao ?? (_pagoDao = new PagoDAO(_connection)); } }
+
+        public static MedioPagoDAO MedioPagoDAO { get { return _medioPagoDao ?? (_medioPagoDao = new MedioPagoDAO(_connection)); } }
+        
+        public static ReservaDAO ReservaDAO { get { return _reservaDao ?? (_reservaDao = new ReservaDAO(_connection)); } }
     }
 }

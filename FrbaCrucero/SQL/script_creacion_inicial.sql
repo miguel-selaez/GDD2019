@@ -693,6 +693,27 @@ BEGIN
 		c_fecha_nacimiento
 	OFFSET (@page * @offset) ROWS FETCH NEXT @offset ROWS ONLY;
 END
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Cliente
+	@id int
+AS
+BEGIN	
+	SELECT 
+		c_id,
+		c_nombre,
+		c_apellido,
+		c_dni,
+		c_direccion,
+		c_telefono,
+		c_mail,
+		c_fecha_nacimiento,
+		c_inconsistente
+	FROM DSW.Cliente
+	WHERE
+		c_id = @id;
+END
+GO
 
 CREATE PROCEDURE [DSW].P_Obtener_Cantidad_Clientes
 	@v_c_dni decimal(18,0),
@@ -710,6 +731,112 @@ BEGIN
 		AND (c_apellido LIKE '%' + @v_c_apellido + '%' OR ISNULL(@v_c_apellido, '') = '')
 		AND (c_inconsistente =  @v_c_inconsistente OR @v_c_inconsistente IS NULL);
 END
+GO
+
+CREATE PROCEDURE [DSW].P_Guardar_Pago
+	@id int OUT,
+	@cantidad_cuotas int,
+	@fecha_compra datetime2,
+	@total decimal(18,2),
+	@id_cliente int, 
+	@id_medio_pago int
+AS
+BEGIN
+	IF @id = 0
+	BEGIN
+		INSERT INTO [DSW].Pago VALUES(@cantidad_cuotas, @fecha_compra, @total, @id_cliente, @id_medio_pago)
+		SET @id = @@IDENTITY
+	END
+	ELSE
+	BEGIN
+		UPDATE [DSW].Pago SET
+			p_cant_cuotas = @cantidad_cuotas, 
+			p_fecha_compra = @fecha_compra, 
+			p_total = @total, 
+			p_id_cliente = @id_cliente, 
+			p_id_medio_pago = @id_medio_pago
+		WHERE
+			p_id = @id
+
+		SET @id = @id
+	END
+	RETURN @id
+END	
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Pago
+	@id int
+AS
+BEGIN	
+	SELECT * FROM DSW.Pago WHERE p_id = @id;
+END
+GO
+
+CREATE PROCEDURE [DSW].P_Guardar_Reserva
+	@codigo decimal OUT,
+	@fecha datetime2,
+	@estado bit,
+	@id_cliente int
+AS
+BEGIN
+	IF @codigo = 0
+	BEGIN
+		INSERT INTO [DSW].Reserva VALUES(@fecha, @estado, @id_cliente)
+		SET @codigo = @@IDENTITY
+	END
+	ELSE
+	BEGIN
+		UPDATE [DSW].Reserva SET
+			r_fecha = @fecha, 
+			r_estado = @estado, 
+			r_id_cliente = @id_cliente
+		WHERE
+			r_codigo = @codigo
+
+		SET @codigo = @codigo
+	END
+	RETURN @codigo
+END	
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Reserva
+	@codigo decimal
+AS
+BEGIN	
+	SELECT * FROM DSW.Reserva WHERE r_codigo = @codigo;
+END
+GO
+
+CREATE PROCEDURE [DSW].P_Guardar_Medio_Pago
+	@id int OUT,
+	@descripcion nvarchar(255)
+AS
+BEGIN
+	IF @id = 0
+	BEGIN
+		INSERT INTO [DSW].Medio_Pago VALUES(@descripcion)
+		SET @id = @@IDENTITY
+	END
+	ELSE
+	BEGIN
+		UPDATE [DSW].Medio_Pago SET
+			mp_descripcion = @descripcion
+		WHERE
+			mp_id = @id
+
+		SET @id = @id
+	END
+	RETURN @id
+END	
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Medio_Pago
+	@id int
+AS
+BEGIN	
+	SELECT * FROM DSW.Medio_Pago WHERE mp_id = @id;
+END
+GO
 --------------------FIN CREACION DE SPS --------------------------------------------
 
 print (CONCAT('INSERTS ', CONVERT(VARCHAR, GETDATE(), 114)))

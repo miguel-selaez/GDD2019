@@ -1,4 +1,8 @@
-﻿using FrbaCrucero.Model;
+﻿using FrbaCrucero.Exceptions;
+using FrbaCrucero.Model;
+using System;
+using System.Collections.Generic;
+using System.Data;
 
 namespace FrbaCrucero.DAO
 {
@@ -52,6 +56,13 @@ namespace FrbaCrucero.DAO
                 return false;
             else
                 return true;
+        }
+
+        public Cliente GetCliente(int id)
+        {
+            var query = ArmarSentenciaSP("P_Obtener_Cliente", new[] { GetParam(id) });
+            var result = Connection.ExecuteQuery(query);
+            return new Cliente(result.Rows[0]);
         }
 
         public List<Cliente> GetClientes(decimal numeroDocumento, string nombre, string apellido, string inconsistente, int page, int offset)

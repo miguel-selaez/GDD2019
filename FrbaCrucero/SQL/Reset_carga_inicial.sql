@@ -145,15 +145,47 @@ IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Tipo_Cabina')
 GO 
 
 IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Validar_Dni_CLiente')
-	DROP PROCEDURE [DSW].[DSW].P_Validar_Dni_CLiente
+	DROP PROCEDURE [DSW].P_Validar_Dni_CLiente
 GO 
 
 IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Guardar_Cliente')
-	DROP PROCEDURE [DSW].[DSW].P_Guardar_Cliente
+	DROP PROCEDURE [DSW].P_Guardar_Cliente
+GO 
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Cantidad_Clientes')
+	DROP PROCEDURE [DSW].P_Obtener_Cantidad_Clientes
 GO 
 
 IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Clientes')
-	DROP PROCEDURE [DSW].[DSW].P_Obtener_Clientes
+	DROP PROCEDURE [DSW].P_Obtener_Clientes
+GO 
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Cliente')
+	DROP PROCEDURE [DSW].P_Obtener_Cliente
+GO 
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Guardar_Pago')
+	DROP PROCEDURE [DSW].P_Guardar_Pago
+GO 
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Pago')
+	DROP PROCEDURE [DSW].P_Obtener_Pago
+GO 
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Guardar_Reserva')
+	DROP PROCEDURE [DSW].P_Guardar_Reserva
+GO 
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Reserva')
+	DROP PROCEDURE [DSW].P_Obtener_Reserva
+GO 
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Guardar_Medio_Pago')
+	DROP PROCEDURE [DSW].P_Guardar_Medio_Pago
+GO 
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Medio_Pago')
+	DROP PROCEDURE [DSW].P_Obtener_Medio_Pago	
 GO 
 
 --- TABLAS
