@@ -61,7 +61,7 @@ namespace FrbaCrucero.DAO
                 return true;
         }
 
-        public List<Cliente> GetClientes(decimal numeroDocumento, string nombre, string apellido, string inconsistente)
+        public List<Cliente> GetClientes(decimal numeroDocumento, string nombre, string apellido, string inconsistente, int page, int offset)
         {
             var list = new List<Cliente>();
 
@@ -69,7 +69,10 @@ namespace FrbaCrucero.DAO
                 GetParam(numeroDocumento),
                 GetParam(nombre),
                 GetParam(apellido),
-                GetParamVigencia(inconsistente) });
+                GetParamVigencia(inconsistente),
+                GetParam(page),
+                GetParam(offset)
+            });
             var result = Connection.ExecuteQuery(query);
 
             if (result.Rows.Count > 0)
@@ -80,6 +83,20 @@ namespace FrbaCrucero.DAO
                 }
             }
             return list;
+        }
+
+        public int GetClientesCount(decimal numeroDocumento, string nombre, string apellido, string inconsistente)
+        {
+            var list = new List<Cliente>();
+
+            var query = ArmarSentenciaSP("P_Obtener_Cantidad_Clientes", new[] {
+                GetParam(numeroDocumento),
+                GetParam(nombre),
+                GetParam(apellido),
+                GetParamVigencia(inconsistente)
+            });
+            var result = Connection.ExecuteQuery(query);
+            return result.Rows[0].GetValue<int>("count");
         }
 
         public List<Cliente> GetClientesxEstadia(int estadiaId)

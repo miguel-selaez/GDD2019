@@ -615,7 +615,101 @@ BEGIN
 END 
 
 GO
+CREATE PROCEDURE [DSW].P_Validar_Dni_CLiente
+	@v_dni decimal,
+	@v_flag bit OUT
+AS
+BEGIN
+	SELECT TOP 1 @v_flag = 1 FROM DSW.Cliente WHERE c_dni = @v_dni
 
+	SET @v_flag = ISNULL(@v_flag, 0)
+END
+GO
+
+CREATE PROCEDURE [DSW].P_Guardar_Cliente
+	@v_c_id int OUT,
+	@v_c_nombre nvarchar(255),
+	@v_c_apellido nvarchar(255),
+	@v_c_dni decimal(18,0),
+	@v_c_direccion nvarchar(255),
+	@v_c_telefono int,
+	@v_c_mail nvarchar(255),
+	@v_c_fecha_nacimiento	datetime2
+AS
+BEGIN
+	IF @v_c_id = 0
+	BEGIN
+		INSERT INTO [DSW].Cliente(c_nombre,c_apellido,c_dni,c_direccion,c_telefono,c_mail,c_fecha_nacimiento) VALUES(@v_c_nombre, @v_c_apellido, @v_c_dni, @v_c_direccion, @v_c_telefono, @v_c_mail, @v_c_fecha_nacimiento)
+		SET @v_c_id = @@IDENTITY
+	END
+	ELSE
+	BEGIN
+		UPDATE [DSW].Cliente SET
+			c_nombre = @v_c_nombre, 
+			c_apellido = @v_c_apellido, 
+			c_dni = @v_c_dni, 
+			c_direccion = @v_c_direccion, 
+			c_telefono = @v_c_telefono, 
+			c_mail = @v_c_mail, 
+			c_fecha_nacimiento = @v_c_fecha_nacimiento
+		WHERE
+			c_id = @v_c_id
+
+		SET @v_c_id = @v_c_id
+	END
+	RETURN @v_c_id
+END	
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Clientes
+	@v_c_dni decimal(18,0),
+	@v_c_nombre nvarchar(255),
+	@v_c_apellido nvarchar(255),
+	@v_c_inconsistente bit,
+	@page int,
+	@offset int
+AS
+BEGIN	
+	SELECT 
+		c_id,
+		c_nombre,
+		c_apellido,
+		c_dni,
+		c_direccion,
+		c_telefono,
+		c_mail,
+		c_fecha_nacimiento,
+		c_inconsistente
+	FROM DSW.Cliente
+	WHERE
+		(c_dni = @v_c_dni OR ISNULL(@v_c_dni, 0) = 0)
+		AND (c_nombre LIKE '%' + @v_c_nombre + '%' OR ISNULL(@v_c_nombre, '') = '')
+		AND (c_apellido LIKE '%' + @v_c_apellido + '%' OR ISNULL(@v_c_apellido, '') = '')
+		AND (c_inconsistente =  @v_c_inconsistente OR @v_c_inconsistente IS NULL)
+	ORDER BY
+		c_apellido,
+		c_nombre,
+		c_dni,
+		c_fecha_nacimiento
+	OFFSET (@page * @offset) ROWS FETCH NEXT @offset ROWS ONLY;
+END
+
+CREATE PROCEDURE [DSW].P_Obtener_Cantidad_Clientes
+	@v_c_dni decimal(18,0),
+	@v_c_nombre nvarchar(255),
+	@v_c_apellido nvarchar(255),
+	@v_c_inconsistente bit
+AS
+BEGIN	
+	SELECT 
+		count(*) as "count"
+	FROM DSW.Cliente
+	WHERE
+		(c_dni = @v_c_dni OR ISNULL(@v_c_dni, 0) = 0)
+		AND (c_nombre LIKE '%' + @v_c_nombre + '%' OR ISNULL(@v_c_nombre, '') = '')
+		AND (c_apellido LIKE '%' + @v_c_apellido + '%' OR ISNULL(@v_c_apellido, '') = '')
+		AND (c_inconsistente =  @v_c_inconsistente OR @v_c_inconsistente IS NULL);
+END
 --------------------FIN CREACION DE SPS --------------------------------------------
 
 print (CONCAT('INSERTS ', CONVERT(VARCHAR, GETDATE(), 114)))

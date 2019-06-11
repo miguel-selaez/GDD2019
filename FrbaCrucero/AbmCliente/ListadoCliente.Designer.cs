@@ -40,7 +40,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtApellido = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.cbTop = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.Editar = new System.Windows.Forms.DataGridViewButtonColumn();
             this.Inconsistente = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -49,6 +49,9 @@
             this.Nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Apellido = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgClientes = new System.Windows.Forms.DataGridView();
+            this.lblPagina = new System.Windows.Forms.Label();
+            this.btnSiguiente = new System.Windows.Forms.Button();
+            this.btnAnterior = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgClientes)).BeginInit();
             this.SuspendLayout();
             // 
@@ -162,17 +165,17 @@
             this.label3.TabIndex = 48;
             this.label3.Text = "Apellido";
             // 
-            // comboBox1
+            // cbTop
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.cbTop.FormattingEnabled = true;
+            this.cbTop.Items.AddRange(new object[] {
             "10",
             "50",
             "100"});
-            this.comboBox1.Location = new System.Drawing.Point(671, 29);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(53, 21);
-            this.comboBox1.TabIndex = 51;
+            this.cbTop.Location = new System.Drawing.Point(671, 29);
+            this.cbTop.Name = "cbTop";
+            this.cbTop.Size = new System.Drawing.Size(53, 21);
+            this.cbTop.TabIndex = 51;
             // 
             // label5
             // 
@@ -236,13 +239,50 @@
             this.dgClientes.ReadOnly = true;
             this.dgClientes.Size = new System.Drawing.Size(744, 178);
             this.dgClientes.TabIndex = 40;
+            this.dgClientes.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgClientes_CellContentClick);
+            // 
+            // lblPagina
+            // 
+            this.lblPagina.AutoSize = true;
+            this.lblPagina.Location = new System.Drawing.Point(355, 340);
+            this.lblPagina.Name = "lblPagina";
+            this.lblPagina.Size = new System.Drawing.Size(61, 13);
+            this.lblPagina.TabIndex = 54;
+            this.lblPagina.Text = "actual/total";
+            this.lblPagina.Visible = false;
+            // 
+            // btnSiguiente
+            // 
+            this.btnSiguiente.Location = new System.Drawing.Point(517, 335);
+            this.btnSiguiente.Name = "btnSiguiente";
+            this.btnSiguiente.Size = new System.Drawing.Size(75, 23);
+            this.btnSiguiente.TabIndex = 53;
+            this.btnSiguiente.Text = "Siguiente";
+            this.btnSiguiente.UseVisualStyleBackColor = true;
+            this.btnSiguiente.Visible = false;
+            this.btnSiguiente.Click += new System.EventHandler(this.btnSiguiente_Click);
+            // 
+            // btnAnterior
+            // 
+            this.btnAnterior.Enabled = false;
+            this.btnAnterior.Location = new System.Drawing.Point(193, 335);
+            this.btnAnterior.Name = "btnAnterior";
+            this.btnAnterior.Size = new System.Drawing.Size(75, 23);
+            this.btnAnterior.TabIndex = 52;
+            this.btnAnterior.Text = "Anterior";
+            this.btnAnterior.UseVisualStyleBackColor = true;
+            this.btnAnterior.Visible = false;
+            this.btnAnterior.Click += new System.EventHandler(this.btnAnterior_Click);
             // 
             // ListadoCliente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(776, 372);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.lblPagina);
+            this.Controls.Add(this.btnSiguiente);
+            this.Controls.Add(this.btnAnterior);
+            this.Controls.Add(this.cbTop);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.txtApellido);
             this.Controls.Add(this.label3);
@@ -279,7 +319,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtApellido;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox cbTop;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.DataGridViewButtonColumn Editar;
         private System.Windows.Forms.DataGridViewTextBoxColumn Inconsistente;
@@ -288,5 +328,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Nombre;
         private System.Windows.Forms.DataGridViewTextBoxColumn Apellido;
         private System.Windows.Forms.DataGridView dgClientes;
+        private System.Windows.Forms.Label lblPagina;
+        private System.Windows.Forms.Button btnSiguiente;
+        private System.Windows.Forms.Button btnAnterior;
     }
 }

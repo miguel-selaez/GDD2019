@@ -16,11 +16,22 @@ namespace FrbaCrucero.AbmCliente
     {
         private Model.Session _session;
         private Model.Cliente _editObject;
+        private ListadoCliente _listado;
 
         public Cliente(Session session)
         {
             this._session = session;
             InitializeComponent();
+        }
+
+        public Cliente(Model.Session session, Model.Cliente selectedCliente, ListadoCliente listadoCliente)
+        {
+            this._session = session;
+            this._editObject = selectedCliente;
+            this._listado = listadoCliente;
+            InitializeComponent();
+            InitValues();
+            BindCliente();
         }
 
         private void InitValues()
@@ -37,7 +48,8 @@ namespace FrbaCrucero.AbmCliente
             txtMail.Text = _editObject.Mail;
             txtTelefono.Text = _editObject.Telefono.ToString();            
             dtFechaNacimiento.Value = _editObject.FechaNacimiento ?? Tools.GetDate();                                                           
-            lbInconsistente.Text = _editObject.Inconsistente ? "Cliente Inconsistente" : "";         
+            lbInconsistente.Text = _editObject.Inconsistente ? "Cliente Inconsistente" : "";
+            txtCalle.Text = _editObject.Direccion;
         }
 
         private string ValidarFormatos()

@@ -144,6 +144,18 @@ IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Tipo_Cabina')
 	DROP PROCEDURE [DSW].P_Obtener_Tipo_Cabina
 GO 
 
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Validar_Dni_CLiente')
+	DROP PROCEDURE [DSW].[DSW].P_Validar_Dni_CLiente
+GO 
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Guardar_Cliente')
+	DROP PROCEDURE [DSW].[DSW].P_Guardar_Cliente
+GO 
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Clientes')
+	DROP PROCEDURE [DSW].[DSW].P_Obtener_Clientes
+GO 
+
 --- TABLAS
 -- Limpieza de datos (TRUNCATE)
 TRUNCATE TABLE [DSW].Cabina
