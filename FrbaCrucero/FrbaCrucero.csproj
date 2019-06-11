@@ -57,7 +57,7 @@
     <Compile Include="AbmCliente\ListadoCliente.Designer.cs">
       <DependentUpon>ListadoCliente.cs</DependentUpon>
     </Compile>
-	<Compile Include="AbmCrucero\AltaCabina.cs">
+    <Compile Include="AbmCrucero\AltaCabina.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="AbmCrucero\AltaCabina.Designer.cs">
@@ -111,12 +111,22 @@
     <Compile Include="CompraReservaPasaje\CompraReserva.Designer.cs">
       <DependentUpon>CompraReserva.cs</DependentUpon>
     </Compile>
+    <Compile Include="CompraReservaPasaje\Reserva.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CompraReservaPasaje\Reserva.Designer.cs">
+      <DependentUpon>Reserva.cs</DependentUpon>
+    </Compile>
     <Compile Include="DAO\BaseDAO.cs" />
+    <Compile Include="DAO\PasajeDAO.cs" />
     <Compile Include="DAO\ClienteDAO.cs" />
-	<Compile Include="DAO\CabinaDAO.cs" />
+    <Compile Include="DAO\CabinaDAO.cs" />
     <Compile Include="DAO\CruceroDAO.cs" />
     <Compile Include="DAO\DAOFactory.cs" />
     <Compile Include="DAO\DBConnection.cs" />
+    <Compile Include="DAO\MedioPagoDAO.cs" />
+    <Compile Include="DAO\ReservaDAO.cs" />
+    <Compile Include="DAO\PagoDAO.cs" />
     <Compile Include="DAO\RecorridoDAO.cs" />
     <Compile Include="DAO\TramoDAO.cs" />
     <Compile Include="DAO\FuncionDAO.cs" />
@@ -160,13 +170,17 @@
     </Compile>
     <Compile Include="MenuCreator.cs" />
     <Compile Include="Model\Cliente.cs" />
-	<Compile Include="Model\TipoCabina.cs" />
+    <Compile Include="Model\MedioPago.cs" />
+    <Compile Include="Model\Reserva.cs" />
+    <Compile Include="Model\TipoCabina.cs" />
     <Compile Include="Model\Cabina.cs" />
     <Compile Include="Model\Marca.cs" />
     <Compile Include="Model\DataRowExtensions.cs" />
     <Compile Include="Model\Funcion.cs" />
     <Compile Include="Model\Crucero.cs" />
     <Compile Include="Model\Puerto.cs" />
+    <Compile Include="Model\Pasaje.cs" />
+    <Compile Include="Model\Pago.cs" />
     <Compile Include="Model\Viaje.cs" />
     <Compile Include="Model\Tramo.cs" />
     <Compile Include="Model\Recorrido.cs" />
@@ -188,7 +202,7 @@
     <EmbeddedResource Include="AbmCliente\ListadoCliente.resx">
       <DependentUpon>ListadoCliente.cs</DependentUpon>
     </EmbeddedResource>
-	<EmbeddedResource Include="AbmCrucero\AltaCabina.resx">
+    <EmbeddedResource Include="AbmCrucero\AltaCabina.resx">
       <DependentUpon>AltaCabina.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AbmCrucero\AltaCrucero.resx">
@@ -212,10 +226,13 @@
     <EmbeddedResource Include="AbmRol\Rol.resx">
       <DependentUpon>Rol.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="CompraReservaPasaje\Reserva.resx">
+      <DependentUpon>Reserva.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GeneracionViaje\ListadoViajes.resx">
       <DependentUpon>ListadoViajes.cs</DependentUpon>
     </EmbeddedResource>
-	    <EmbeddedResource Include="GeneracionViaje\Viaje.resx">
+    <EmbeddedResource Include="GeneracionViaje\Viaje.resx">
       <DependentUpon>Viaje.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Inicio.resx">
