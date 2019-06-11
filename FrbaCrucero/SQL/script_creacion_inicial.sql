@@ -568,12 +568,12 @@ BEGIN
 						OR v_fecha_llegada BETWEEN @fechaSalida AND @fechaLlegada)
 						AND v_id_crucero = cr_id)
 		AND cr_baja = 0 
-		--AND NOT EXISTS(
-		--	SELECT * FROM DSW.Fuera_Servicio_Crucero as f 
-		--	WHERE f.fs_id_crucero = c.cr_id
-		--		AND f.fs_fecha_inicio >= @fecha_actual 
-		--		AND f.fs_fecha_fin <= @fecha_actual
-		--)
+		AND NOT EXISTS(
+			SELECT * FROM DSW.Fuera_Servicio_Crucero as f 
+			WHERE f.fs_id_crucero = c.cr_id
+				AND (f.fs_fecha_inicio BETWEEN @fechaSalida AND @fechaLlegada
+				OR f.fs_fecha_fin BETWEEN @fechaSalida AND @fechaLlegada) 
+		)
 		ORDER BY cr_id_marca, cr_modelo
 END
 GO
