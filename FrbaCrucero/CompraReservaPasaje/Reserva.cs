@@ -22,11 +22,14 @@ namespace FrbaCrucero.CompraReservaPasaje
             InitializeComponent();
         }
 
-        public Reserva(Session session, List<Pasaje> pasajes)
+        public Reserva(Session session, List<Pasaje> pasajes, Cliente cliente)
         {
             InitializeComponent();
             _session = session;
             _pasajes = pasajes;
+            Model.Reserva reserva = new Model.Reserva(0, new DateTime(), false, cliente);
+            reserva.Codigo = DAO.DAOFactory.ReservaDAO.CreateOrUpdate(reserva);
+            lbCodigo.Text = reserva.Codigo.ToString();
         }
     }
 }

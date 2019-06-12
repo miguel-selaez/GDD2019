@@ -208,6 +208,10 @@ IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Tipos_Cabina')
 	DROP PROCEDURE [DSW].P_Obtener_Tipos_Cabina	
 GO
 
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Guardar_Pasaje')
+	DROP PROCEDURE [DSW].P_Guardar_Pasaje	
+GO
+
 --- TABLAS
 -- Limpieza de datos (TRUNCATE)
 TRUNCATE TABLE [DSW].Cabina

@@ -926,7 +926,6 @@ BEGIN
 		SELECT id_out = @id;
 	END
 END
-
 GO
 
 CREATE PROCEDURE [DSW].P_Obtener_Tipos_Cabina
@@ -935,7 +934,40 @@ BEGIN
 	SELECT * FROM [DSW].Tipo_cabina
 	ORDER BY tc_descripcion
 END 
+GO
 
+CREATE PROCEDURE [DSW].P_Guardar_Pasaje
+	@codigo decimal(18, 0),
+	@precio decimal(18, 2),
+	@id_viaje decimal(18,0),
+	@id_cabina int,
+	@codigo_reserva decimal(18,0),
+	@id_cliente int,
+	@id_pago decimal(18,0)
+AS
+BEGIN 
+	IF @codigo = 0
+	BEGIN 
+		INSERT INTO [DSW].Pasaje
+		VALUES (@precio, @id_viaje, @id_cabina, @codigo_reserva, @id_cliente, @id_pago)
+		SELECT id_out = @@IDENTITY
+	END 
+	ELSE 
+	BEGIN 
+		UPDATE [DSW].Pasaje 
+		SET 
+			pa_precio = @precio,
+			pa_id_viaje = @id_viaje,
+			pa_id_cabina = @id_cabina,
+			pa_id_reserva = @codigo_reserva,
+			pa_id_cliente = @id_cliente,
+			pa_id_pago = @id_pago
+		WHERE 
+			pa_codigo = @codigo;
+
+		SELECT id_out = @codigo;
+	END
+END
 GO
 --------------------FIN CREACION DE SPS --------------------------------------------
 

@@ -9,10 +9,17 @@ namespace FrbaCrucero.DAO
     {
         public ReservaDAO(DBConnection con) : base(con) { }
 
-        public int CreateOrUpdate(Reserva reserva)
+        public decimal CreateOrUpdate(Reserva reserva)
         {
             var query = ArmarSentenciaSP("P_Guardar_Reserva", new[] { GetParam(reserva.Codigo), GetParam(reserva.Fecha), GetParam(reserva.Estado), GetParam(reserva.Cliente.Id) });
-            return Int32.Parse(Connection.ExecuteSingleResult(query));
+            reserva.Codigo =  Int32.Parse(Connection.ExecuteSingleResult(query));
+            foreach (Model.Pasaje pasaje in reserva.Pasajes)
+            {
+                pasaje.Reserva = reserva;
+                pasaje.Cliente = reserva.Cliente;
+                DAO.DAOFactory.PasajeDAO.CreateOrUpdate(pasaje);
+            }
+            return reserva.Codigo;
         } 
 
         public Reserva GetReserva(decimal codigo)
