@@ -79,5 +79,25 @@ namespace FrbaCrucero.DAO
             }
             return list;
         }
+
+        public int CreateOrUpdate(Crucero crucero)
+        {
+            var query = ArmarSentenciaSP("P_Guardar_Crucero", new[] { 
+                GetParam(crucero.Id), 
+                GetParam(crucero.Codigo), 
+                GetParam(crucero.Modelo), 
+                GetParam(crucero.Marca.Id), 
+                GetParam(crucero.FechaAlta),
+                GetParam(crucero.FechaBaja),
+                GetParam(crucero.Baja) 
+            });
+            var cruceroId = Int32.Parse(Connection.ExecuteSingleResult(query));
+
+            foreach (var cabina in crucero.Cabinas)
+            {
+                DAOFactory.CabinaDAO.SaveCabina(cabina, cruceroId);
+            }
+            return cruceroId;
+        }
     }
 }

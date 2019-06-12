@@ -19,9 +19,8 @@ namespace FrbaCrucero.Model
             Tipo = DAO.DAOFactory.CabinaDAO.GetTipoCabina(row.GetValue<int>("ca_id_tipo_cabina"));
         }
 
-        public Cabina(int id, decimal numero, decimal piso, bool baja, TipoCabina tipo)
+        public Cabina(decimal numero, decimal piso, bool baja, TipoCabina tipo)
         {
-            Id = id;
             Numero = numero;
             Piso = piso;
             Baja = baja;

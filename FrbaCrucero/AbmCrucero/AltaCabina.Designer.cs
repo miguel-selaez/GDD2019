@@ -118,7 +118,7 @@
             this.btnSave.TabIndex = 75;
             this.btnSave.Text = "Guardar";
             this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            this.btnSave.Click += new System.EventHandler(this.btnAgregarCabina_Click);
             // 
             // AltaCabina
             // 

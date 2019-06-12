@@ -1,4 +1,5 @@
-﻿using FrbaCrucero.Model;
+﻿using FrbaCrucero.Exceptions;
+using FrbaCrucero.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace FrbaCrucero.AbmCrucero
         private Model.Session _session;
         private Model.Crucero _crucero;
         private ListadoCrucero _listadoCrucero;
+        private List<Model.Cabina> _cabinas;
         
         public AltaCrucero(Model.Session session)
         {
@@ -48,21 +50,22 @@ namespace FrbaCrucero.AbmCrucero
             rdNo.Checked = _crucero.Baja;
             rdSi.Checked = !_crucero.Baja;
 
+            _cabinas = _crucero.Cabinas;
             BindCabinas();
         }
 
         private void BindCabinas()
         {
             dgCabinas.Rows.Clear();
-            var results = _crucero.Cabinas;
 
-            foreach (Model.Cabina cabina in results)
+            foreach (Model.Cabina cabina in _cabinas)
             {
                 var index = dgCabinas.Rows.Add();
                 dgCabinas.Rows[index].Cells["Numero"].Value = cabina.Numero.ToString();
                 dgCabinas.Rows[index].Cells["Piso"].Value = cabina.Piso.ToString();
                 dgCabinas.Rows[index].Cells["Tipo"].Value = cabina.Tipo.Descripcion;
-                dgCabinas.Rows[index].Cells["Editar"].Value = "Seleccionar";
+                dgCabinas.Rows[index].Cells["Eliminar"].Value = "X";
+                dgCabinas.Rows[index].Visible = !cabina.Baja;
             }
         }
 
@@ -82,25 +85,77 @@ namespace FrbaCrucero.AbmCrucero
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            try
+            {
+                ValidateForm();
+                var baja = rdNo.Checked;
+                if (_crucero == null)
+                {
+                    _crucero = new Model.Crucero(txtCodigo.Text, txtModelo.Text, (Model.Marca)cbMarca.SelectedItem, baja, _cabinas);
+                }
+                else
+                {
+                    _crucero.Codigo = txtCodigo.Text;
+                    _crucero.Modelo = txtModelo.Text;
+                    _crucero.Marca = (Model.Marca)cbMarca.SelectedItem;
+                    if (baja && !_crucero.FechaBaja.HasValue)
+                        _crucero.FechaBaja = Tools.GetDate();
+                    _crucero.Baja = baja;
+                    _crucero.Cabinas = _cabinas;
+                }
+                DAO.DAOFactory.CruceroDAO.CreateOrUpdate(_crucero);
 
+                CerrarAbm();
+            }
+            catch (Exception ex)
+            {
+                string message = ex.Message;
+                string caption = "Error de Validación";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                MessageBox.Show(message, caption, buttons);
+            }
+        }
+
+        private void ValidateForm()
+        {
+            if (string.IsNullOrEmpty(txtCodigo.Text))
+            {
+                throw new ValidateException("El código no puede estar vacío.");
+            }
+
+            if (string.IsNullOrEmpty(txtModelo.Text))
+            {
+                throw new ValidateException("El modelo no puede estar vacío.");
+            }
+
+            if (rdSi.Checked == false && rdNo.Checked == false)
+            {
+                throw new ValidateException("Debe seleccionar la vigencia del crucero");
+            }
+
+            if (!_cabinas.Any())
+            {
+                throw new ValidateException("El crucero debe tener alguna cabina");
+            }
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-
+            CerrarAbm();
         }
 
         private void btnAgregarCabina_Click(object sender, EventArgs e)
         {
-            var nueva = new AltaCabina();
-            nueva.Show();
+            var nuevo = new AltaCabina(_session, this);
+            nuevo.Show();
         }
 
-        private void btnEliminarCabina_Click(object sender, EventArgs e)
+        public void AgregarCabina(Model.Cabina nuevaCabina)
         {
-
+            _cabinas.Add(nuevaCabina);
+            BindCabinas();
         }
-
+        
         private void btnFueraServicio_Click(object sender, EventArgs e)
         {
             var fueraServicio = new FueraDeServicio();
@@ -109,9 +164,19 @@ namespace FrbaCrucero.AbmCrucero
 
         private void dgCabinas_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            var selectedCabina = _crucero.Cabinas.ElementAt(e.RowIndex);
-            var nuevo = new AltaCabina(_session, selectedCabina, this);
-            nuevo.Show();
+            if (e.RowIndex >= 0)
+            {
+                _cabinas[e.RowIndex].Baja = true;
+                BindCabinas();
+            }
+        }
+
+        private void CerrarAbm()
+        {
+            if (_listadoCrucero != null)
+                _listadoCrucero.UpdateCruceros();
+
+            Close();
         }
 
     }

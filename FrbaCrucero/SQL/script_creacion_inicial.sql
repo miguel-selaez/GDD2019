@@ -355,7 +355,6 @@ BEGIN
 END
 GO
 
-
 CREATE PROCEDURE [DSW].P_Obtener_Puerto
 	@id_puerto int
 AS
@@ -860,6 +859,83 @@ BEGIN
 	WHERE 
 		pa_id_pago = @id_pago
 END 
+GO
+
+CREATE PROCEDURE [DSW].P_Guardar_Crucero 
+	@id int, 
+	@codigo nvarchar(50),
+	@modelo nvarchar(50),
+	@id_marca nvarchar(50),
+	@fecha_alta datetime2(3),
+	@fecha_baja datetime2(3),
+	@baja bit
+AS
+BEGIN 
+	IF @id = 0
+	BEGIN 
+		INSERT INTO [DSW].Crucero (cr_codigo, cr_modelo, cr_id_marca, cr_fecha_alta, cr_fecha_baja, cr_baja)
+		VALUES (@codigo, @modelo, @id_marca, @fecha_alta, null, 0)
+
+		SELECT id_out = @@IDENTITY
+	END 
+	ELSE 
+	BEGIN 
+		UPDATE [DSW].Crucero 
+		SET 
+			cr_codigo = @codigo,
+			cr_modelo = @modelo,
+			cr_id_marca = @id_marca,
+			cr_fecha_baja = @fecha_baja,
+			cr_baja = @baja
+		WHERE 
+			cr_id = @id;
+
+		SELECT id_out = @id;
+	END
+END
+GO
+
+CREATE PROCEDURE [DSW].P_Guardar_Cabina
+	@id int, 
+	@numero decimal(18,0),
+	@piso decimal(18, 0),
+	@baja bit,
+	@id_crucero int,
+	@id_tipo_cabina int
+AS
+BEGIN 
+	IF @id = 0
+	BEGIN 
+		INSERT INTO [DSW].Cabina (ca_numero, ca_piso, ca_baja, ca_id_crucero, ca_id_tipo_cabina)
+		VALUES (@numero, @piso, 0, @id_crucero, @id_tipo_cabina)
+
+		SELECT id_out = @@IDENTITY
+	END 
+	ELSE 
+	BEGIN 
+		UPDATE [DSW].Cabina 
+		SET 
+			ca_numero = @numero,
+			ca_piso = @piso,
+			ca_baja = @baja,
+			ca_id_crucero = @id_crucero,
+			ca_id_tipo_cabina = @id_tipo_cabina
+		WHERE 
+			ca_id = @id;
+
+		SELECT id_out = @id;
+	END
+END
+
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Tipos_Cabina
+AS
+BEGIN
+	SELECT * FROM [DSW].Tipo_cabina
+	ORDER BY tc_descripcion
+END 
+
 GO
 --------------------FIN CREACION DE SPS --------------------------------------------
 

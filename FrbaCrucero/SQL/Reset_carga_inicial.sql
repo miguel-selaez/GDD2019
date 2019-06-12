@@ -196,6 +196,18 @@ IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Pasajes_x_Reserva')
 	DROP PROCEDURE [DSW].P_Obtener_Pasajes_x_Reserva	
 GO
 
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Guardar_Crucero')
+	DROP PROCEDURE [DSW].P_Guardar_Crucero 	
+GO
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Guardar_Cabina')
+	DROP PROCEDURE [DSW].P_Guardar_Cabina	
+GO
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Tipos_Cabina')
+	DROP PROCEDURE [DSW].P_Obtener_Tipos_Cabina	
+GO
+
 --- TABLAS
 -- Limpieza de datos (TRUNCATE)
 TRUNCATE TABLE [DSW].Cabina

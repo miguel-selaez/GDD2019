@@ -9,54 +9,42 @@ namespace FrbaCrucero.AbmCrucero
     {
         private Session _session;
         private Cabina _cabina;
-        private AltaCrucero altaCrucero;
+        private AltaCrucero _altaCrucero;
 
         public AltaCabina()
         {
             InitializeComponent();
         }
 
-        public AltaCabina(Session session, Cabina selectedCabina, AltaCrucero altaCrucero)
+        public AltaCabina(Session session, AltaCrucero altaCrucero)
         {
             InitializeComponent();
             _session = session;
-            this._cabina = selectedCabina;
-            this.altaCrucero = altaCrucero;
+            this._altaCrucero = altaCrucero;
 
-            //var tipos = DAO.DAOFactory.CabinaDAO.GetTiposCabina();
-            //BindCbTipos();
-            BindCabina();
+            var tipos = DAO.DAOFactory.CabinaDAO.GetTiposCabina();
+            BindCbTipos(tipos);
         }
-
-        private void BindCabina()
-        {
-            txtNumero.Text = _cabina.Numero.ToString();
-            txtPiso.Text = _cabina.Piso.ToString();
-            cbTipos.SelectedIndex = IndexOfBindCabina(_cabina.Tipo.Id);
-        }
-
-        private void BindCbTipos(List<Marca> tipos)
+        
+        private void BindCbTipos(List<Model.TipoCabina> tipos)
         {
             cbTipos.DataSource = null;
             cbTipos.DataSource = tipos;
             cbTipos.DisplayMember = "Descripcion";
             cbTipos.SelectedIndex = 0;
         }
-
-        private int IndexOfBindCabina(int id)
+        
+        private void btnAgregarCabina_Click(object sender, EventArgs e)
         {
-            var list = (List<Model.Cabina>)cbTipos.DataSource;
-            return list.FindIndex(t => t.Id == id);
-        }
-
-        private void btnSave_Click(object sender, EventArgs e)
-        {
-
+            var numero = Decimal.Parse(txtNumero.Text);
+            var piso = decimal.Parse(txtPiso.Text);
+            var nuevaCabina = new Cabina(numero, piso, false, (Model.TipoCabina)cbTipos.SelectedItem);
+            _altaCrucero.AgregarCabina(nuevaCabina);
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-
+            Close();
         }
     }
 }
