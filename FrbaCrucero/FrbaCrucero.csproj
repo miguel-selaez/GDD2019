@@ -170,6 +170,7 @@
     </Compile>
     <Compile Include="MenuCreator.cs" />
     <Compile Include="Model\Cliente.cs" />
+    <Compile Include="Model\FueraServicioCrucero.cs" />
     <Compile Include="Model\MedioPago.cs" />
     <Compile Include="Model\Reserva.cs" />
     <Compile Include="Model\TipoCabina.cs" />

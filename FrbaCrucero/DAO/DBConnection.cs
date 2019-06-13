@@ -34,7 +34,7 @@ namespace FrbaCrucero.DAO
         }
 
         /// <summary>
-        /// Esta función se encarga de ejecutar una sentencia sql que no realiza retorna valores
+        /// Esta función se encarga de ejecutar una sentencia sql que no retorna valores
         /// </summary>
         /// <param name="query">Sentencia a ejecutar</param>
         public void ExecuteNoQuery(String query)

@@ -97,6 +97,7 @@ namespace FrbaCrucero.AbmCrucero
                 Model.CruceroEstados.FueraServicio 
             };
         }
+
         public void UpdateCruceros()
         {
             btnBuscar.PerformClick();

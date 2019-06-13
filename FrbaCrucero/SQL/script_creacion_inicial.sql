@@ -539,8 +539,8 @@ BEGIN
 				WHEN EXISTS(
 					SELECT * FROM DSW.Fuera_Servicio_Crucero as f 
 					WHERE f.fs_id_crucero = c.cr_id
-						AND f.fs_fecha_inicio >= @fecha_actual 
-						AND f.fs_fecha_fin <= @fecha_actual) THEN 'Fuera de Servicio'
+						AND @fecha_actual >= f.fs_fecha_inicio  
+						AND @fecha_actual <= f.fs_fecha_fin) THEN 'Fuera de Servicio'
 				ELSE 'Vigente' 
 			END as 'cr_estado'  
 		FROM [DSW].Crucero as c
@@ -967,6 +967,18 @@ BEGIN
 
 		SELECT id_out = @codigo;
 	END
+END
+GO
+
+CREATE PROCEDURE [DSW].P_Guardar_Fuera_Servicio 
+	@id_crucero int, 
+	@fecha_inicio datetime2(3),
+	@fecha_fin datetime2(3),
+	@motivo nvarchar(50)
+AS
+BEGIN 
+	INSERT INTO [DSW].Fuera_Servicio_Crucero(fs_id_crucero, fs_fecha_inicio, fs_fecha_fin, fs_motivo)
+	VALUES (@id_crucero, @fecha_inicio, @fecha_fin, @motivo)
 END
 GO
 --------------------FIN CREACION DE SPS --------------------------------------------

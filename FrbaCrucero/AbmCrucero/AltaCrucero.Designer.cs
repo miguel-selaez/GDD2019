@@ -35,6 +35,10 @@
             this.btnAgregarCabina = new System.Windows.Forms.Button();
             this.lblTitulo = new System.Windows.Forms.Label();
             this.dgCabinas = new System.Windows.Forms.DataGridView();
+            this.Numero = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Piso = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Tipo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Eliminar = new System.Windows.Forms.DataGridViewButtonColumn();
             this.label1 = new System.Windows.Forms.Label();
             this.txtModelo = new System.Windows.Forms.TextBox();
             this.cbMarca = new System.Windows.Forms.ComboBox();
@@ -47,17 +51,13 @@
             this.label6 = new System.Windows.Forms.Label();
             this.dtAlta = new System.Windows.Forms.DateTimePicker();
             this.btnFueraServicio = new System.Windows.Forms.Button();
-            this.Numero = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Piso = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Tipo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Eliminar = new System.Windows.Forms.DataGridViewButtonColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgCabinas)).BeginInit();
             this.SuspendLayout();
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(317, 434);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnCancel.Location = new System.Drawing.Point(507, 434);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(100, 28);
             this.btnCancel.TabIndex = 40;
@@ -68,7 +68,7 @@
             // btnSave
             // 
             this.btnSave.Location = new System.Drawing.Point(615, 434);
-            this.btnSave.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnSave.Margin = new System.Windows.Forms.Padding(4);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(100, 28);
             this.btnSave.TabIndex = 39;
@@ -89,7 +89,7 @@
             // btnAgregarCabina
             // 
             this.btnAgregarCabina.Location = new System.Drawing.Point(588, 180);
-            this.btnAgregarCabina.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnAgregarCabina.Margin = new System.Windows.Forms.Padding(4);
             this.btnAgregarCabina.Name = "btnAgregarCabina";
             this.btnAgregarCabina.Size = new System.Drawing.Size(127, 28);
             this.btnAgregarCabina.TabIndex = 37;
@@ -129,6 +129,31 @@
             this.dgCabinas.TabIndex = 42;
             this.dgCabinas.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgCabinas_CellContentClick);
             // 
+            // Numero
+            // 
+            this.Numero.HeaderText = "Número";
+            this.Numero.Name = "Numero";
+            this.Numero.ReadOnly = true;
+            // 
+            // Piso
+            // 
+            this.Piso.HeaderText = "Piso";
+            this.Piso.Name = "Piso";
+            this.Piso.ReadOnly = true;
+            // 
+            // Tipo
+            // 
+            this.Tipo.HeaderText = "Tipo";
+            this.Tipo.Name = "Tipo";
+            this.Tipo.ReadOnly = true;
+            // 
+            // Eliminar
+            // 
+            this.Eliminar.HeaderText = "Eliminar";
+            this.Eliminar.Name = "Eliminar";
+            this.Eliminar.ReadOnly = true;
+            this.Eliminar.Text = "Eliminar";
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -142,7 +167,7 @@
             // txtModelo
             // 
             this.txtModelo.Location = new System.Drawing.Point(159, 94);
-            this.txtModelo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtModelo.Margin = new System.Windows.Forms.Padding(4);
             this.txtModelo.Name = "txtModelo";
             this.txtModelo.Size = new System.Drawing.Size(212, 22);
             this.txtModelo.TabIndex = 47;
@@ -157,7 +182,7 @@
             this.cbMarca.Items.AddRange(new object[] {
             "Todos"});
             this.cbMarca.Location = new System.Drawing.Point(499, 53);
-            this.cbMarca.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbMarca.Margin = new System.Windows.Forms.Padding(4);
             this.cbMarca.Name = "cbMarca";
             this.cbMarca.Size = new System.Drawing.Size(217, 24);
             this.cbMarca.TabIndex = 46;
@@ -185,7 +210,7 @@
             // txtCodigo
             // 
             this.txtCodigo.Location = new System.Drawing.Point(159, 50);
-            this.txtCodigo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtCodigo.Margin = new System.Windows.Forms.Padding(4);
             this.txtCodigo.Name = "txtCodigo";
             this.txtCodigo.Size = new System.Drawing.Size(212, 22);
             this.txtCodigo.TabIndex = 43;
@@ -204,7 +229,7 @@
             // 
             this.rdNo.AutoSize = true;
             this.rdNo.Location = new System.Drawing.Point(568, 97);
-            this.rdNo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rdNo.Margin = new System.Windows.Forms.Padding(4);
             this.rdNo.Name = "rdNo";
             this.rdNo.Size = new System.Drawing.Size(47, 21);
             this.rdNo.TabIndex = 52;
@@ -216,7 +241,7 @@
             // 
             this.rdSi.AutoSize = true;
             this.rdSi.Location = new System.Drawing.Point(499, 97);
-            this.rdSi.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rdSi.Margin = new System.Windows.Forms.Padding(4);
             this.rdSi.Name = "rdSi";
             this.rdSi.Size = new System.Drawing.Size(41, 21);
             this.rdSi.TabIndex = 51;
@@ -247,39 +272,14 @@
             // 
             // btnFueraServicio
             // 
-            this.btnFueraServicio.Location = new System.Drawing.Point(427, 434);
-            this.btnFueraServicio.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnFueraServicio.Location = new System.Drawing.Point(318, 434);
+            this.btnFueraServicio.Margin = new System.Windows.Forms.Padding(4);
             this.btnFueraServicio.Name = "btnFueraServicio";
             this.btnFueraServicio.Size = new System.Drawing.Size(181, 28);
             this.btnFueraServicio.TabIndex = 66;
             this.btnFueraServicio.Text = "Poner Fuera de Servicio";
             this.btnFueraServicio.UseVisualStyleBackColor = true;
             this.btnFueraServicio.Click += new System.EventHandler(this.btnFueraServicio_Click);
-            // 
-            // Numero
-            // 
-            this.Numero.HeaderText = "Número";
-            this.Numero.Name = "Numero";
-            this.Numero.ReadOnly = true;
-            // 
-            // Piso
-            // 
-            this.Piso.HeaderText = "Piso";
-            this.Piso.Name = "Piso";
-            this.Piso.ReadOnly = true;
-            // 
-            // Tipo
-            // 
-            this.Tipo.HeaderText = "Tipo";
-            this.Tipo.Name = "Tipo";
-            this.Tipo.ReadOnly = true;
-            // 
-            // Eliminar
-            // 
-            this.Eliminar.HeaderText = "Eliminar";
-            this.Eliminar.Name = "Eliminar";
-            this.Eliminar.ReadOnly = true;
-            this.Eliminar.Text = "Eliminar";
             // 
             // AltaCrucero
             // 

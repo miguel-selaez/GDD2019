@@ -36,13 +36,14 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txtMotivo = new System.Windows.Forms.TextBox();
             this.lblTitulo = new System.Windows.Forms.Label();
-            this.btnSave = new System.Windows.Forms.Button();
+            this.btnAceptar = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // dtFinFueraServicio
             // 
-            this.dtFinFueraServicio.CustomFormat = "yyyy-MM-dd";
+            this.dtFinFueraServicio.CustomFormat = "dd/MM/yyyy hh:mm:ss";
+            this.dtFinFueraServicio.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtFinFueraServicio.Location = new System.Drawing.Point(202, 101);
             this.dtFinFueraServicio.Name = "dtFinFueraServicio";
             this.dtFinFueraServicio.Size = new System.Drawing.Size(164, 22);
@@ -50,8 +51,9 @@
             // 
             // dtIncioFueraServicio
             // 
-            this.dtIncioFueraServicio.CustomFormat = "yyyy-MM-dd";
+            this.dtIncioFueraServicio.CustomFormat = "dd/MM/yyyy hh:mm:ss";
             this.dtIncioFueraServicio.Enabled = false;
+            this.dtIncioFueraServicio.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtIncioFueraServicio.Location = new System.Drawing.Point(202, 56);
             this.dtIncioFueraServicio.Name = "dtIncioFueraServicio";
             this.dtIncioFueraServicio.Size = new System.Drawing.Size(164, 22);
@@ -92,7 +94,7 @@
             this.txtMotivo.Location = new System.Drawing.Point(202, 146);
             this.txtMotivo.Margin = new System.Windows.Forms.Padding(4);
             this.txtMotivo.Name = "txtMotivo";
-            this.txtMotivo.Size = new System.Drawing.Size(248, 22);
+            this.txtMotivo.Size = new System.Drawing.Size(226, 22);
             this.txtMotivo.TabIndex = 71;
             // 
             // lblTitulo
@@ -107,33 +109,35 @@
             this.lblTitulo.TabIndex = 72;
             this.lblTitulo.Text = "Poner Fuera de Servicio";
             // 
-            // btnSave
+            // btnAceptar
             // 
-            this.btnSave.Location = new System.Drawing.Point(350, 197);
-            this.btnSave.Margin = new System.Windows.Forms.Padding(4);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(100, 28);
-            this.btnSave.TabIndex = 73;
-            this.btnSave.Text = "Guardar";
-            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnAceptar.Location = new System.Drawing.Point(328, 197);
+            this.btnAceptar.Margin = new System.Windows.Forms.Padding(4);
+            this.btnAceptar.Name = "btnAceptar";
+            this.btnAceptar.Size = new System.Drawing.Size(100, 28);
+            this.btnAceptar.TabIndex = 73;
+            this.btnAceptar.Text = "Aceptar";
+            this.btnAceptar.UseVisualStyleBackColor = true;
+            this.btnAceptar.Click += new System.EventHandler(this.btnAceptar_Click);
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(242, 197);
+            this.btnCancel.Location = new System.Drawing.Point(220, 197);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(100, 28);
             this.btnCancel.TabIndex = 74;
             this.btnCancel.Text = "Cancelar";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // FueraDeServicio
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(465, 238);
+            this.ClientSize = new System.Drawing.Size(441, 238);
             this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.btnSave);
+            this.Controls.Add(this.btnAceptar);
             this.Controls.Add(this.lblTitulo);
             this.Controls.Add(this.txtMotivo);
             this.Controls.Add(this.label1);
@@ -158,7 +162,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtMotivo;
         private System.Windows.Forms.Label lblTitulo;
-        private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.Button btnAceptar;
         private System.Windows.Forms.Button btnCancel;
     }
 }

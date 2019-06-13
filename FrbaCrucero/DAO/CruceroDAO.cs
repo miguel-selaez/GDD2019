@@ -99,5 +99,17 @@ namespace FrbaCrucero.DAO
             }
             return cruceroId;
         }
+
+        public void SaveFueraServicio(FueraServicioCrucero fueraServicio)
+        {
+            var query = ArmarSentenciaSP("P_Guardar_Fuera_Servicio", new[] {
+                GetParam(fueraServicio.Crucero.Id),
+                GetParam(fueraServicio.FechaInicio),
+                GetParam(fueraServicio.FechaFin),
+                GetParam(fueraServicio.Motivo),
+            });
+
+            Connection.ExecuteNoQuery(query);
+        }
     }
 }

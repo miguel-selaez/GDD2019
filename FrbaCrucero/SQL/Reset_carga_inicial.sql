@@ -212,6 +212,10 @@ IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Guardar_Pasaje')
 	DROP PROCEDURE [DSW].P_Guardar_Pasaje	
 GO
 
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Guardar_Fuera_Servicio')
+	DROP PROCEDURE [DSW].P_Guardar_Fuera_Servicio	
+GO
+
 --- TABLAS
 -- Limpieza de datos (TRUNCATE)
 TRUNCATE TABLE [DSW].Cabina

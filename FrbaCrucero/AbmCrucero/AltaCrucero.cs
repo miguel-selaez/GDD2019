@@ -17,8 +17,9 @@ namespace FrbaCrucero.AbmCrucero
         public AltaCrucero(Model.Session session)
         {
             InitializeComponent();
-
             this._session = session;
+
+            btnFueraServicio.Visible = false;
         }
 
         public AltaCrucero(Model.Session session, Model.Crucero crucero, ListadoCrucero listadoCrucero)
@@ -34,6 +35,7 @@ namespace FrbaCrucero.AbmCrucero
 
         private void InitValues()
         {
+            btnFueraServicio.Visible = _crucero.Estado == CruceroEstados.Vigente;
             var marcas = DAO.DAOFactory.CruceroDAO.GetMarcas();
             BindCbMarca(marcas);
         }
@@ -158,7 +160,7 @@ namespace FrbaCrucero.AbmCrucero
         
         private void btnFueraServicio_Click(object sender, EventArgs e)
         {
-            var fueraServicio = new FueraDeServicio();
+            var fueraServicio = new FueraDeServicio(_session, this, _crucero);
             fueraServicio.Show();
         }
 
@@ -177,6 +179,11 @@ namespace FrbaCrucero.AbmCrucero
                 _listadoCrucero.UpdateCruceros();
 
             Close();
+        }
+
+        public void UpdateCrucero()
+        {
+            btnSave.PerformClick();
         }
 
     }
