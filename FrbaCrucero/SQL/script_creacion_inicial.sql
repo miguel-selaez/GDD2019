@@ -969,18 +969,6 @@ BEGIN
 	END
 END
 GO
-
-CREATE PROCEDURE [DSW].P_Guardar_Fuera_Servicio 
-	@id_crucero int, 
-	@fecha_inicio datetime2(3),
-	@fecha_fin datetime2(3),
-	@motivo nvarchar(50)
-AS
-BEGIN 
-	INSERT INTO [DSW].Fuera_Servicio_Crucero(fs_id_crucero, fs_fecha_inicio, fs_fecha_fin, fs_motivo)
-	VALUES (@id_crucero, @fecha_inicio, @fecha_fin, @motivo)
-END
-GO
 --------------------FIN CREACION DE SPS --------------------------------------------
 
 print (CONCAT('INSERTS ', CONVERT(VARCHAR, GETDATE(), 114)))
@@ -1507,3 +1495,63 @@ GO
 
 --------------- FKS, INDICES Y CONSTRAINS ------------------
 print (CONCAT('Fin del Script Inicial', CONVERT(VARCHAR, GETDATE(), 114)))
+
+CREATE PROCEDURE [DSW].P_Guardar_Fuera_Servicio 
+	@id_crucero int, 
+	@fecha_inicio datetime2(3),
+	@fecha_fin datetime2(3),
+	@motivo nvarchar(50)
+AS
+BEGIN 
+	INSERT INTO [DSW].Fuera_Servicio_Crucero(fs_id_crucero, fs_fecha_inicio, fs_fecha_fin, fs_motivo)
+	VALUES (@id_crucero, @fecha_inicio, @fecha_fin, @motivo)
+END
+GO
+
+CREATE PROCEDURE [DSW].P_Top_Recorridos_Pasajes_Comprados
+	@fecha_desde datetime2,
+	@fecha_hasta datetime2
+AS
+BEGIN 
+	SELECT TOP 5 rc_id, count(*) cantidad FROM [DSW].Recorrido
+	INNER JOIN [DSW].Viaje ON v_id_recorrido = rc_id 
+	INNER JOIN [DSW].Pasaje ON pa_id_viaje = v_id AND pa_id_pago IS NOT NULL
+	WHERE (v_fecha_llegada BETWEEN @fecha_desde AND @fecha_hasta
+		AND v_fecha_llegada BETWEEN @fecha_desde AND @fecha_hasta)
+	GROUP BY rc_id
+	ORDER BY cantidad DESC
+END
+GO
+
+CREATE PROCEDURE [DSW].P_Top_Recorridos_Cabinas_Libres
+	@fecha_desde datetime2,
+	@fecha_hasta datetime2
+AS
+BEGIN 
+	SELECT TOP 5 rc.rc_id, vi.v_id, COUNT(*) cantidad FROM [DSW].Recorrido as rc
+	INNER JOIN [DSW].Viaje as vi ON vi.v_id_recorrido = rc.rc_id 
+	INNER JOIN [DSW].Crucero as cr ON cr.cr_id = vi.v_id_crucero
+	INNER JOIN [DSW].Cabina as ca ON ca.ca_id_crucero = cr.cr_id
+	WHERE (vi.v_fecha_llegada BETWEEN @fecha_desde AND @fecha_hasta
+		AND vi.v_fecha_llegada BETWEEN @fecha_desde AND @fecha_hasta)
+	AND ca.ca_id NOT IN (SELECT pa.pa_id_cabina FROM [DSW].Pasaje as pa WHERE pa.pa_id_viaje = vi.v_id)
+	GROUP BY rc.rc_id, vi.v_id
+	ORDER BY cantidad DESC
+	;
+END
+GO
+
+CREATE PROCEDURE [DSW].P_Top_Cruceros_Fuera_Servicio
+	@fecha_desde datetime2,
+	@fecha_hasta datetime2
+AS
+BEGIN 
+	SELECT TOP 5 cr.cr_id, 
+		(SELECT MAX(DATEDIFF(day, fs_fecha_inicio, fs_fecha_fin)) FROM [DSW].Fuera_Servicio_Crucero as fsc 
+		WHERE fsc.fs_id_crucero = cr.cr_id
+		AND (fsc.fs_fecha_inicio BETWEEN @fecha_desde AND @fecha_hasta
+		AND fsc.fs_fecha_fin BETWEEN @fecha_desde AND @fecha_hasta)) 
+		FROM [DSW].Crucero as cr
+	GROUP BY cr.cr_id
+END
+GO
