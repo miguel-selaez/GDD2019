@@ -142,14 +142,11 @@ namespace FrbaCrucero.CompraReservaPasaje
 
             foreach (Model.Viaje viaje in _results)
             {
-                var puertoOrigen = DAO.DAOFactory.PuertoDAO.GetPuertoOrigenByRecorrido(viaje.Recorrido.Id);
-                var puertoLlegada = DAO.DAOFactory.PuertoDAO.GetPuertoLlegadaByRecorrido(viaje.Recorrido.Id);
-
                 var index = dgViajes.Rows.Add();
                 dgViajes.Rows[index].Cells["Codigo"].Value = viaje.Id;
                 dgViajes.Rows[index].Cells["Crucero"].Value = viaje.Crucero.Modelo;
-                dgViajes.Rows[index].Cells["PuertoOrigen"].Value = puertoOrigen.Descripcion;
-                dgViajes.Rows[index].Cells["PuertoLlegada"].Value = puertoLlegada.Descripcion;
+                dgViajes.Rows[index].Cells["PuertoOrigen"].Value = viaje.PuertoOrigen;
+                dgViajes.Rows[index].Cells["PuertoLlegada"].Value = viaje.PuertoDestino;
                 dgViajes.Rows[index].Cells["FechaSalida"].Value = viaje.FechaSalida;
                 dgViajes.Rows[index].Cells["FechaLlegada"].Value = viaje.FechaLlegadaEstimada;
                 dgViajes.Rows[index].Cells["Editar"].Value = "Seleccionar";
@@ -178,14 +175,11 @@ namespace FrbaCrucero.CompraReservaPasaje
 
             foreach (Model.Viaje viaje in _results)
             {
-                var puertoOrigen = DAO.DAOFactory.PuertoDAO.GetPuertoOrigenByRecorrido(viaje.Recorrido.Id);
-                var puertoLlegada = DAO.DAOFactory.PuertoDAO.GetPuertoLlegadaByRecorrido(viaje.Recorrido.Id);
-
                 var index = dgViajes.Rows.Add();
                 dgViajes.Rows[index].Cells["Codigo"].Value = viaje.Id;
                 dgViajes.Rows[index].Cells["Crucero"].Value = viaje.Crucero.Modelo;
-                dgViajes.Rows[index].Cells["PuertoOrigen"].Value = puertoOrigen.Descripcion;
-                dgViajes.Rows[index].Cells["PuertoLlegada"].Value = puertoLlegada.Descripcion;
+                dgViajes.Rows[index].Cells["PuertoOrigen"].Value = viaje.PuertoOrigen;
+                dgViajes.Rows[index].Cells["PuertoLlegada"].Value = viaje.PuertoDestino;
                 dgViajes.Rows[index].Cells["FechaSalida"].Value = viaje.FechaSalida;
                 dgViajes.Rows[index].Cells["FechaLlegada"].Value = viaje.FechaLlegadaEstimada;
                 dgViajes.Rows[index].Cells["Editar"].Value = "Seleccionar";
