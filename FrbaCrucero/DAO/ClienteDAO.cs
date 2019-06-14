@@ -12,17 +12,12 @@ namespace FrbaCrucero.DAO
 
         public int CreateOrUpdate(Cliente cliente, bool esInsert)
         {
-            if (esInsert)
-            {
                 if (!ExisteCliente(cliente.NumeroDocumento))
                     return GuardarCliente(cliente);
                 else
                 {
                     throw new ClienteException("Existe un cliente registrado con el DNI ingresado.");
                 }
-            }
-            else
-                return GuardarCliente(cliente);
         }
 
         private int GuardarCliente(Cliente cliente)
@@ -73,7 +68,7 @@ namespace FrbaCrucero.DAO
                 GetParam(numeroDocumento),
                 GetParam(nombre),
                 GetParam(apellido),
-                GetParamVigencia(inconsistente),
+                GetParamInconsistente(inconsistente),
                 GetParam(page),
                 GetParam(offset)
             });
@@ -97,7 +92,7 @@ namespace FrbaCrucero.DAO
                 GetParam(numeroDocumento),
                 GetParam(nombre),
                 GetParam(apellido),
-                GetParamVigencia(inconsistente)
+                GetParamInconsistente(inconsistente)
             });
             var result = Connection.ExecuteQuery(query);
             return result.Rows[0].GetValue<int>("count");

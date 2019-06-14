@@ -73,6 +73,10 @@ namespace FrbaCrucero.DAO
         public string GetParamVigencia(string param) {
             return param == "Todos" ? "null" : param == "No" ? "1" : "0";
         }
+        public string GetParamInconsistente(string param)
+        {
+            return param == "Todos" ? "null" : param == "Si" ? "1" : "0";
+        }
         //public string GetParam(Usuario param)
         //{
         //    return param != null && param.Id > 0 ? param.Id.ToString() : "null"; ;

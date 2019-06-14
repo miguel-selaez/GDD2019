@@ -13,6 +13,7 @@ namespace FrbaCrucero.Model
         public Reserva Reserva { get; set; }
         public Cliente Cliente { get; set; }
         public Pago Pago { get; set; }
+        public decimal Precio_Final { get; set; }
 
         public Pasaje(DataRow row)
         {
@@ -31,6 +32,16 @@ namespace FrbaCrucero.Model
             Reserva = reserva;
             Cliente = cliente;
             Pago = pago;
+        }
+
+        public Pasaje(decimal precio, Viaje viaje, Reserva reserva, Cliente cliente, Pago pago, decimal Precio_Final)
+        {
+            Precio = precio;
+            Viaje = viaje;
+            Reserva = reserva;
+            Cliente = cliente;
+            Pago = pago;
+            this.Precio_Final = Precio_Final;
         }
     }
 }
