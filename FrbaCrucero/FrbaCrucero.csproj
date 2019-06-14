@@ -118,6 +118,7 @@
       <DependentUpon>Reserva.cs</DependentUpon>
     </Compile>
     <Compile Include="DAO\BaseDAO.cs" />
+    <Compile Include="DAO\EstadisticasDAO.cs" />
     <Compile Include="DAO\PasajeDAO.cs" />
     <Compile Include="DAO\ClienteDAO.cs" />
     <Compile Include="DAO\CabinaDAO.cs" />
@@ -171,6 +172,7 @@
     <Compile Include="MenuCreator.cs" />
     <Compile Include="Model\Cliente.cs" />
     <Compile Include="Model\FueraServicioCrucero.cs" />
+    <Compile Include="Model\Estadistica.cs" />
     <Compile Include="Model\MedioPago.cs" />
     <Compile Include="Model\Reserva.cs" />
     <Compile Include="Model\TipoCabina.cs" />
@@ -238,6 +240,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Inicio.resx">
       <DependentUpon>Inicio.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ListadoEstadistico\Estadisticas.resx">
+      <DependentUpon>Estadisticas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
