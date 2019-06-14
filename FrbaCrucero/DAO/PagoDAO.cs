@@ -9,10 +9,18 @@ namespace FrbaCrucero.DAO
     {
         public PagoDAO(DBConnection con) : base(con) { }
 
-        public int CreateOrUpdate(Pago pago)
+        public decimal CreateOrUpdate(Pago pago)
         {
             var query = ArmarSentenciaSP("P_Guardar_Pago", new[] { GetParam(pago.Id), GetParam(pago.CantidadCuotas), GetParam(pago.FechaCompra), GetParam(pago.Total), GetParam(pago.Cliente.Id), GetParam(pago.MedioPago.Id) });
-            return Int32.Parse(Connection.ExecuteSingleResult(query));
+            pago.Id = Int32.Parse(Connection.ExecuteSingleResult(query));
+
+            foreach (Model.Pasaje pasaje in pago.Pasajes)
+            {
+                pasaje.Pago = pago;
+                pasaje.Cliente = pago.Cliente;
+                DAO.DAOFactory.PasajeDAO.CreateOrUpdate(pasaje);
+            }
+            return pago.Id;
         }
 
         public Pago GetPago(decimal id)

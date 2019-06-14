@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace FrbaCrucero.PagoReserva
@@ -13,6 +14,8 @@ namespace FrbaCrucero.PagoReserva
         private int[] cantCuotasEfeDb = { 1 };
         private List<Pasaje> pasajes;
         private Model.Pago _pago;
+        private Model.Cliente _cliente;
+        private decimal _totalPasajes;
 
         public Pago(Session session)
         {
@@ -39,6 +42,7 @@ namespace FrbaCrucero.PagoReserva
             BindDatosPasajes(this.pasajes);
             BindDatosViaje(this.pasajes);
 
+            lbPrecioTotal.Text = _totalPasajes.ToString();
             txtNroReserva.Enabled = false;
             button1.Enabled = false;                       
             /*cbMedioPago.Enabled = false;
@@ -48,6 +52,7 @@ namespace FrbaCrucero.PagoReserva
 
         private void BindDatosPasajes(List<Pasaje> pasajes)
         {
+            _totalPasajes = 0;
             foreach (Pasaje p in pasajes)
             {
                 var index = dgPasajes.Rows.Add();
@@ -55,16 +60,21 @@ namespace FrbaCrucero.PagoReserva
                 dgPasajes.Rows[index].Cells["Nro_cabina"].Value = p.Cabina.Numero;
                 dgPasajes.Rows[index].Cells["Piso"].Value = p.Cabina.Piso;
                 dgPasajes.Rows[index].Cells["Precio"].Value = p.Precio;
+                _totalPasajes += p.Precio;
             }            
         }
 
         private void BindDatosViaje(List<Pasaje> pasajes)
         {
-            Pasaje pa = pasajes.Find(p => p.Codigo > 0);
-            lbCodRecorrido.Text = pa.Viaje.Recorrido.Codigo;
-            lbCodCrucero.Text = pa.Viaje.Crucero.Codigo;
-            lbFechaSalida.Text = pa.Viaje.FechaSalida.ToString();
-            lbFechaLlegada.Text = pa.Viaje.FechaLlegadaEstimada.ToString();
+            if (pasajes.Any())
+            {
+                Pasaje pa = pasajes[0];
+                _cliente = pa.Cliente;
+                lbCodRecorrido.Text = pa.Viaje.Recorrido.Codigo;
+                lbCodCrucero.Text = pa.Viaje.Crucero.Codigo;
+                lbFechaSalida.Text = pa.Viaje.FechaSalida.ToString();
+                lbFechaLlegada.Text = pa.Viaje.FechaLlegadaEstimada.ToString();
+            }
         }
 
         private void SumPrecioTotal(List<Pasaje> pasajes)
@@ -139,7 +149,7 @@ namespace FrbaCrucero.PagoReserva
 
         private void button2_Click(object sender, EventArgs e)
         {
-            int result;
+            decimal result;
             if (txtNroReserva.Enabled)
             {
                 result = DAO.DAOFactory.PagoDAO.SetPagoAPasaje(
@@ -151,11 +161,9 @@ namespace FrbaCrucero.PagoReserva
             }
             else
             {
-                _pago.FechaCompra = Tools.GetDate();
-                _pago.CantidadCuotas = Int32.Parse(cbCantCuotas.Text);
-                _pago.Cliente.Id = pasajes.Find(p => p.Cliente.Id > 0).Cliente.Id;
-                _pago.MedioPago.Id = cbMedioPago.SelectedIndex + 1;
-                result = DAO.DAOFactory.PagoDAO.GuardarPasajes(pasajes, _pago);
+                _pago = new Model.Pago(Int32.Parse(cbCantCuotas.Text), Tools.GetDate(), _totalPasajes, _cliente, cbMedioPago.SelectedItem as Model.MedioPago);
+                //result = DAO.DAOFactory.PagoDAO.GuardarPasajes(pasajes, _pago);
+                result = DAO.DAOFactory.PagoDAO.CreateOrUpdate(_pago);
             }
             
             MessageBox.Show("Pago registrado. Código de Pago: " + result.ToString(),"", MessageBoxButtons.OK);

@@ -742,7 +742,7 @@ BEGIN
 	IF @id = 0
 	BEGIN
 		INSERT INTO [DSW].Pago VALUES(@cantidad_cuotas, @fecha_compra, @total, @id_cliente, @id_medio_pago)
-		SET @id = @@IDENTITY
+		SELECT id_out = @@IDENTITY
 	END
 	ELSE
 	BEGIN
@@ -755,9 +755,8 @@ BEGIN
 		WHERE
 			p_id = @id
 
-		SET @id = @id
+		SELECT id_out = @id
 	END
-	RETURN @id
 END	
 GO
 
@@ -966,7 +965,10 @@ CREATE PROCEDURE [DSW].P_Obtener_Medio_Pago
 AS
 BEGIN	
 	SELECT * FROM DSW.Medio_Pago WHERE mp_id = @id OR @id = 0;
-CREATE ALTER PROCEDURE DSW.P_Obtener_datos_viaje(
+END
+GO
+
+CREATE PROCEDURE DSW.P_Obtener_datos_viaje(
 	@v_id_reserva decimal(18,0)
 )
 AS
@@ -992,6 +994,7 @@ BEGIN
 	SELECT * FROM #result
 END
 GO
+
 CREATE PROCEDURE DSW.P_Obtener_pasajes_reserva(
 	@v_id_reserva decimal(18,0)
 )
@@ -1009,6 +1012,7 @@ BEGIN
 		pa_id_reserva = @v_id_reserva
 END
 GO
+
 CREATE PROCEDURE DSW.P_Obtener_precio_total_pasajes(
 	@v_id_reserva decimal(18,0)
 )
@@ -1026,6 +1030,7 @@ BEGIN
 		pa_id_reserva = @v_id_reserva
 END
 GO
+
 CREATE PROCEDURE DSW.P_Guardar_pago_a_pasaje(
 	@v_id_reserva decimal(18,0),
 	@v_medio_pago int,
@@ -1047,7 +1052,6 @@ BEGIN
 	SELECT @id_pago
 END
 GO
-
 
 CREATE PROCEDURE [DSW].P_Guardar_Fuera_Servicio 
 	@id_crucero int, 

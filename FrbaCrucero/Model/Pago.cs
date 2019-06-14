@@ -1,5 +1,6 @@
 ﻿using FrbaCrucero.DAO;
 using System;
+using System.Collections.Generic;
 using System.Data;
 
 namespace FrbaCrucero.Model
@@ -12,6 +13,13 @@ namespace FrbaCrucero.Model
         public decimal Total { get; set; }
         public Cliente Cliente { get; set; }
         public MedioPago MedioPago { get; set; }
+
+        private List<Pasaje> _pasajes;
+        public List<Pasaje> Pasajes
+        {
+            get { return _pasajes ?? (_pasajes = DAOFactory.PasajeDAO.GetPasajesByReservaCodigo(Id)); }
+            set { _pasajes = value; }
+        }
 
         public Pago(DataRow row)
         {

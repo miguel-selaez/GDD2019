@@ -54,7 +54,7 @@ namespace FrbaCrucero
             mainMenu.Dock = DockStyle.Top;
             this.MainMenuStrip = mainMenu;
 
-            var generico = DAO.DAOFactory.UsuarioDAO.Login("admin", "w23e");
+            var generico = DAO.DAOFactory.UsuarioDAO.Login("clienteGenerico", "w23e");
             SetSession(generico, generico.Roles.First());
             SetUserFunctions();
         }

@@ -82,8 +82,7 @@ namespace FrbaCrucero.CompraReservaPasaje
                 {
                     throw new ValidateException("No selecciono ningun pasaje.");
                 }
-                //var nuevo = new PagoReserva.Pago(_session, pasajes, _cliente);
-                var nuevo = new PagoReserva.Pago(_session);
+                var nuevo = new PagoReserva.Pago(_session, pasajes, _cliente);
                 nuevo.Show();
             }
             catch (Exception ex)
