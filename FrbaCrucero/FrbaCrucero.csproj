@@ -229,6 +229,9 @@
     <EmbeddedResource Include="AbmRol\Rol.resx">
       <DependentUpon>Rol.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="CompraReservaPasaje\CompraReserva.resx">
+      <DependentUpon>CompraReserva.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CompraReservaPasaje\Reserva.resx">
       <DependentUpon>Reserva.cs</DependentUpon>
     </EmbeddedResource>

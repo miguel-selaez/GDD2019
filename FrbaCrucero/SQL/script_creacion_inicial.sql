@@ -1052,11 +1052,129 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE [DSW].P_Obtener_Puertos
+AS
+BEGIN
+	SELECT * FROM [DSW].Puerto
+	ORDER BY pt_descripcion
+END 
+
+GO
+
+CREATE FUNCTION [DSW].F_Obtener_Puerto_Origen_x_Recorrido (@id_recorrido decimal(18,0))
+RETURNS int
+AS
+BEGIN
+	DECLARE @id_puerto_origen int;
+
+	SELECT @id_puerto_origen = p.pt_id FROM [DSW].Puerto as p
+	INNER JOIN [DSW].Tramo as t
+		ON p.pt_id = t.t_id_origen
+	INNER JOIN [DSW].Recorridos_x_tramos as rt
+		ON t.t_id = rt.rxt_id_tramo
+	WHERE 
+		rt.rxt_id_recorrido = @id_recorrido
+	ORDER BY rt.rxt_orden asc
+
+	IF (@id_puerto_origen IS NULL)   
+        SET @id_puerto_origen = 0;
+
+	RETURN @id_puerto_origen;
+END 
+
+GO
+
+CREATE FUNCTION [DSW].F_Obtener_Puerto_Llegada_x_Recorrido (@id_recorrido decimal(18,0))
+RETURNS int
+AS
+BEGIN
+	DECLARE @id_puerto_destino int;
+
+	SELECT @id_puerto_destino = p.pt_id FROM [DSW].Puerto as p
+	INNER JOIN [DSW].Tramo as t
+		ON p.pt_id = t.t_id_destino
+	INNER JOIN [DSW].Recorridos_x_tramos as rt
+		ON t.t_id = rt.rxt_id_tramo
+	WHERE 
+		rt.rxt_id_recorrido = @id_recorrido
+	ORDER BY rt.rxt_orden desc
+
+	IF (@id_puerto_destino IS NULL)   
+        SET @id_puerto_destino = 0;
+
+	RETURN @id_puerto_destino;
+END 
+
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Viajes_Compra
+	@fecha datetime2(3),
+	@id_puerto_origen int,
+	@id_puerto_destino int,
+	@page int,
+	@offset int
+AS
+BEGIN
+
+	DECLARE @fecha_fin datetime2(3) = DATEADD(DAY, 1, @fecha);
+
+	SELECT 
+	temp.*,  
+	po.pt_descripcion as 'v_puerto_origen',
+	pd.pt_descripcion as 'v_puerto_destino'
+	FROM (
+		SELECT 
+			v.*,
+			[DSW].F_Obtener_Puerto_Origen_x_Recorrido(v.v_id_recorrido) as 'v_id_puerto_origen',
+			[DSW].F_Obtener_Puerto_Llegada_x_Recorrido(v.v_id_recorrido) as 'v_id_puerto_destino'
+		FROM [DSW].Viaje v
+		WHERE 
+			v.v_fecha_salida >= @fecha 
+			AND v.v_fecha_salida < @fecha_fin
+	) as temp
+	INNER JOIN [DSW].Puerto as po
+		ON temp.v_id_puerto_origen = po.pt_id
+	INNER JOIN [DSW].Puerto as pd
+		ON temp.v_id_puerto_origen = pd.pt_id
+	WHERE 
+		temp.v_id_puerto_origen = @id_puerto_origen
+		AND temp.v_id_puerto_destino = @id_puerto_destino
+	ORDER BY temp.v_fecha_salida DESC
+	OFFSET (@page * @offset) ROWS FETCH NEXT @offset ROWS ONLY;
+END
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Cantidad_Viajes_Compra
+	@fecha datetime2(3),
+	@id_puerto_origen int,
+	@id_puerto_destino int
+AS
+BEGIN
+	DECLARE @fecha_fin datetime2(3) = DATEADD(DAY, 1, @fecha);
+
+	SELECT 
+	COUNT(*)
+	FROM (
+		SELECT 
+			v.*,
+			[DSW].F_Obtener_Puerto_Origen_x_Recorrido(v.v_id_recorrido) as 'v_id_puerto_origen',
+			[DSW].F_Obtener_Puerto_Llegada_x_Recorrido(v.v_id_recorrido) as 'v_id_puerto_destino'
+		FROM [DSW].Viaje v
+		WHERE 
+			v.v_fecha_salida >= @fecha 
+			AND v.v_fecha_salida < @fecha_fin
+	) as temp
+	WHERE 
+		temp.v_id_puerto_origen = @id_puerto_origen
+		AND temp.v_id_puerto_destino = @id_puerto_destino
+END
+GO
+
 --------------------FIN CREACION DE SPS --------------------------------------------
 
 print (CONCAT('INSERTS ', CONVERT(VARCHAR, GETDATE(), 114)))
 --VARIABLES
-DECLARE @fecha_actual datetime2(3) = GETDATE()
+DECLARE @fecha_actual datetime2(3) = '2019-04-01 00:00:00'
 
 BEGIN TRANSACTION
 BEGIN TRY

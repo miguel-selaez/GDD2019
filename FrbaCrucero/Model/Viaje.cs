@@ -13,6 +13,9 @@ namespace FrbaCrucero.Model
         public DateTime? FechaSalida { get; set; }
         public DateTime? FechaLlegadaEstimada { get; set; }
 
+        public string PuertoOrigen { get; set; }
+        public string PuertoDestino { get; set; }
+
         public Viaje(DataRow row)
         {
             Id = row.GetValue<int>("v_id");
@@ -21,6 +24,9 @@ namespace FrbaCrucero.Model
             FechaLlegada = row.GetDate("v_fecha_llegada");
             FechaSalida = row.GetDate("v_fecha_salida");
             FechaLlegadaEstimada = row.GetDate("v_fecha_llegada_estimada");
+
+            PuertoOrigen = row.GetValue<string>("v_puerto_origen");
+            PuertoDestino = row.GetValue<string>("v_puerto_destino");
         }
 
         public Viaje(Crucero crucero, Recorrido recorrido,DateTime fechaSalida, DateTime fechaLlegada, DateTime fechaLlegadaEstimada)

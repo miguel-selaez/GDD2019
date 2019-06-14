@@ -236,6 +236,25 @@ IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Precio_Recorrido')
 	DROP PROCEDURE [DSW].P_Obtener_Precio_Recorrido	
 GO
 
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Puertos')
+	DROP PROCEDURE [DSW].P_Obtener_Puertos	
+GO
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='F_Obtener_Puerto_Origen_x_Recorrido')
+	DROP FUNCTION [DSW].F_Obtener_Puerto_Origen_x_Recorrido
+GO
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='F_Obtener_Puerto_Llegada_x_Recorrido')
+	DROP FUNCTION [DSW].F_Obtener_Puerto_Llegada_x_Recorrido	
+GO
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Viajes_Compra')
+	DROP PROCEDURE [DSW].P_Obtener_Viajes_Compra	
+GO
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_Cantidad_Viajes_Compra')
+	DROP PROCEDURE [DSW].P_Obtener_Cantidad_Viajes_Compra	
+GO
 --- TABLAS
 -- Limpieza de datos (TRUNCATE)
 TRUNCATE TABLE [DSW].Cabina
