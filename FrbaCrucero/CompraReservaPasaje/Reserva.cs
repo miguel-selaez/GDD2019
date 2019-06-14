@@ -9,7 +9,6 @@ namespace FrbaCrucero.CompraReservaPasaje
     {
 
         private Session _session;
-        private List<Pasaje> _pasajes;
 
         public Reserva()
         {
@@ -20,8 +19,8 @@ namespace FrbaCrucero.CompraReservaPasaje
         {
             InitializeComponent();
             _session = session;
-            _pasajes = pasajes;
-            Model.Reserva reserva = new Model.Reserva(0, new DateTime(), false, cliente);
+            Model.Reserva reserva = new Model.Reserva(0, Tools.GetDate(), false, cliente);
+            reserva.Pasajes = pasajes;
             reserva.Codigo = DAO.DAOFactory.ReservaDAO.CreateOrUpdate(reserva);
             lbCodigo.Text = reserva.Codigo.ToString();
         }

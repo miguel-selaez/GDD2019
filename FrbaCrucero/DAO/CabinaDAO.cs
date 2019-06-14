@@ -29,7 +29,7 @@ namespace FrbaCrucero.DAO
         {
             var list = new List<Cabina>();
 
-            var query = ArmarSentenciaSP("P_Obtener_Cabinas_Disponibles_x_Viaje", new[] { GetParam(viajeId) });
+            var query = ArmarSentenciaSP("P_Obtener_Cabinas_Disponibles_x_Viaje", new[] { GetParam(viajeId), GetParam(cruceroId) });
             var result = Connection.ExecuteQuery(query);
 
             if (result.Rows.Count > 0)

@@ -25,12 +25,10 @@ namespace FrbaCrucero.CompraReservaPasaje
             dtInicio.Value = Tools.GetDate();
 
             var puertoOrigen = new List<Model.Puerto>();
-            puertoOrigen.Add(new Model.Puerto(0, "Todos"));
             puertoOrigen.AddRange(DAO.DAOFactory.PuertoDAO.GetPuertos());
             BindCbPuertoOrigen(puertoOrigen);
             
             var puertoDestino = new List<Model.Puerto>();
-            puertoDestino.Add(new Model.Puerto(0, "Todos"));
             puertoDestino.AddRange(DAO.DAOFactory.PuertoDAO.GetPuertos());
             BindCbPuertoLlegada(puertoDestino);
         }
@@ -105,6 +103,13 @@ namespace FrbaCrucero.CompraReservaPasaje
             {
                 return 0;
             }
+        }
+
+        private void dgViaje_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var selectedViaje = _results.ElementAt(e.RowIndex);
+            var nuevo = new SeleccionCabina(session, selectedViaje);
+            nuevo.Show();
         }
 
         private int GetPuertoLlegadaSeleccionada()

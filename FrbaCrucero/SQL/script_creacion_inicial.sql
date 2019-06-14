@@ -770,7 +770,7 @@ END
 GO
 
 CREATE PROCEDURE [DSW].P_Guardar_Reserva
-	@codigo decimal OUT,
+	@codigo decimal,
 	@fecha datetime2,
 	@estado bit,
 	@id_cliente int
@@ -779,7 +779,7 @@ BEGIN
 	IF @codigo = 0
 	BEGIN
 		INSERT INTO [DSW].Reserva VALUES(@fecha, @estado, @id_cliente)
-		SET @codigo = @@IDENTITY
+		SELECT codigo_out = @@IDENTITY
 	END
 	ELSE
 	BEGIN
@@ -790,9 +790,8 @@ BEGIN
 		WHERE
 			r_codigo = @codigo
 
-		SET @codigo = @codigo
+		SELECT codigo_out = @codigo
 	END
-	RETURN @codigo
 END	
 GO
 
@@ -1048,7 +1047,8 @@ CREATE PROCEDURE [DSW].P_Obtener_Precio_Recorrido
 AS
 BEGIN 
 	SELECT SUM(t_precio) precio FROM [DSW].Tramo
-	INNER JOIN [DSW].Recorridos_x_tramos ON rxt_id_recorrido = @id_recorrido
+	INNER JOIN [DSW].Recorridos_x_tramos ON rxt_id_tramo = t_id
+	WHERE rxt_id_recorrido = @id_recorrido
 END
 GO
 

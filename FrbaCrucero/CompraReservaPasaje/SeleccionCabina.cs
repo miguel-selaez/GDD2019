@@ -62,7 +62,7 @@ namespace FrbaCrucero.CompraReservaPasaje
         {
             var pasajes = new List<Pasaje>();                            
             for(int i = 0; i < dgCabinas.Rows.Count; i++){
-                if (dgCabinas.Rows[i].Cells["Seleccionar"].Value.Equals("true"))
+                if ((bool)dgCabinas.Rows[i].Cells["Seleccionar"].Value)
                 {
                     var cabina = _results.ElementAt(i);
                     var precio = System.Convert.ToDecimal(dgCabinas.Rows[i].Cells["Precio"].Value);
@@ -80,7 +80,7 @@ namespace FrbaCrucero.CompraReservaPasaje
                 List<Pasaje> pasajes = GetPasajesSeleccionados();
                 if(pasajes.Count == 0)
                 {
-                    throw new ValidateException("No selecciono ningun cliente.");
+                    throw new ValidateException("No selecciono ningun pasaje.");
                 }
                 //var nuevo = new PagoReserva.Pago(_session, pasajes, _cliente);
                 var nuevo = new PagoReserva.Pago(_session);
@@ -97,7 +97,7 @@ namespace FrbaCrucero.CompraReservaPasaje
 
         private void BtnBuscarCliente_Click(object sender, System.EventArgs e)
         {
-            List<Cliente> clientes = DAO.DAOFactory.ClienteDAO.GetClientes(System.Convert.ToDecimal(txtDni.Text), "", "", "", 1, 1);
+            List<Cliente> clientes = DAO.DAOFactory.ClienteDAO.GetClientes(System.Convert.ToDecimal(txtDni.Text), "", "", "", 0, 1);
             if (clientes.Any())
             {
                 _cliente = clientes[0];
@@ -118,7 +118,7 @@ namespace FrbaCrucero.CompraReservaPasaje
                 List<Pasaje> pasajes = GetPasajesSeleccionados();
                 if (pasajes.Count == 0)
                 {
-                    throw new ValidateException("No selecciono ningun cliente.");
+                    throw new ValidateException("No selecciono ningun pasaje.");
                 }
                 var nuevo = new CompraReservaPasaje.Reserva(_session, pasajes, _cliente);
                 nuevo.Show();

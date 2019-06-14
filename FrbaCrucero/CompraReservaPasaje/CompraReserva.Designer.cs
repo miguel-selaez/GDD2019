@@ -37,8 +37,6 @@
             this.cbPuertoLlegada = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.dgViajes = new System.Windows.Forms.DataGridView();
-            this.btnLimpiar = new System.Windows.Forms.Button();
-            this.btnBuscar = new System.Windows.Forms.Button();
             this.Codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Crucero = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PuertoOrigen = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -46,6 +44,8 @@
             this.FechaSalida = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FechaLlegada = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Editar = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.btnLimpiar = new System.Windows.Forms.Button();
+            this.btnBuscar = new System.Windows.Forms.Button();
             this.lblPagina = new System.Windows.Forms.Label();
             this.btnSiguiente = new System.Windows.Forms.Button();
             this.btnAnterior = new System.Windows.Forms.Button();
@@ -55,7 +55,6 @@
             // dtInicio
             // 
             this.dtInicio.CustomFormat = "dd/MM/yyyy";
-            this.dtInicio.Enabled = false;
             this.dtInicio.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtInicio.Location = new System.Drawing.Point(62, 51);
             this.dtInicio.Margin = new System.Windows.Forms.Padding(2);
@@ -148,26 +147,7 @@
             this.dgViajes.Name = "dgViajes";
             this.dgViajes.Size = new System.Drawing.Size(759, 222);
             this.dgViajes.TabIndex = 73;
-            // 
-            // btnLimpiar
-            // 
-            this.btnLimpiar.Location = new System.Drawing.Point(258, 94);
-            this.btnLimpiar.Name = "btnLimpiar";
-            this.btnLimpiar.Size = new System.Drawing.Size(75, 23);
-            this.btnLimpiar.TabIndex = 75;
-            this.btnLimpiar.Text = "Limpiar";
-            this.btnLimpiar.UseVisualStyleBackColor = true;
-            this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
-            // 
-            // btnBuscar
-            // 
-            this.btnBuscar.Location = new System.Drawing.Point(483, 94);
-            this.btnBuscar.Name = "btnBuscar";
-            this.btnBuscar.Size = new System.Drawing.Size(75, 23);
-            this.btnBuscar.TabIndex = 74;
-            this.btnBuscar.Text = "Buscar";
-            this.btnBuscar.UseVisualStyleBackColor = true;
-            this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
+            this.dgViajes.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgViaje_CellContentClick);
             // 
             // Codigo
             // 
@@ -210,6 +190,26 @@
             this.Editar.HeaderText = "Editar";
             this.Editar.Name = "Editar";
             this.Editar.Text = "Seleccionar";
+            // 
+            // btnLimpiar
+            // 
+            this.btnLimpiar.Location = new System.Drawing.Point(258, 94);
+            this.btnLimpiar.Name = "btnLimpiar";
+            this.btnLimpiar.Size = new System.Drawing.Size(75, 23);
+            this.btnLimpiar.TabIndex = 75;
+            this.btnLimpiar.Text = "Limpiar";
+            this.btnLimpiar.UseVisualStyleBackColor = true;
+            this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
+            // 
+            // btnBuscar
+            // 
+            this.btnBuscar.Location = new System.Drawing.Point(483, 94);
+            this.btnBuscar.Name = "btnBuscar";
+            this.btnBuscar.Size = new System.Drawing.Size(75, 23);
+            this.btnBuscar.TabIndex = 74;
+            this.btnBuscar.Text = "Buscar";
+            this.btnBuscar.UseVisualStyleBackColor = true;
+            this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
             // 
             // lblPagina
             // 
