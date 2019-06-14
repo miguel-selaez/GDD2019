@@ -211,6 +211,22 @@ GO
 IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Guardar_Pasaje')
 	DROP PROCEDURE [DSW].P_Guardar_Pasaje	
 GO
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_datos_viaje')
+	DROP PROCEDURE [DSW].P_Obtener_datos_viaje
+GO
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Obtener_pasajes_reserva')
+	DROP PROCEDURE [DSW].P_Obtener_pasajes_reserva
+GO
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='DSW.P_Obtener_precio_total_pasajes')
+	DROP PROCEDURE [DSW].DSW.P_Obtener_precio_total_pasajes
+GO
+IF EXISTS (SELECT 1 FROM sysobjects WHERE name='DSW.P_Guardar_pago_a_pasaje')
+	DROP PROCEDURE [DSW].DSW.P_Guardar_pago_a_pasaje
+GO
+
+
 
 IF EXISTS (SELECT 1 FROM sysobjects WHERE name='P_Top_Recorridos_Pasajes_Comprados')
 	DROP PROCEDURE [DSW].P_Top_Recorridos_Pasajes_Comprados	
