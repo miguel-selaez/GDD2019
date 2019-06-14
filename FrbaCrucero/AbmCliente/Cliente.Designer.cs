@@ -203,7 +203,8 @@
             this.lbInconsistente.AccessibleDescription = "lbInconsistente";
             this.lbInconsistente.AccessibleName = "lbInconsistente";
             this.lbInconsistente.AutoSize = true;
-            this.lbInconsistente.Location = new System.Drawing.Point(172, 235);
+            this.lbInconsistente.ForeColor = System.Drawing.Color.Red;
+            this.lbInconsistente.Location = new System.Drawing.Point(123, 236);
             this.lbInconsistente.Name = "lbInconsistente";
             this.lbInconsistente.Size = new System.Drawing.Size(0, 13);
             this.lbInconsistente.TabIndex = 97;

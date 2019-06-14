@@ -20,6 +20,8 @@ namespace FrbaCrucero.AbmCliente
         public ListadoCliente(Session session)
         {
             InitializeComponent();
+            cbInconsistente.SelectedIndex = 0;
+            cbTop.SelectedIndex = 0;
             _session = session;
             Limpiar();
         }
@@ -32,7 +34,7 @@ namespace FrbaCrucero.AbmCliente
                     Dni, 
                     txtNombre.Text,
                     txtApellido.Text,
-                    cbInconsistente.SelectedText.ToString(),
+                    cbInconsistente.SelectedItem.ToString(),
                     page,
                     offset
                 );
@@ -73,7 +75,7 @@ namespace FrbaCrucero.AbmCliente
                     dgClientes.Rows[index].Cells["Nombre"].Value = cliente.Nombre;
                     dgClientes.Rows[index].Cells["Mail"].Value = cliente.Mail;
                     dgClientes.Rows[index].Cells["Nro_Documento"].Value = cliente.NumeroDocumento;
-                    dgClientes.Rows[index].Cells["Inconsistente"].Value = cliente.Inconsistente ? "No" : "Si";
+                    dgClientes.Rows[index].Cells["Inconsistente"].Value = cliente.Inconsistente ? "Si" : "No";
                     dgClientes.Rows[index].Cells["Editar"].Value = "Seleccionar";
                 }
 

@@ -1,5 +1,7 @@
 ﻿using FrbaCrucero.Model;
 using System;
+using System.Collections.Generic;
+using System.Data;
 
 namespace FrbaCrucero.DAO
 {
@@ -20,5 +22,20 @@ namespace FrbaCrucero.DAO
             return new MedioPago(result.Rows[0]);
         }
 
+        public List<MedioPago> GetMediosPago()
+        {
+            var query = ArmarSentenciaSP("P_Obtener_Medio_Pago", new[] { GetParam(0) });
+            var result = Connection.ExecuteQuery(query);
+            var list = new List<MedioPago>();
+
+            if (result.Rows.Count > 0)
+            {
+                foreach (DataRow row in result.Rows)
+                {
+                    list.Add(new MedioPago(row));
+                }
+            }
+            return list;           
+        }
     }
 }

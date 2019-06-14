@@ -29,7 +29,7 @@ namespace FrbaCrucero.Model
             Telefono = Row.GetValue<int>("c_telefono");
             Mail = Row.GetValue<string>("c_mail");
             FechaNacimiento = Row.GetDate("c_fecha_nacimiento");                                               
-            Inconsistente = Row.GetValue<bool>("inconsistente");
+            Inconsistente = Row.GetValue<bool>("c_inconsistente");
         }
 
         public Cliente(string _nombre, string _apellido, decimal _numeroDocumento, string _direccion, int _telefono, string _mail, DateTime? _fechaNacimiento)

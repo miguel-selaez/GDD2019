@@ -826,14 +826,6 @@ BEGIN
 END	
 GO
 
-CREATE PROCEDURE [DSW].P_Obtener_Medio_Pago
-	@id int
-AS
-BEGIN	
-	SELECT * FROM DSW.Medio_Pago WHERE mp_id = @id;
-END
-GO
-
 CREATE PROCEDURE [DSW].P_Obtener_Pasajes_x_Reserva
 @codigo_reserva decimal
 AS
@@ -968,6 +960,94 @@ BEGIN
 	END
 END
 GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Medio_Pago
+	@id int
+AS
+BEGIN	
+	SELECT * FROM DSW.Medio_Pago WHERE mp_id = @id OR @id = 0;
+CREATE ALTER PROCEDURE DSW.P_Obtener_datos_viaje(
+	@v_id_reserva decimal(18,0)
+)
+AS
+BEGIN	
+	SELECT 
+		rc_codigo as [Cod. Recorrido],
+		cr_codigo as [Cod. Crucero],
+		v_fecha_salida as [Fecha Salida],
+		v_fecha_llegada_estimada as [Fecha Llegada]
+	INTO #result
+	FROM 
+		DSW.Pasaje 
+		INNER JOIN DSW.Viaje ON pa_id_viaje = v_id 
+		INNER JOIN DSW.Recorrido ON v_id_recorrido = rc_id
+		INNER JOIN DSW.Crucero ON v_id_crucero = cr_id 
+	WHERE 
+		pa_id_reserva = @v_id_reserva
+		--AND pa_id_pago IS NULL
+
+	IF NOT EXISTS(SELECT TOP 1 1 FROM #result)
+		INSERT INTO #result VALUES('NO ROWS', NULL, NULL, NULL)	 
+
+	SELECT * FROM #result
+END
+GO
+CREATE PROCEDURE DSW.P_Obtener_pasajes_reserva(
+	@v_id_reserva decimal(18,0)
+)
+AS
+BEGIN	
+	SELECT 
+		tc_descripcion as [Tipo_de_cabina], ca_numero as [Nro_Cabina], ca_piso as [Piso_cabina], pa_precio as [Precio]
+	FROM 
+		dsw.pasaje 
+		INNER JOIN dsw.Viaje ON pa_id_viaje = v_id
+		INNER JOIN dsw.Recorrido ON v_id_recorrido = rc_id
+		INNER JOIN dsw.Cabina ON pa_id_cabina = ca_id
+		INNER JOIN dsw.Tipo_cabina ON ca_id_tipo_cabina = tc_id
+	WHERE
+		pa_id_reserva = @v_id_reserva
+END
+GO
+CREATE PROCEDURE DSW.P_Obtener_precio_total_pasajes(
+	@v_id_reserva decimal(18,0)
+)
+AS
+BEGIN
+	SELECT 
+		SUM(pa_precio) as [Precio]
+	FROM 
+		dsw.pasaje 
+		INNER JOIN dsw.Viaje ON pa_id_viaje = v_id
+		INNER JOIN dsw.Recorrido ON v_id_recorrido = rc_id
+		INNER JOIN dsw.Cabina ON pa_id_cabina = ca_id
+		INNER JOIN dsw.Tipo_cabina ON ca_id_tipo_cabina = tc_id
+	WHERE
+		pa_id_reserva = @v_id_reserva
+END
+GO
+CREATE PROCEDURE DSW.P_Guardar_pago_a_pasaje(
+	@v_id_reserva decimal(18,0),
+	@v_medio_pago int,
+	@v_cant_cuotas int,
+	@v_precio decimal(18,2),
+	@v_fecha datetime2
+)
+AS
+BEGIN
+	DECLARE @id_cliente int, @id_pago int
+	SELECT @id_cliente = pa_id_cliente FROM DSW.Pasaje WHERE pa_id_reserva = @v_id_reserva
+
+	INSERT INTO DSW.Pago
+	VALUES(@v_precio, @v_fecha, @v_cant_cuotas, @id_cliente, @v_medio_pago)
+	SET @id_pago = @@IDENTITY
+
+	UPDATE DSW.Pasaje SET pa_id_pago = @id_pago WHERE pa_id_reserva = @v_id_reserva
+
+	SELECT @id_pago
+END
+GO
+
 
 CREATE PROCEDURE [DSW].P_Guardar_Fuera_Servicio 
 	@id_crucero int, 
@@ -1169,7 +1249,6 @@ BEGIN
 		AND temp.v_id_puerto_destino = @id_puerto_destino
 END
 GO
-
 --------------------FIN CREACION DE SPS --------------------------------------------
 
 print (CONCAT('INSERTS ', CONVERT(VARCHAR, GETDATE(), 114)))
@@ -1379,7 +1458,7 @@ DROP TABLE #cliente_inconsistente
 
 --Medio_Pago
 INSERT INTO DSW.Medio_Pago
-VALUES('EFECTIVO'), ('CR�DITO'), ('D�BITO')
+VALUES('EFECTIVO'), ('CRÉDITO'), ('DÉBITO')
 
 ---- Pasaje
 CREATE TABLE #main(

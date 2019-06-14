@@ -13,6 +13,7 @@ namespace FrbaCrucero.Model
         public Reserva Reserva { get; set; }
         public Cliente Cliente { get; set; }
         public Pago Pago { get; set; }
+        public decimal Precio_Final { get; set; }
 
         public Pasaje(DataRow row)
         {

@@ -83,6 +83,10 @@ namespace FrbaCrucero.DAO
             return param != null && param.Codigo > 0 ? param.Codigo.ToString("0.00", CultureInfo.InvariantCulture) : "null"; ;
         }
 
+        public string GetParamInconsistente(string param)
+        {
+            return param == "Todos" ? "null" : param == "Si" ? "1" : "0";
+        }
         //public string GetParam(Cliente param)
         //{
         //    return param != null && param.Id > 0 ? param.Id.ToString() : "null"; ;
