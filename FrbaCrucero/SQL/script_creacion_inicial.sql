@@ -1031,6 +1031,27 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE [DSW].P_Obtener_Cabinas_Disponibles_x_Viaje
+	@id_viaje int,
+	@id_crucero int
+AS
+BEGIN 
+	SELECT * FROM [DSW].Cabina
+	WHERE ca_id_crucero = @id_crucero
+	AND ca_id NOT IN (SELECT pa_id_cabina FROM [DSW].Pasaje WHERE pa_id_viaje = @id_viaje)
+	ORDER BY ca_piso, ca_numero
+END
+GO
+
+CREATE PROCEDURE [DSW].P_Obtener_Precio_Recorrido
+	@id_recorrido decimal
+AS
+BEGIN 
+	SELECT SUM(t_precio) precio FROM [DSW].Tramo
+	INNER JOIN [DSW].Recorridos_x_tramos ON rxt_id_recorrido = @id_recorrido
+END
+GO
+
 --------------------FIN CREACION DE SPS --------------------------------------------
 
 print (CONCAT('INSERTS ', CONVERT(VARCHAR, GETDATE(), 114)))

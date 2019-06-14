@@ -25,6 +25,23 @@ namespace FrbaCrucero.DAO
             return list;
         }
 
+        public List<Cabina> GetCabinasDisponiblesByViaje(int viajeId, int cruceroId)
+        {
+            var list = new List<Cabina>();
+
+            var query = ArmarSentenciaSP("P_Obtener_Cabinas_Disponibles_x_Viaje", new[] { GetParam(viajeId) });
+            var result = Connection.ExecuteQuery(query);
+
+            if (result.Rows.Count > 0)
+            {
+                foreach (DataRow row in result.Rows)
+                {
+                    list.Add(new Cabina(row));
+                }
+            }
+            return list;
+        }
+
         public TipoCabina GetTipoCabina(int tipoCabinaId)
         {
             var query = ArmarSentenciaSP("P_Obtener_Tipo_Cabina", new[] { GetParam(tipoCabinaId) });

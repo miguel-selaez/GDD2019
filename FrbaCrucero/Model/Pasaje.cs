@@ -24,13 +24,22 @@ namespace FrbaCrucero.Model
             Pago = DAOFactory.PagoDAO.GetPago(row.GetValue<int>("pa_id_pago"));
         }
 
-        public Pasaje(decimal precio, Viaje viaje, Reserva reserva, Cliente cliente, Pago pago)
+        public Pasaje(decimal precio, Viaje viaje, Cabina cabina, Reserva reserva, Cliente cliente, Pago pago)
         {
             Precio = precio;
             Viaje = viaje;
             Reserva = reserva;
             Cliente = cliente;
             Pago = pago;
+            Cabina = cabina;
+        }
+
+        public Pasaje(decimal precio, Viaje viaje, Cabina cabina, Cliente cliente)
+        {
+            Precio = precio;
+            Viaje = viaje;
+            Cliente = cliente;
+            Cabina = cabina;
         }
     }
 }

@@ -40,6 +40,13 @@ namespace FrbaCrucero.DAO
             return list;
         }
 
+        public decimal GetPrecioRecorrido(decimal idRecorrido)
+        {
+            var query = ArmarSentenciaSP("P_Obtener_Precio_Recorrido", new[] { GetParam(idRecorrido) });
+            var result = Connection.ExecuteSingleResult(query);
+            return System.Convert.ToDecimal(result);
+        }
+
         public Recorrido GetRecorrido(decimal id)
         {
             var query = ArmarSentenciaSP("P_Obtener_Recorrido", new[] { GetParam(id) });

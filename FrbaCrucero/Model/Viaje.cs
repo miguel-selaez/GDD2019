@@ -6,7 +6,7 @@ namespace FrbaCrucero.Model
 {
     public class Viaje
     {
-        public decimal Id { get; set; }
+        public int Id { get; set; }
         public Crucero Crucero { get; set; }
         public Recorrido Recorrido { get; set; }
         public DateTime? FechaLlegada { get; set; }
