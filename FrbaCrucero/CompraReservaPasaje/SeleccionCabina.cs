@@ -1,4 +1,6 @@
-﻿using FrbaCrucero.Model;
+﻿using FrbaCrucero.Exceptions;
+using FrbaCrucero.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -72,10 +74,25 @@ namespace FrbaCrucero.CompraReservaPasaje
 
         private void BtnPagar_Click(object sender, System.EventArgs e)
         {
-            List<Pasaje> pasajes = GetPasajesSeleccionados();
-            //var nuevo = new PagoReserva.Pago(_session, selectedRecorrido, this);
-            var nuevo = new PagoReserva.Pago(_session);
-            nuevo.Show();
+            try
+            {
+                Validate();
+                List<Pasaje> pasajes = GetPasajesSeleccionados();
+                if(pasajes.Count == 0)
+                {
+                    throw new ValidateException("No selecciono ningun cliente.");
+                }
+                //var nuevo = new PagoReserva.Pago(_session, pasajes, _cliente);
+                var nuevo = new PagoReserva.Pago(_session);
+                nuevo.Show();
+            }
+            catch (Exception ex)
+            {
+                string message = ex.Message;
+                string caption = "Error de Validación";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                MessageBox.Show(message, caption, buttons);
+            }
         }
 
         private void BtnBuscarCliente_Click(object sender, System.EventArgs e)
@@ -95,9 +112,32 @@ namespace FrbaCrucero.CompraReservaPasaje
 
         private void BtnReservar_Click(object sender, System.EventArgs e)
         {
-            List<Pasaje> pasajes = GetPasajesSeleccionados();
-            var nuevo = new CompraReservaPasaje.Reserva(_session, pasajes, _cliente);
-            nuevo.Show();
+            try
+            {
+                Validate();
+                List<Pasaje> pasajes = GetPasajesSeleccionados();
+                if (pasajes.Count == 0)
+                {
+                    throw new ValidateException("No selecciono ningun cliente.");
+                }
+                var nuevo = new CompraReservaPasaje.Reserva(_session, pasajes, _cliente);
+                nuevo.Show();
+            }
+            catch (Exception ex)
+            {
+                string message = ex.Message;
+                string caption = "Error de Validación";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                MessageBox.Show(message, caption, buttons);
+            }
+        }
+
+        public void Validate()
+        {
+            if(_cliente == null)
+            {
+                throw new ValidateException("Debe seleccionar un cliente.");
+            }
         }
 
     }
